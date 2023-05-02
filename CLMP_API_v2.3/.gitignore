@@ -12,7 +12,7 @@
 /CloudSwyft.Web.Api/CloudSwyft.Web.Api.csproj.user
 /CloudSwyft.Web.Api/CloudSwyft.Web.Api.csproj.vspscc
 /.vs/CloudSwyft.Azure
-/CloudSwyft.Web.Api/Web.config
+*Web.config
 
 /.vs/CloudLabsAPI/v16
 /.vs
