@@ -8,3 +8,5 @@
 /CloudSwyft.Web.Api/obj/
 /.vs
 /packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0
+/CloudSwyft.Auth/Web.config
+/CloudLabs/Web.config
