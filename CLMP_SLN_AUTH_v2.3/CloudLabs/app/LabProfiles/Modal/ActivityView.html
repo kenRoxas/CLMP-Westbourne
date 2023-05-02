@@ -1,0 +1,14 @@
+﻿<div class="panel-outline-content modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$viewmodal.cancel()"><i class="glyphicon glyphicon-remove close-icon"></i></button>
+        <h3 class="panel-modal-title lab-title" id="modal-title" data-toggle="tooltip" data-placement="top" title="{{$viewmodal.title}}" ng-model="$viewmodal.title">{{$viewmodal.title}}</h3>
+    </div>
+    <div class="modal-body-style modal-inner-box-act overflow margin" >
+        <div text-angular ta-unsafe-sanitizer="true" class="activity-title-content" ta-bind ng-model="message" >
+        </div>
+    </div>
+   
+    <div class="modal-footer" style="text-align:center">
+        <button class="btn btn-danger btn-confirm"  type="button" ng-click="$viewmodal.cancel()">Close</button>
+    </div>
+</div>

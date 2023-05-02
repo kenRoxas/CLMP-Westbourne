@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Confirm Email";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+
+<div class="col-md-7 right-cont">
+    <div class="right-form">
+        <span class="text-cs"> Confirm your Account </span>
+        <div class="col-sm-12">
+            <div class="form-group" style="margin-top:30px;">
+                <div class="col-md-12" style="text-align: center; font-size: 20px; font-weight: bold; padding:0;">
+                    Your Account is already verified.
+                </div>
+            </div>
+
+            <div class="btn signIn-btn" style="margin-top: 30px; padding-top: 12px;margin-bottom: 20px; border: 0px;">
+                @*@Html.BeginForm("ForgotPassword", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })*@
+                @Html.ActionLink("Click here to Log in", "Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl, @style = "color:white; font-size:14px; text-decoration: none;" })
+            </div>
+        </div>
+        <div class="footer" style="display: flex; background-color: #535c65; align-items: center; justify-content: center; flex-direction: column;">
+            <span class="validationFont-size">
+                Already have an account?
+            </span>
+            <span class="validationFont-size">
+                @Html.ActionLink("Login", "Login")
+            </span>
+        </div>
+    </div>
+</div>

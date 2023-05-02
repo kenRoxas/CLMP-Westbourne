@@ -1,0 +1,182 @@
+<div class="panel-modal-content panel-outline-content no-overflow">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()"><i class="glyphicon glyphicon-remove close" aria-hidden="true"></i></button>
+        <div>
+            <span class="panel-modal-title">Course Lab Hours</span>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div>
+            <div class="modal-inner-box-grant">               
+                <div class="no-padding" style="display: flex; justify-content: space-between; margin: 10px 2px 10px 2px;">
+                    <div style="margin: 5px; margin-left: 0px; display: flex; align-items:center;">
+                        <input class="form-control search-labs" ng-model="hourlab.CourseName;" type="text" placeholder="Search Course Name" style="width: 95%; top:11px; width:220px !important;">
+                        <i class="glyphicon glyphicon-search" style="color:dimgray; margin-left: -20px;"></i>
+                    </div>
+                    <div class="align-right">
+                        <div class="text-block width-100">
+                            <span class="grant-lab-header">Total Subscription Credits: </span>
+                            <span class="lab-hours">{{totalCredits}}</span>
+                        </div>
+                        <div class="text-block width-100">
+                            <span class="grant-lab-header">Total Remaining Subscription Credits: </span>
+                            <span class="lab-hours" ng-style="remainingCredits < 0 ? {'color': 'red'} : {'color': ''}">{{remainingCredits}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="outer-box">
+                    <table class="table table-condensed table-hover table-lhv">
+                        <thead class="levelOne">
+                            <tr>
+                                <th style="min-width:200px; text-align: left !important; ">
+                                    Course Name
+                                </th>
+                                <th style="min-width:90px;">
+                                    Course Hours
+                                </th>
+                                <th style="min-width:90px;">
+                                    No. of Users
+                                </th>
+                                <th style="min-width:90px;">
+                                    Credit Hours
+                                </th>
+                                <th style="min-width:90px;">
+                                    Machine Labs
+                                </th>
+                                <th style="min-width:90px;">
+                                    Lab Hours Consumed
+                                </th>
+                                <th style="min-width:160px;">
+                                    Machine Size
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody ng-show="filterData.length == 0">
+                            <tr>
+                                <td colspan="8" class="text-center noHover" style="color:white;">No Course found.</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr ng-show="!loading" style="text-align:center;" class="trow" ng-repeat="course in filterData = (groupLabDetails | filter : hourlab)">
+                                <td style="text-align-last: left !important;">
+                                    <span class="text-overflow-dynamic-container">
+                                        <span class="text-overflow-dynamic-ellipsis" data-toggle="tooltip" title="{{course.CourseName}}" style="text-transform:capitalize !important;">
+                                            {{course.CourseName}}
+                                        </span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="user-name truncate-lab" ng-if="course.VETypeID == 1 || course.VETypeID == 2 || course.VETypeID == 3 || course.VETypeID == 4 || course.VETypeID == 5 || course.VETypeID == 8 || course.VETypeID == 9 || course.VETypeID == 10 || course.VETypeID == 11">
+                                        <input type="number" min="0" max="9999999" style="width: 70%;" ng-change="courseStudentChanged({{course.CourseHours * course.NumberOfUsers}}, course.CourseHours, course.NumberOfUsers, course, $index)" ng-model="course.CourseHours" ng-disabled="course.DisabledCourse || course.VETypeID == 6" ng-style="course.CourseHours < 0 ? {'border-color': 'rgb(255,0,0)'} : {'border-color': ''}" prevent-typing limit-Hrs="9999999" />
+                                    </div>
+                                    <div class="user-name truncate-lab" ng-if="course.VETypeID == 6">
+                                        <input type="number" min="0" max="9999999" style="width: 70%;" ng-model="course.CourseHours" ng-disabled="course.VETypeID == 6" prevent-typing limit-Hrs="9999999" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="user-name truncate-lab" ng-if="course.VETypeID == 1 || course.VETypeID == 2 || course.VETypeID == 3 || course.VETypeID == 4 || course.VETypeID == 5 || course.VETypeID == 8 || course.VETypeID == 9 || course.VETypeID == 10 || course.VETypeID == 11">
+                                        <!--<input type="number" min="0" max="9999" style="width: 70%;" ng-change="courseStudentChanged({{course.NumberOfUsers * course.CourseHours}}, course.CourseHours, course.NumberOfUsers, course, $index)" ng-model="course.NumberOfUsers" ng-disabled="course.DisabledUsers" ng-style="course.ProvisionCount > course.NumberOfUsers || (course.TotalCourseHours - (course.TotalRemainingCourseHours / 60) / course.CourseHours) > course.TotalCourseHours ? {'border-color': 'rgb(255,0,0)'} : {'border-color': ''}" prevent-typing limit-Std="9999" />-->
+                                        <input type="number" min="0" max="9999" style="width: 70%;" ng-change="courseStudentChanged({{course.NumberOfUsers * course.CourseHours}}, course.CourseHours, course.NumberOfUsers, course, $index)" ng-model="course.NumberOfUsers" ng-disabled="course.DisabledUsers" ng-style="course.ProvisionCount > course.NumberOfUsers || (course.TotalCourseHours - (course.TotalRemainingCourseHours) / course.CourseHours) > course.TotalCourseHours ? {'border-color': 'rgb(255,0,0)'} : {'border-color': ''}" prevent-typing limit-Std="9999" />
+                                    </div>
+                                    <div class="user-name truncate-lab" ng-if="course.VETypeID == 6">
+                                        <!--<input type="number" min="0" max="9999" style="width: 70%;" ng-change="courseStudentChanged({{course.NumberOfUsers * course.CourseHours}}, course.CourseHours, course.NumberOfUsers, course, $index)" ng-model="course.NumberOfUsers" ng-disabled="course.DisabledUsers || course.VETypeID == 6" ng-style="course.ProvisionCount > course.NumberOfUsers || (course.TotalCourseHours - (course.TotalRemainingCourseHours / 60) / course.CourseHours) > course.TotalCourseHours ? {'border-color': 'rgb(255,0,0)'} : {'border-color': ''}" prevent-typing limit-Std="9999" />-->
+                                        <input type="number" min="0" max="9999" style="width: 70%;" ng-change="courseStudentChanged({{course.NumberOfUsers * course.CourseHours}}, course.CourseHours, course.NumberOfUsers, course, $index)" ng-model="course.NumberOfUsers" ng-disabled="course.DisabledUsers || course.VETypeID == 6" ng-style="course.ProvisionCount > course.NumberOfUsers || (course.TotalCourseHours - (course.TotalRemainingCourseHours) / course.CourseHours) > course.TotalCourseHours ? {'border-color': 'rgb(255,0,0)'} : {'border-color': ''}" prevent-typing limit-Std="9999" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="user-name truncate-lab" ng-style="course.VETypeID == 6 ? {'color':'gray'} : {'color':'white'}">
+                                        <span data-toggle="tooltip" ng-if="course.VETypeID == 1 || course.VETypeID == 2 || course.VETypeID == 3 || course.VETypeID == 4 || course.VETypeID == 5 || course.VETypeID == 8 || course.VETypeID == 9 || course.VETypeID == 10 || course.VETypeID == 11">
+                                            {{ course.TotalCourseHours }}
+                                        </span>
+                                        <span ng-if="course.VETypeID == 6" style="text-transform:uppercase;">
+                                            N/A
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="user-name truncate-lab">
+                                        <span data-toggle="tooltip" title="{{course.ProvisionCount}}" ng-if="course.VETypeID == 1 || course.VETypeID == 2 || course.VETypeID == 3 || course.VETypeID == 4 || course.VETypeID == 5 || course.VETypeID == 8 || course.VETypeID == 9 || course.VETypeID == 10 || course.VETypeID == 11">
+                                            {{course.ProvisionCount}}
+                                        </span>
+                                        <span ng-if="course.VETypeID == 6" style="text-transform:uppercase;">
+                                            N/A
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="user-name truncate-lab">
+                                        <!--<span ng-if="course.VETypeID == 1 || course.VETypeID == 2 || course.VETypeID == 3 || course.VETypeID == 4 || course.VETypeID == 5 || course.VETypeID == 8 || course.VETypeID == 9" data-toggle="tooltip" title="{{tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalCourseHours - (tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalRemainingCourseHours / 60)}}">-->
+                                        <span ng-if="course.VETypeID == 1 || course.VETypeID == 2 || course.VETypeID == 3 || course.VETypeID == 4 || course.VETypeID == 5 || course.VETypeID == 8 || course.VETypeID == 9 || course.VETypeID == 10 || course.VETypeID == 11" data-toggle="tooltip" title="{{tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalCourseHours - (tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalRemainingCourseHours)}}">
+                                            <!-- {{isNumber(tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalCourseHours - (tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalRemainingCourseHours / 60)) ? tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalCourseHours - (tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalRemainingCourseHours / 60) : 0}}-->
+                                            {{isNumber(tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalCourseHours - (tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalRemainingCourseHours)) ? tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalCourseHours - (tempGroupLabDetails[((currentPage-1)*itemsPerPage + $index+1) - 1].TotalRemainingCourseHours) : 0}}
+                                        </span>
+                                        <span ng-if="course.VETypeID == 6" style="text-transform:uppercase;">
+                                            N/A
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <form name="DiskSize">
+                                        <div class="user-name truncate-lab">
+                                            <span ng-if="course.VETypeID == 1 || course.VETypeID == 2 || course.VETypeID == 3 || course.VETypeID == 4" data-toggle="tooltip">
+                                                <select ng-model="course.MachineSize" ng-change="courseStudentChanged({{course.CourseHours * course.NumberOfUsers}}, course.CourseHours, course.NumberOfUsers, course, $index)" ng-options="x.Size as x.Size for x in vmSize" style="width: 6vw;" ng-disabled="course.DisabledCourse"></select>
+                                            </span>
+                                            <span ng-if="course.VETypeID == 5 || course.VETypeID == 6 || course.VETypeID == 7 || course.VETypeID == 11" style="text-transform:uppercase;">
+                                                N/A
+                                            </span>
+                                            <span ng-if="course.VETypeID == 8 || course.VETypeID == 9" style="text-transform:uppercase;">
+                                                <select ng-model="course.MachineSize" ng-change="courseStudentChanged({{course.CourseHours * course.NumberOfUsers}}, course.CourseHours, course.NumberOfUsers, course, $index)" ng-options="x.Size as x.Size for x in vmAWSSize" style="width: 6vw;" ng-disabled="course.DisabledCourse"></select>
+                                            </span>
+                                            <span ng-if="course.VETypeID == 10" style="text-transform:uppercase;">
+                                                <select ng-model="course.MachineSize" ng-options="x for x in vmGCPSize" style="width: 3vw;" ng-disabled="course.DisabledCourse" ng-change="courseStudentChanged({{course.CourseHours * course.NumberOfUsers}}, course.CourseHours, course.NumberOfUsers, course, $index)"></select>
+                                                <input type="number" min="{{course.DiskSizeMin}}" oninput="this.value = Math.abs(this.value)" name="sizes" max="10000" style="width: 3vw;" ng-model="course.DiskSize" ng-keyup="change(DiskSize.sizes.$valid, course.VEProfileId,course.DiskSize)" ng-change="change(DiskSize.sizes.$valid, course.VEProfileId,course.DiskSize)" value="{{course.DiskSizeMin}}" ng-disabled="!course.MachineSize"/>
+                                            </span>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div ng-show="loading" class="loading-block-grant">
+                        <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+                    </div>
+
+                    <h1 class="loading-block white-text" ng-show="veprofiles.length == 0 && loading == false">No Course Available.</h1>
+                </div>
+
+                <!--<div ng-show="!loading" class="page">
+                    <ul uib-pagination class="pagination-sm hey"
+                        total-items="length" max-size="maxSize" items-per-page="itemsPerPage"
+                        ng-model="currentPage" boundary-links="true" rotate="false" style="margin:5px 0 !important;">
+                    </ul>
+                </div>-->
+
+            </div>
+        </div>
+        <div class="modal-footer no-left col-md-12">
+            <div class="col-md-12 no-padding">
+                <div class="keep-right">
+                    <a class="btn btn-danger btn-sm" ng-click="close()">
+                        <span class="glyphicon glyphicon-menu-left"> </span>
+                        Cancel
+                    </a>
+                </div>
+                <div class="keep-right" style="margin-right:10px;">
+                    <a class="btn btn-primary btn-sm" ng-click="save()" ng-disabled="isSaveDisabled || isValid || || isAWSConsole || (remainingCredits < 0)" ng-style="isSaveDisabled || isValid  || (remainingCredits < 0)? {'pointer-events':'none'} : ''">
+                        <span class="glyphicon glyphicon-menu-left"> </span>
+                        Save
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<style>
+    input.ng-invalid {
+        border: 2px solid red;
+    }
+</style>

@@ -1,0 +1,45 @@
+﻿
+
+<div class="panel-modal-content panel-outline-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()"><i class="glyphicon glyphicon-remove close" aria-hidden="true"></i></button>
+       <!-- <div class="modal-header-font">--> 
+        <div>
+            <span class="panel-modal-title" ng-show="status=='create'">Creating Lab Activity</span>
+            <span class="panel-modal-title" ng-show="status=='edit'">Editing Lab Activity</span>
+            <h3 class="panel-modal-title" ng-show="status=='view'" data-toggle="tooltip" data-placement="top" title="{{activityName}}" ng-model="activityName"><b>{{activityName}}</b></h3>
+        </div>
+    </div>
+
+        <div class="modal-body">
+            <div class="inner-box-create" ng-show="status=='create' || status=='edit'">
+                <div class="form-group group-container">
+                    <div class="act-name-container">
+                        <label ng-show="status=='create' || status=='edit'" for="activityName" class="control-label style-label"><b>Activity Name: <span class="text-danger">*&nbsp;</span></b></label>
+                        <input type="text" id="activityName" ng-show="status=='create' || status=='edit'" class="form-control inline-form" value="" placeholder="Name of the Activity " ng-model="activityName" maxlength="70">
+                    </div>
+                    <div class="course-code-container">
+                        <label ng-show="status=='create' || status=='edit'" for="courseCode" class="control-label style-label"><b>Course Code: <span class="text-danger">*&nbsp;</span></b></label>
+                        <input type="text" id="courseCode" ng-show="status=='create' || status=='edit'" class="form-control inline-form" value="" unique placeholder="Course Code" ng-model="courseCode" maxlength="70">
+                    </div>
+                </div>
+                <form method="post" ng-show="status=='create' || status=='edit'">
+                    <textarea ui-tinymce="tinymceOptions" ng-model="tinymceModel"></textarea>
+                </form>
+            </div>
+            <div class="modal-inner-box" ng-show="status=='view'">
+                <div ta-unsafe-sanitizer="true" ta-bind ng-model="tinymceModel" ng-show="status=='view'"></div>
+            </div>
+    </div>
+    <div class="modal-footer text-center">
+        <a class="btn btn-primary btn-lg" id="btn-save-activity" ng-disabled="!activityName || !tinymceModel || !courseCode" 
+           ng-show="status=='create' || status=='edit'" data-dismiss="modal" 
+           ng-click="!activityName || !tinymceModel || !courseCode || getContent(activityName, tinymceModel, courseCode, LabAnswerKey, LabAnswerKeyName)">Save Activity</a>
+        <a class="btn btn-danger btn-lg" data-dismiss="modal" ng-show="status=='create' || status=='edit'" ng-click="cancel()">Cancel</a>
+        <a class="btn btn-danger btn-lg" ng-click="close()" ng-show="status=='view'">Close</a>
+    </div>
+</div>
+
+
+
+

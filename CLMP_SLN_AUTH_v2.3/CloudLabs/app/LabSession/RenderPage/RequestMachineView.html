@@ -1,0 +1,32 @@
+﻿<div class="modal-content panel-outline-content">
+    <div class="col-xs-12 modal-header">
+        <button type="button" class="close" ng-click="close()"><i class="glyphicon glyphicon-remove"></i></button>
+        <h3 class="panel-modal-title">Request Lab Machine</h3>
+    </div>
+    <form name="reqLabFrom">
+        <div ng-show="!loading" class="loading-block" style="margin-top:8% !important; margin-bottom:8% !important;">
+            <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+            <div>
+                <span style="color:white;">Please Wait...</span>
+            </div>
+        </div>
+        <div style="margin-top:5px;" ng-show="loading">
+            <div class="modal-inner-box-grant" style="padding: 3% 0%;">
+                <span style="color:white;padding-left: 3.5%;">Please select a course:</span>
+                <select ng-model="course" class="form-control" name="reqSelect" ng-options="opt for opt in courses" style="margin: auto; min-width:93%; margin-bottom: 1rem;" ng-required="true" ng-show="courses.length != 0">
+                    <option style="display:none;" value="">Select a Course</option>
+                </select>
+                <select ng-model="course" class="form-control" name="reqSelect" style="margin: auto; min-width:93%; margin-bottom: 1rem;" ng-required="true" ng-show="courses.length == 0">
+                    <option style="display:none;" value="">No Course Available</option>
+                </select>
+                <span style="color:white;padding-left: 3.5%;">Note: (Optional)</span>
+                <textarea ng-model="noteTag" class="form-control" style="max-width: 93%;height: 350px;margin: auto;"></textarea>
+                <!--<input class="form-control" style="margin:auto; width:auto;" ng-model="noteTag" />-->
+            </div>
+        </div>
+        <div class="modal-footer-conf cursor-notallowed" style="margin-bottom:3%;margin-top:3%; text-align:center;" ng-show="loading">
+            <a class="btn btn-primary btn-sm" ng-click="send()" ng-disabled="!reqLabFrom.reqSelect.$valid || !course || course.length == 0" ng-style="!course || course.length === 0 ? pointer-events-none : ''">Send Request</a>
+            <a class="btn btn-danger btn-sm" ng-click="close()">Cancel</a>
+        </div>
+    </form>
+</div>

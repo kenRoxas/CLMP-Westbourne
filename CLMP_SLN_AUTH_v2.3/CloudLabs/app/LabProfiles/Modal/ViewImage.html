@@ -1,0 +1,23 @@
+﻿<div class="panel-modal-content panel-outline-content no-overflow">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()"><i class="glyphicon glyphicon-remove close" aria-hidden="true"></i></button>
+        <div>
+            <span class="panel-modal-title">View Image</span>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <!--<span class="panel-modal-title">{{(name)}}</span>-->
+        <div style="display: flex;">
+            <div class="modal-inner-box-grant" style="overflow-y: auto; height: 30em; display: flex; overflow-x: hidden; flex-wrap: wrap; width: 100%; justify-content: center; align-items: center;">
+                <div>
+                    <img ng-src="{{image}}" style="height: auto; width: 100%;" />
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+         <a href="{{image}}" class="btn btn-danger">DOWNLOAD</a>
+            
+        </div>
+    </div>
+</div>

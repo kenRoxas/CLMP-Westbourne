@@ -1,0 +1,592 @@
+﻿
+html {
+    height: 100%;
+}
+
+.loginPage {
+    position: absolute;
+    top: 29%;
+    left: 0%;
+}
+
+body {
+    min-height: 100%;
+}
+
+#loginForm {
+    padding: 10px 23px 0 23px;
+}
+
+    #loginForm .form-group {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+#ForgotForm {
+    padding: 0px 30px 0 30px;
+    margin-bottom: 30px;
+}
+
+    #ForgotForm .form-group {
+        margin: 0;
+    }
+
+.signUp-btn {
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 45px;
+    border-bottom: 2px solid #f49242;
+}
+
+.signIn-btn {
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 45px;
+    border: 2px solid #009DFF;
+    background-color: #009DFF;
+    color: #F5F5F5;
+}
+
+    .signIn-btn:hover {
+        background-color: #0E7FAA;
+        border: 0px;
+        color: #F5F5F5;
+    }
+
+    .signIn-btn:active {
+        background-color: #0E7FAA;
+        border: 0px;
+        color: #F5F5F5;
+    }
+
+    .signIn-btn:focus {
+        background-color: #0E7FAA;
+        border: 0px;
+        color: #F5F5F5;
+    }
+
+.lower-dot-line-container {
+    position: absolute;
+    bottom: 57px;
+    left: -22px;
+}
+
+.upper-dot-line-container {
+    position: absolute;
+    right: -13px;
+    top: 0px;
+}
+
+.lower-dot-line {
+    width: 100%;
+}
+
+.upper-dot-line {
+    width: 100%;
+    transform: scaleX(-1);
+}
+
+.loginTxt {
+    padding-top: 10px;
+    color: #fff;
+}
+
+    .loginTxt a:hover {
+        color: #fff;
+    }
+
+.checkbox {
+    text-align: right;
+    padding-top: 0;
+}
+
+    .checkbox label {
+        padding-left: 0;
+    }
+
+.validationFont-size {
+    font-size: 13px;
+}
+
+.validationFont-size-login {
+    font-size: 14px;
+}
+
+input {
+    max-width: 100%;
+}
+
+.footer {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    padding: 1rem;
+    text-align: center;
+}
+
+    .footer span {
+        color: #fff;
+    }
+
+    .footer a {
+        color: #01ffff;
+    }
+
+.padding {
+    padding: 1px;
+}
+
+.left-cont {
+    margin-left: 0;
+}
+
+    .left-cont .logo-cs {
+        display: block;
+        float: right;
+        width: 100%;
+        height: auto;
+    }
+
+    .left-cont .tagline-cs {
+        display: block;
+        float: right;
+        clear: both;
+        margin-right: 3%;
+    }
+
+        .left-cont .tagline-cs .blue-text {
+            color: #31b0d5;
+            float: right;
+            font-size: 35px;
+            font-family: Verdana;
+        }
+
+        .left-cont .tagline-cs .white-text {
+            color: white;
+            float: right;
+            clear: both;
+            font-size: 35px;
+            font-family: Verdana;
+        }
+
+.right-cont .right-form {
+    background-color: #2B3448;
+    width: 350px;
+    display: block;
+    font-family: OpenSans;
+    margin-left: 3%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding-top: 30px;
+}
+
+    .right-cont .right-form .logo-sm-cs {
+        height: 60px;
+        margin: auto;
+        display: block;
+        padding-top: 10px;
+    }
+
+    .right-cont .right-form .text-cs {
+        color: #fff;
+        display: block;
+        text-align: center;
+        font-size: 18px;
+    }
+
+@media only screen and (min-width: 320px) and (max-width: 330px) {
+    .loginPage {
+        position: absolute;
+        top: 18%;
+        left: 0%;
+    }
+
+    .left-cont {
+        margin-left: 0;
+        position: absolute;
+    }
+
+        .left-cont .logo-cs {
+            width: 95%;
+            float: none;
+        }
+
+        .left-cont .tagline-cs {
+            width: 90%;
+            float: none;
+        }
+
+            .left-cont .tagline-cs .white-text {
+                font-size: 20px;
+            }
+
+            .left-cont .tagline-cs .blue-text {
+                font-size: 20px;
+            }
+
+    .right-cont {
+        width: 100%;
+        margin: 45% 0 0 9px;
+    }
+
+        .right-cont .right-form {
+            width: 90%;
+        }
+
+    a {
+        display: block;
+    }
+
+    .lower-dot-line {
+        width: 107%;
+    }
+
+    .upper-dot-line {
+        width: 107%;
+        transform: scaleX(-1);
+    }
+}
+
+@media only screen and (min-width: 331px) and (max-width: 640px) {
+    .loginPage {
+        position: absolute;
+        top: 20%;
+        left: 0%;
+    }
+
+    .left-cont {
+        float: none;
+        margin-left: 0;
+    }
+
+        .left-cont .logo-cs {
+            float: none;
+            width: 100%;
+        }
+
+        .left-cont .tagline-cs {
+            float: none;
+            margin-top: 10%;
+        }
+
+            .left-cont .tagline-cs .white-text {
+                font-size: 20px;
+            }
+
+            .left-cont .tagline-cs .blue-text {
+                font-size: 20px;
+            }
+
+    .right-cont {
+        margin-bottom: 10%;
+        margin-top: 5%;
+    }
+
+        .right-cont .right-form {
+            width: 90%;
+        }
+
+            .right-cont .right-form .text-cs {
+                margin: 5px;
+            }
+
+            .right-cont .right-form .footer {
+                padding: 5px;
+            }
+
+        .right-cont a {
+            display: block;
+        }
+
+    .lower-dot-line {
+        width: 107%;
+    }
+
+    .upper-dot-line {
+        width: 107%;
+        transform: scaleX(-1);
+    }
+}
+
+@media only screen and (min-width: 641px) and (max-width: 767px) {
+    .loginPage {
+        position: absolute;
+        top: 20%;
+        left: 0%;
+    }
+
+    .left-cont {
+        float: none;
+        margin-left: 0;
+    }
+
+        .left-cont .logo-cs {
+            float: none;
+            width: 100%;
+        }
+
+        .left-cont .tagline-cs {
+            float: none;
+            margin-top: 10%;
+        }
+
+            .left-cont .tagline-cs .white-text {
+                font-size: 20px;
+            }
+
+            .left-cont .tagline-cs .blue-text {
+                font-size: 20px;
+            }
+
+    .right-cont {
+        margin-bottom: 10%;
+        margin-top: 5%;
+    }
+
+        .right-cont .right-form {
+            width: 90%;
+        }
+
+            .right-cont .right-form .text-cs {
+                margin: 5px;
+            }
+
+            .right-cont .right-form .footer {
+                padding: 5px;
+            }
+
+        .right-cont a {
+            display: block;
+        }
+
+    .lower-dot-line {
+        width: 100%;
+    }
+
+    .upper-dot-line {
+        width: 100%;
+        transform: scaleX(-1);
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 960px) {
+    .left-cont {
+        margin-left: 0;
+    }
+
+        .left-cont .logo-cs {
+            width: 100%;
+        }
+
+        .left-cont .tagline-cs {
+            margin-top: 10%;
+        }
+
+            .left-cont .tagline-cs .white-text {
+                font-size: 30px;
+            }
+
+            .left-cont .tagline-cs .blue-text {
+                font-size: 30px;
+            }
+
+    .right-cont .right-form {
+        width: 100%;
+    }
+
+    .lower-dot-line {
+        width: 100%;
+    }
+
+    .upper-dot-line {
+        width: 100%;
+        transform: scaleX(-1);
+    }
+}
+
+@media only screen and (min-width: 961px) and (max-width: 1024px) {
+    .left-cont {
+        margin-left: 0;
+    }
+
+        .left-cont .logo-cs {
+            width: 100%;
+        }
+
+        .left-cont .tagline-cs {
+            margin-top: 5%;
+        }
+
+            .left-cont .tagline-cs .blue-text {
+                font-size: 30px;
+            }
+
+            .left-cont .tagline-cs .white-text {
+                font-size: 30px;
+            }
+}
+
+@media only screen and (min-width: 1025px) and (max-width: 1280px) {
+    .left-cont {
+        margin-left: 0;
+    }
+
+        .left-cont .logo-cs {
+            float: none;
+            width: 100%;
+        }
+
+        .left-cont .tagline-cs {
+            float: none;
+            margin-top: 4%;
+        }
+
+            .left-cont .tagline-cs .white-text {
+                font-size: 35px;
+            }
+
+            .left-cont .tagline-cs .blue-text {
+                font-size: 35px;
+            }
+
+    .right-cont .right-form .footer {
+        padding: 5px;
+    }
+
+    .right-cont a {
+        display: block;
+    }
+}
+
+@media only screen and (min-width: 1281px) {
+    .left-cont {
+        margin-left: 100px;
+    }
+
+    .right-cont {
+        width: 100%;
+    }
+}
+
+.forgotPassword {
+    color: white;
+}
+
+#ForgotPasswordForm {
+    padding: 10px 30px 0 30px;
+}
+
+    #ForgotPasswordForm .form-group {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+.forgot-btn {
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 45px;
+    border-bottom: 2px solid #23A7DE;
+}
+
+.prov-notif {
+    color: red;
+    text-align: center;
+}
+
+.forgot-hover-color {
+    color: #fff;
+}
+
+    .forgot-hover-color:hover {
+        color: #fff;
+    }
+
+.privacy-tos-box {
+    padding: 0rem 1rem;
+    padding-bottom: 2rem;
+}
+
+    .privacy-tos-box .display-1 {
+        font-size: 2.5rem;
+    }
+
+        .privacy-tos-box .display-1 .display-intro {
+            color: #43C1D9;
+            display: block;
+            font-weight: 700;
+            font-family: " Poppins", sans-serif;
+        }
+
+        .privacy-tos-box .display-1 .display-intro-mini {
+            color: #43C1D9;
+            display: block;
+            font-weight: 400;
+            line-height: 2.5rem;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            font-family: " Poppins", sans-serif;
+        }
+
+    .privacy-tos-box ol .list-box {
+        counter-increment: li;
+        margin-bottom: 2rem;
+        color: white;
+    }
+
+        .privacy-tos-box ol .list-box h3 {
+            font-size: 1.4rem;
+            display: inline-block;
+            font-family: " Poppins", sans-serif;
+            color: white;
+        }
+
+        .privacy-tos-box ol .list-box p, .privacy-tos-box ol .list-box ol {
+            font-size: 1rem;
+            line-height: 1.8rem;
+            padding-right: 2rem;
+            margin-top: 0rem;
+            text-align: justify;
+            color: white;
+            font-family: " Roboto", sans-serif;
+        }
+
+            .privacy-tos-box ol .list-box p a, .privacy-tos-box ol .list-box ol a {
+                color: #43C1D9;
+            }
+
+            .privacy-tos-box ol .list-box p span, .privacy-tos-box ol .list-box ol span {
+                display: block;
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+
+        .privacy-tos-box ol .list-box span {
+            display: block;
+            font-size: 1.3rem;
+            line-height: 2rem;
+            font-weight: 600;
+            padding-right: 2rem;
+            font-family: " Roboto", sans-serif;
+        }
+
+.privacy-details {
+    color: darkgray;
+    margin-right: 1rem;
+    font-size: 1.7rem;
+}
+
+.tos-details {
+    color: darkgray;
+    font-size: 1.7rem;
+}
+
+.login-privacy-tos-box {
+    position: absolute;
+    bottom: 2rem;
+    left: 4.4rem;
+}

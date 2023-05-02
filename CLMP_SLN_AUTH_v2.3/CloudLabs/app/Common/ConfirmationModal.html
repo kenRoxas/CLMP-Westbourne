@@ -1,0 +1,40 @@
+﻿<div class="modal-content panel-outline-content">
+    <div class="modal-header">
+        <!--<button type="button" class="close" ng-click="cancel()"><i class="glyphicon glyphicon-remove close-icon"></i></button>-->
+        <h3 class="panel-modal-title" ng-model="title">{{title}}</h3>
+    </div>
+    <div>
+        <div class="modal-inner-box-confirmation">
+            <div>
+                <span class="conf-message">
+                    {{message}} <span><strong>{{name}}</strong></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer-conf" style="text-align:center" ng-show="!isBulk">
+        <button ng-show="!info && messageType == null" class="btn btn-yes" type="button" ng-click="confirm()">Yes</button>
+        <button ng-show="!info && messageType == null" class="btn btn-danger" type="button" ng-click="cancel()">No</button>
+        <button ng-show="info && messageType == null" class="btn btn-close" type="button" ng-click="cancel()">Close</button>
+        <button ng-show="messageType == 'clickClose'" class="btn btn-yes" type="button" ng-click="confirm()">Yes</button>
+        <button ng-show="messageType == 'clickClose'" class="btn btn-danger" type="button" ng-click="cancel()">No</button>
+        <button ng-show="messageType == 'shutdown'" class="btn btn-danger" type="button" ng-click="confirm()">Close</button>
+        <button ng-show="messageType == 'warning'" class="btn btn-danger" type="button" ng-click="cancel()">Close</button>
+        <button ng-show="messageType == 'ExtendSingle'" class="btn btn-danger" type="button" ng-click="cancel()">CloseSingle</button>
+
+        <!--Button group for saving or cancelling creation of lab hour extension -->
+        <button ng-show="messageType == 'Extend'" class="btn btn-yes" type="button" ng-click="confirmSaveLabHourExtension()">Yes</button>
+        <button ng-show="messageType == 'Extend'" class="btn btn-danger" type="button" ng-click="cancel()">No</button>
+
+        <!--Button group for confirming or cancelling deletion of lab hour extension -->
+        <button ng-show="messageType == 'DeleteExtend'" class="btn btn-yes" type="button" ng-click="confirmDeleteLabHourExtension()">Yes</button>
+        <button ng-show="messageType == 'DeleteExtend'" class="btn btn-danger" type="button" ng-click="cancel()">No</button>
+
+        <!--Button group for updating or cancelling updating of lab hour extension -->
+        <button ng-show="messageType == 'UpdateExtend'" class="btn btn-yes" type="button" ng-click="confirmUpdateLabHourExtension()">Yes</button>
+        <button ng-show="messageType == 'UpdateExtend'" class="btn btn-danger" type="button" ng-click="cancel()">No</button>
+    </div>
+    <div class="modal-footer-conf" style="text-align:center" ng-show="isBulk">
+        <button class="btn btn-danger" type="button" ng-click="close()">Close</button>
+    </div>
+</div>

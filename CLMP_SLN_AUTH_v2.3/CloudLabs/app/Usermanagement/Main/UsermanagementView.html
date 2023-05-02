@@ -1,0 +1,236 @@
+﻿
+<div class="" style="padding-bottom:1%;padding-top:1%; display: flex; justify-content: flex-end;">    
+    <button type="button" style="margin: 0px 5px 0px 0px;" class="btn btn-primary btn-lg" id="btn-create-profile" ng-click="openModal('createUser','md', '', 2, 'createModifiedModal')" ng-show="bulkShow">Bulk Create</button>
+    <button type="button" style="margin: 0px 5px 0px 0px;" class="btn btn-primary btn-lg" id="btn-create-profile" ng-click="openModal('createUser','md', '', 3, 'createModifiedModal')" ng-show="exportUser">Export User List</button>
+    <button type="button" style="margin: 0px -14px 0px 0px;" class="btn btn-primary btn-lg" id="btn-create-profile" ng-click="openModal('createUser','md', '', 0, 'createModifiedModal')">Create User Profile</button>
+</div>
+<div class="loading-block no-padding text-center" ng-show="loader = false" style="position:absolute; top:25px; left:25px;">
+    <img src="../../../Content/Image/loading2.gif" />
+</div>
+<div class="col-sm-12 {{hideShowClass}}" style="max-height: none !important;">
+    <div class="col-sm-12 dropdown-search">
+        <h4 class="col-sm-12" style="font-weight:bold; padding: 1%;"> Advanced Search </h4>
+        <div class="container-fluid">
+            <div id="filter-panel" class="collapse container-fluid" ng-model="showPanel" ng-show="showPanel" style="margin-left:5%;margin-right:5%">
+                <form class="form-inline" name="searchfrm">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="label-width1">Name</label>
+                                <input type="text" class="form-control textBox" name="name" ng-model="searchText.Name" ng-required="false">
+                            </div>
+                            <div>
+                                <label class="label-width1">Email</label>
+                                <input type="text" class="form-control textBox" name="email" ng-model="searchText.Email" ng-required="false">
+                            </div>
+                            <div>
+                                <label class="label-width1">Role</label>
+                                <select class="form-control dropBox" name="role" ng-model="searchText.RoleName" ng-options="v for v in roles" ng-required="false"></select>
+                            </div>
+                            <div>
+                                <label class="label-width1">User Group</label>
+                                <select class="form-control textBox" ng-model="searchText.GroupName" ng-options="v for v in tempGroup" ng-required="false"></select> <!--ng-options="v for v in roles"-->
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="margin-left: 2%;">
+                                <label class="label-width2">Email Confirmed</label>
+                                <select class="form-control dropBox" name="status" ng-model="searchText.EmailConfirmed" ng-options="x.StatusBool as x.Status for x in verified" ng-required="false"></select>
+                            </div>
+                            <div style="margin-left: 2%;">
+                                <label class="label-width2">Disabled</label>
+                                <select class="form-control dropBox" name="status" ng-model="searchText.IsDisabled" ng-options="x.StatusBool as x.Status for x in status" ng-required="false"></select>
+                            </div>
+                            <div style="margin-left: 2%;">
+                                <label class="label-width2">Created by</label>
+                                <input type="text" class="form-control textBox" name="createdBy" ng-model="searchText.CreatedBy" ng-required="false">
+                            </div>
+                            <div style="margin-left: 2%;">
+                                <label class="label-width2">Date Created</label>
+                                <div style="margin-left: 28.3%; min-width: 117%; margin-top: -26px;">
+                                    <div class="input-group col-md-3" ng-class="{'has-error': searchfrm.start.$invalid && searchModel.endSubmittedDate}">
+                                        <input ng-required="searchModel.endSubmittedDate" id="startSubmittedDate" class="form-control datepicker"
+                                               name="start"
+                                               placeholder="Start Date" uib-datepicker-popup="{{formatDate}}"
+                                               datepicker-options="datePicker.startSubmittedDateOptions"
+                                               is-open="datePicker.startsubmittedDateStatus.opened"
+                                               ng-model="searchModel.startSubmittedDate"
+                                               ng-click="datePicker.startSubmittedDateOpen($event)"
+                                               onkeydown="return false"
+                                               ng-change="changeSubmittedMinAndMaxDate()" />
+                                        <span class="input-group-addon" ng-click="datePicker.startSubmittedDateOpen($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <span style="position: absolute; right: 41.4%; bottom: 6%;">to</span>
+                                    <div class="input-group col-md-3" ng-class="{'has-error': searchfrm.end.$invalid && searchModel.startSubmittedDate}">
+                                        <input ng-required="searchModel.startSubmittedDate" id="endSubmittedDate" class="form-control datepicker"
+                                               name="end"
+                                               placeholder="End Date" uib-datepicker-popup="{{formatDate}}"
+                                               datepicker-options="datePicker.endSubmittedDateOptions"
+                                               is-open="datePicker.endSubmittedDateStatus.opened"
+                                               ng-model="searchModel.endSubmittedDate"
+                                               ng-click="datePicker.endSubmittedStatusOpen($event)"
+                                               onkeydown="return false"
+                                               ng-change="changeSubmittedMinAndMaxDate()" />
+                                        <span class="input-group-addon" ng-click="datePicker.endSubmittedStatusOpen($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-offset-9 col-md-3" style="margin-top:2%; left: 4.2%;">
+
+                        <button type="reset" style="float: right; margin-right: 55%;" class="btn btn-danger" ng-click="clear(searchText, searchModel)">CLEAR</button>
+                    </div>
+                </form>
+            </div>
+            <button class="btn btn-sm btn-primary btn-collapse col-sm-12 text-center show-btn" data-toggle="collapse" data-target="#filter-panel" ng-click="showPanelSearch()">{{showPanelTitle}}</button>
+        </div>
+    </div>
+    <table class="table table-striped table-hover">
+        <thead class="levelOne">
+            <tr>
+                <th style="width: 3%;"></th>
+                <th style="width: 9%;">Action</th>
+                <th style="width: 15%; text-align:left;" ng-click="tableSort('Name'); caretClick = !caretClick">
+                    Name
+                    <span ng-if="defaultCaretChange.Name">
+                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.Name" />
+                    </span>
+                    <span ng-if="!defaultCaretChange.Name">
+                        <span ng-show="caretChange.Name" class="fa fa-caret-down" style="color:black"></span>
+                        <span ng-show="!caretChange.Name" class="fa fa-caret-up" style="color:black"></span>
+                    </span>
+                </th>
+                <th style="width:18%;text-align:left;" ng-click="tableSort('Email')">
+                    Email Address
+                    <span ng-if="defaultCaretChange.Email">
+                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.Email" />
+                    </span>
+                    <span ng-if="!defaultCaretChange.Email">
+                        <span ng-show="caretChange.Email" class="fa fa-caret-down" style="color:black"></span>
+                        <span ng-show="!caretChange.Email" class="fa fa-caret-up" style="color:black"></span>
+                    </span>
+                </th>
+
+                <th style="width:15%;text-align:center;" ng-click="tableSort('GroupName')">
+                    User Group
+                    <span ng-if="defaultCaretChange.GroupName">
+                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.GroupName" />
+                    </span>
+                    <span ng-if="!defaultCaretChange.GroupName">
+                        <span ng-show="caretChange.GroupName" class="fa fa-caret-down" style="color:black"></span>
+                        <span ng-show="!caretChange.GroupName" class="fa fa-caret-up" style="color:black"></span>
+                    </span>
+                </th>
+
+                <th style="width:5%;text-align:center;" ng-click="tableSort('Role')">
+                    Role
+                    <span ng-if="defaultCaretChange.Role">
+                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.Role" />
+                    </span>
+                    <span ng-if="!defaultCaretChange.Role">
+                        <span ng-show="caretChange.Role" class="fa fa-caret-down" style="color:black"></span>
+                        <span ng-show="!caretChange.Role" class="fa fa-caret-up" style="color:black"></span>
+                    </span>
+                </th>
+                <th style="width:7%;text-align:center;" ng-click="tableSort('Status')">
+                    Status
+                    <span ng-if="defaultCaretChange.Status">
+                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.Status" />
+                    </span>
+                    <span ng-if="!defaultCaretChange.Status">
+                        <span ng-show="caretChange.Status" class="fa fa-caret-down" style="color:black"></span>
+                        <span ng-show="!caretChange.Status" class="fa fa-caret-up" style="color:black"></span>
+                    </span>
+                </th>
+                <th style="width:12%;text-align:center;" ng-click="tableSort('CreatedBy')">
+                    Created By
+                    <span ng-if="defaultCaretChange.CreatedBy">
+                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.CreatedBy" />
+                    </span>
+                    <span ng-if="!defaultCaretChange.CreatedBy">
+                        <span ng-show="caretChange.CreatedBy" class="fa fa-caret-down" style="color:black"></span>
+                        <span ng-show="!caretChange.CreatedBy" class="fa fa-caret-up" style="color:black"></span>
+                    </span>
+                </th>
+                <th style="width:8%;text-align:center;" ng-click="tableSort('DateCreated')">
+                    Date Created
+                    <span ng-if="defaultCaretChange.DateCreated">
+                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.DateCreated" />
+                    </span>
+                    <span ng-if="!defaultCaretChange.DateCreated">
+                        <span ng-show="caretChange.DateCreated" class="fa fa-caret-down" style="color:black"></span>
+                        <span ng-show="!caretChange.DateCreated" class="fa fa-caret-up" style="color:black"></span>
+                    </span>
+                </th>
+                <th style="width:8%;text-align:center;" ng-click="tableSort('EmailConfirmed')" ng-if="RoleName == 'SuperAdmin'  || RoleName == 'Admin' ">
+                    Email Verification
+                    <span ng-if="defaultCaretChange.EmailConfirmed">
+                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.EmailConfirmed" />
+                    </span>
+                    <span ng-if="!defaultCaretChange.EmailConfirmed">
+                        <span ng-show="caretChange.EmailConfirmed" class="fa fa-caret-down" style="color:black"></span>
+                        <span ng-show="!caretChange.EmailConfirmed" class="fa fa-caret-up" style="color:black"></span>
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody ng-show="searchUser.length == 0 || filterData.length == 0">
+            <tr>
+                <td colspan="8" style="width: 100%; position: absolute; border-top: none; background-color: transparent; "  class="text-center"><span class="text-danger">{{searchMsg}}</span></td>
+            </tr>
+        </tbody>
+        <tbody style="text-align:center;">
+            <tr ng-repeat="user in filterData = (userManagementUsers | filter : searchText) | orderBy: sortType:sortReverse | limitTo: itemsPerPage:itemsPerPage*(currentPage-1)">
+                <td ng-if="user.ThumbNail == null"></td>
+                <td ng-if="user.IsDisabled == 'InActive'">
+                    <img ng-src="../../../Content/Image/editcircle-hover.png" class="buttonAction" style="margin-right:6%" ng-click="openModal('createUser','md', user, 1, 'editModifiedModal')" title="Edit User" />
+                    <img ng-src="../../../Content/Image/btn-enable-active.png" class="buttonAction" style="margin-right:6%" ng-click="disable(user,'enable')" title="Activate User" />
+                    <!--<img ng-src="../../Content/images/btn-delete-active.png" ng-show="validRole" style="margin-right:6%" class="buttonAction" ng-click="delete(user, 'delete')" />-->
+                </td>
+                <td ng-if="user.IsDisabled == 'Active'">
+                    <img ng-src="../../../Content/Image/editcircle-hover.png" class="buttonAction" style="margin-right:6%" ng-click="openModal('createUser','md', user, 1, 'editModifiedModal')" title="Edit User" />
+                    <img ng-src="../../../Content/Image/close-icon.png" class="buttonAction" style="margin-right:6%" ng-click="disable(user,'disable')" title="Disable User" />
+                    <!--<img ng-src="../../Content/images/delete.png" ng-show="validRole" style="margin-right:6%" class="buttonAction" ng-click="delete(user, 'delete')" />-->
+                </td>
+                <td class="letterCase" style="text-align:left;">{{user.Lastname}}, {{user.Firstname}} </td>
+                <td style="text-transform: lowercase; text-align:left;">{{user.Email }}</td>
+                <td>{{user.GroupName}}</td>
+                <td>{{user.RoleName}}</td>
+                <td ng-if="user.IsDisabled == 'Active'">Active</td>
+                <td ng-if="user.IsDisabled == 'InActive'">Inactive</td>
+                <td ng-if="user.CreatedBy == null ">Self Registration</td>
+                <td ng-if="user.CreatedBy">{{user.CreatedBy}}</td>
+                <td>{{user.DateCreated | date: 'MM/dd/yyyy'}}</td>
+                <td ng-if="RoleName == 'SuperAdmin' || RoleName == 'Admin'">
+                    <button ng-if="user.EmailConfirmed == true && user.EmailLoading == false" class="btn btn-verified" ng-click="toggleEmailVerification(user)">VERIFIED</button>
+                    <button ng-if="user.EmailLoading == true" class="btn btn-warning btn-progress" ng-disabled="user.EmailLoading">IN PROGRESS</button>
+                    <button ng-if="user.EmailConfirmed == false && user.EmailLoading == false" class="btn btn-unverified" ng-click="toggleEmailVerification(user)">UNVERIFIED</button>
+                </td>
+            </tr>
+        </tbody>
+        <div class="page">
+            <pagination ng-model="currentPage"></pagination>
+            <ul uib-pagination ng-model="currentPage"
+                class="pagination-sm"
+                max-size="maxSize"
+                boundary-links="true "
+                items-per-page="itemsPerPage"
+                num-pages="numPages"
+                ng-change="pageChanged()"
+                total-items="filterData.length"></ul>
+        </div>
+        <div class="numberUsers">
+            <u>{{filterData.length}}</u> Total users
+        </div>
+    </table>
+
+    <div class="text-center" ng-show='isLoading' style="color:antiquewhite">
+        <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+    </div>
+</div>
+

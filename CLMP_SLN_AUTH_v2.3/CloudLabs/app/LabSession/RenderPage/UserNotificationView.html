@@ -1,0 +1,43 @@
+﻿<div class="modal-content panel-outline-content">
+    <div class="col-xs-12 modal-header">
+        <button ng-hide="type == 'nohours' || (image.type != 'image' && type != 'shutdown' && type != 'fifteen')" type="button" class="close" ng-click="cancel()"><i class="glyphicon glyphicon-remove"></i></button>
+        <button ng-show="type == 'nohours'" type="button" class="close" ng-click="close()"><i class="glyphicon glyphicon-remove" tabindex="10"></i></button>
+        <button ng-show="image.type != 'image' && type != 'shutdown' && type != 'fifteen' && type != 'nohours'" type="button" class="close" ng-click="uploadFinish()"><i class="glyphicon glyphicon-remove"></i></button>
+        <h3 class="panel-modal-title">Notification</h3>
+    </div>
+    <div class="modal-inner-box-confirmation">
+        <span class="prod-right conf-message" style="margin-left: 3px;">
+            {{message}}
+        </span>
+    </div>
+
+    <div class="modal-footer-conf">
+        <button ng-show="type == 'shutdown'" class="btn btn-primary btn-center btn-md ceb" id="createNext" ng-click="close()">
+            Yes
+        </button>
+        <button ng-show="type == 'shutdown'" class="btn btn-danger btn-center btn-md ceb" id="createNext" ng-click="cancel()">
+            No
+        </button>
+        <button ng-show="image.type == 'image'" class="btn btn-primary btn-center btn-md ceb" id="createNext" ng-click="upload()">
+            Yes
+        </button>
+        <button ng-show="image.type == 'image'" class="btn btn-danger btn-center btn-md ceb" id="createNext" ng-click="cancel()">
+            No
+        </button>
+        <a ng-show="type == 'nohours'" class="btn btn-danger btn-center btn-md ceb" id="createNext" ng-click="close()">
+            Close
+        </a>
+        <button ng-show="image.type != 'image' && type != 'shutdown' && type != 'fifteen' && type != 'nohours' && type != 'Provisioning' && type != 'Starting'" class="btn btn-danger btn-center btn-md ceb" id="createNext" ng-click="uploadFinish(type)">
+            Close
+        </button>
+        <button ng-show="image.type != 'image' && type != 'shutdown' && type != 'fifteen' && type != 'nohours' && type == 'Starting'" class="btn btn-danger btn-center btn-md ceb" id="createNext" ng-click="close()">
+            Close
+        </button>
+        <button ng-show="type == 'fifteen'" class="btn btn-danger btn-center btn-md ceb" id="createNext" ng-click="close()">
+            Close
+        </button>
+        <button ng-show="type == 'Provisioning'" class="btn btn-danger btn-center btn-md ceb" id="createNext" ng-click="close()">
+            Close
+        </button>
+    </div>
+</div>

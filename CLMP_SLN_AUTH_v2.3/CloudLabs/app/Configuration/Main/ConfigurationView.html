@@ -1,0 +1,44 @@
+﻿
+<div class="container">
+    <div ng-show="isUserAdmin">
+        <div class="main-layer">
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModal('configurationModalController')">Create Virtual Environments</a>
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModal('configurationModalEditVirtualEnvironmentImagesController')">Virtual Environment Images</a>
+        </div>
+    </div>
+    <div ng-show="isUserSuperAdmin">
+        <div class="main-layer">
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModal('configurationModalController')">Create Virtual Environments</a>
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModal('configurationModalEditVirtualEnvironmentsController')">Edit/Delete Virtual Environments</a>
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModal('configurationModalEditVirtualEnvironmentImagesController')">Virtual Environment Images</a>
+        </div>
+        <div class="main-layer">
+            <hr />
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModal('configurationModalRoleController')">Role Name</a>
+            <!--<hr style="display: inline-block;width:9px; background:white; height:130px; margin-top:-10px; padding:0px; margin:0px;"/>-->
+            <!--<a class="btn btn-primary  btn-configuration-style" ng-click="openModal('configurationModalEditTimeController')">Max Idle Time/Heartbeat Interval Time</a>-->
+            <!--<a class="btn btn-primary  btn-configuration-style" ng-click="openModal('configurationModalAutoDeletion')">Auto-Deletion</a>-->
+           <!-- <a class="btn btn-primary  btn-configuration-style" ng-click="openModal('createOrEditTypeOfBusinesses')">Type Of Businesses</a>-->
+        </div>
+        <div class="main-layer">
+            <hr />
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModalUserGroup('configurationModalAddUserGroupController')">Add User Groups</a>
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModalUserGroup('configurationModalEditUserGroupController')">Edit/Delete User Groups</a>
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModalUserGroup('configurationModalLabHoursCreditsController')">Lab Hours Credit</a>
+        </div>
+
+        <!--<div class="main-layer">
+            <hr />
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModalTenant('configurationModalAddTenantController')">Add Tenants</a>-->
+        <!--<a class="btn btn-primary  btn-configuration-style" ng-click="openModalTenant('configurationModalEditTenantController')">Edit/Delete Tenants</a>-->
+        <!--</div>-->
+
+        <div class="main-layer" ng-show="toShow">
+            <hr />
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModalTenantNew('configurationModalAddTenantNewController')">Add Tenants</a>
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModalTenantNew('configurationModalEditTenantNewController')">Edit Tenants</a>
+            <a class="btn btn-primary  btn-configuration-style" ng-click="openModalTenantNew('configurationModalBusinessController')">Business Type</a>
+        </div>
+    </div>
+</div>
+

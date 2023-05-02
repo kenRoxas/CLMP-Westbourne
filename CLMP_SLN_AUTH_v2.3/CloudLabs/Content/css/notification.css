@@ -1,0 +1,315 @@
+.calendar-startdate {
+    height: 35px;
+    color: #009DFF;
+    position: absolute;
+    top: 23px;
+    left: 194px;
+    width: 35px;
+}
+
+.ui-datepicker-trigger:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.calendar-enddate {
+    height: 35px;
+    color: #009DFF;
+    position: absolute;
+    top: 23px;
+    right: 46px;
+}
+
+#admin-notification-icon:hover {
+    opacity: 0.7;
+}
+
+#notification-icon:hover {
+    opacity: 0.7;
+}
+
+.create-button:hover {
+    opacity: 0.8;
+}
+
+.back-button:hover {
+    opacity: 0.8;
+}
+
+.edit-button:hover {
+    opacity: .7;
+}
+
+.delete-button:hover {
+    opacity: .7;
+}
+
+.message-container {
+    margin: 5px;
+}
+
+.send-message-button:disabled {
+    pointer-events: auto !important;
+    cursor: no-drop !important;
+}
+
+#edit-startdate:disabled {
+    pointer-events: auto !important;
+    cursor: no-drop !important;
+}
+
+.edit-button:disabled {
+    pointer-events: auto !important;
+    cursor: no-drop !important;
+}
+
+.calendar-startdate:disabled {
+    pointer-events: auto !important;
+    cursor: no-drop !important;
+}
+
+.message-span {
+    max-width: 411px;
+    min-width: 411px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.message-span-container:hover {
+    cursor: pointer;
+}
+
+.main-message-container:hover {
+    opacity: 0.9;
+    background-color: #30343D;
+}
+
+.message-cancel-button {
+    position: absolute;
+    top: 52px;
+    right: 0px;
+}
+
+    .message-cancel-button:hover {
+        color: orangered;
+        cursor: pointer;
+    }
+
+#ui-datepicker-div {
+    z-index: 2000 !important;
+}
+
+.admin-notification-count-container {
+    text-align-last: center;
+    height: 13px;
+    width: 13px;
+    background-color: #fa3e3e;
+    border-radius: 50%;
+    color: white;
+    position: absolute;
+    top: 30px;
+    right: 13px;
+}
+
+.confirmatiom-modal {
+    background-color: grey;
+    padding: 20px;
+    position: absolute;
+    left: 100px;
+    height: 100px;
+    width: 250px;
+    border-radius: 20px;
+}
+
+.confirmation-message {
+    text-align: center;
+    position: relative;
+    top: 10px;
+}
+
+.confirmation-button {
+    width: 75px;
+    border-radius: 5px;
+}
+
+#notification-icon {
+    display: flex;
+    height: 100%;
+}
+
+.dropdownMainContainer {
+    color: #fff !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 381px;
+    border-radius: 7px;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.notification-title-container {
+    padding: 0 10px 10px 10px;
+    margin-left: 7px;
+    color: #25a9c0;
+}
+
+#header-title-notification {
+    font-size: 24px !important;
+    font-weight: 500;
+}
+
+.create-button {
+    margin: 20px 20px;
+    border: none;
+    background-color: inherit;
+    color: #009DFF;
+    font-weight: bold;
+}
+
+.back-button {
+    margin: 20px 20px;
+    border: none;
+    background-color: inherit;
+    color: #ff8000;
+    font-weight: bold;
+}
+
+#empty-notification-notice-superadmin {
+    text-align-last: center;
+    width: 280px;
+    height: 180px;
+    margin-top: -40px;
+}
+
+.empty-notification-icon {
+    color: #009DFF;
+    margin-top: 40px;
+}
+
+.empty-notification-title {
+    font-size: 20px;
+    font-style: normal;
+    margin: 5px 0 0 !important;
+    font-weight: 600;
+}
+
+.empty-notification-message-container {
+    width: 190px;
+    margin: 5px auto 10px;
+}
+
+.empty-notification-message {
+    font-size: 14px !important;
+}
+
+.full-message-container {
+    padding: 0 10px 0 10px;
+    margin: 0 10px 25px 10px;
+    overflow-y: auto;
+    width: 435px;
+    height: 100px;
+}
+
+.overflow-message {
+    font-size: 14px;
+    font-weight: 500;
+    word-wrap: break-word;
+}
+
+#admin-notification-icon {
+    display: flex;
+    height: 100%;
+}
+
+#admin-bell-icon {
+    color: #125282;
+    left: -2px;
+    top: -1px;
+}
+
+.admin-notification-count {
+    font-size: 10px;
+    position: relative;
+    top: -5px;
+}
+
+.admin-notification-title {
+    font-size: 24px !important;
+    font-weight: 500;
+}
+
+#empty-notification-notice {
+    text-align-last: center;
+    width: 280px;
+    height: 180px;
+}
+
+.modal-footer-notification {
+    text-align: right;
+    border: none;
+    padding: 20px !important;
+    margin: 0 !important;
+}
+
+.modal-body-notification {
+    padding: 0 20px !important;
+    position: relative;
+}
+
+.modal-content-notification {
+    width: 500px;
+    border-radius: 10px !important;
+    background-color: #171A1F;
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.2);
+    outline: 0;
+    background-clip: padding-box;
+}
+
+.modal.fade .modal-dialog-notification {
+    -webkit-transform: translate(0,-25%);
+    -ms-transform: translate(0,-25%);
+    transform: translate(0,-25%);
+    -webkit-transition: -webkit-transform 0.3s ease-out;
+    -moz-transition: -moz-transform 0.3s ease-out;
+    -o-transition: -o-transform 0.3s ease-out;
+    transition: transform 0.3s ease-out;
+}
+
+.modal.in .modal-dialog-notification {
+    -webkit-transform: translate(0,0);
+    -ms-transform: translate(0,0);
+    transform: translate(0,0);
+}
+
+.modal-dialog-notification {
+    z-index: 1050;
+    width: auto;
+    padding: 10px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media screen and (min-width: 768px) {
+    .modal-dialog-notification {
+        right: auto;
+        left: 50%;
+        width: 600px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .modal-content {
+        -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+}

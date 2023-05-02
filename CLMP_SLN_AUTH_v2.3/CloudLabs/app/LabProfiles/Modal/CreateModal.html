@@ -1,0 +1,291 @@
+﻿<div class="panel-modal-content panel-outline-content">
+    <div class="modal-header">
+        <span class="panel-modal-title">{{modalTitle}}</span>
+        <i class="glyphicon glyphicon-remove close" ng-click="close()"></i>
+    </div>
+    <div class="modal-body modal-body-style" id="createModalbody">
+        <span class="panel-header title-header"></span>
+
+        <div class="row">
+            <!-- pages -->
+
+            <div class="col-xs-12 no-padding">
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <!-- ve profile details -->
+                    <div class="tab-pane fade active in" id="tabPage1" ng-hide="index != 0">
+                        <div class="lp-row">
+                            <h3 class="header-space">
+                                Lab Details
+                                <span class="header-span">(1/4)</span>
+                            </h3>
+                        </div>
+                        <div class="col-sm-12 modal-inner-box">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <form name="page1">
+                                        <div>
+                                            <label class="panel-sub-name" for="ProfileName">Name&nbsp;</label>
+                                            <input maxlength="70" class="form-control noBorder" type="text" ng-model="profileName" name="profileName" style="max-width: 100%;" required ng-disabled="isUserInstructor" autocomplete="off">
+                                            <p class="error-block text-danger" ng-show="page1.profileName.$invalid && page1.profileName.$dirty">Please provide the name.</p>
+                                            <p class="help-block" ng-hide="page1.profileName.$invalid && page1.profileName.$clean"></p>
+
+
+                                        </div>
+                                        <div class="filler-perc">
+                                            <label class="panel-sub-name" for="ProfileDescription">Description&nbsp;</label>
+                                            <textarea id="ProfileDescription" ng-model="profileDescription" name="profileDescription" class="input-lg form-description" required ng-disabled="isUserInstructor"></textarea>
+                                            <p class="error-block text-danger" ng-show="page1.profileDescription.$invalid && page1.profileDescription.$dirty">Please provide the description.</p>
+                                            <p class="help-block" ng-hide="page1.profileDescription.$invalid && page1.profileDescription.$clean"></p>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <form name="thumbnailUpload" enctype="multipart/form-data">
+                                        <label class="panel-sub-name">Select Image</label>
+                                        <input type="file" style="padding:6px; font-size:11px;" ngf-select ng-model="picFile" ngf-pattern=".jpg,.jpeg,.png,.JPG" ng-change="checkValidity(picFile.size)" name="picFile" id="thumbnail"
+                                               accept=".jpg,.jpeg,.png,.JPG" ngf-max-size="checkValidity(picFile)"
+                                               ngf-model-invalid="errorFile" class="form-control" ng-disabled="isUserInstructor">
+                                        <p class="error-block text-danger" ng-show="thumbnailUpload.picFile.$invalid && thumbnailUpload.$dirty">Please provide an image.</p>
+                                        <p class="error-block text-danger" ng-show="picFile.size > 3145728 && imgLarge">Maximum size is 3MB.</p>
+                                        <div ng-show="picFile.size < 3145728 || !picFile || !thumbnailUpload.picFile.$invalid" class="gap-5"></div>
+                                        <div>
+                                            <label class="panel-sub-name">Image Preview</label>
+                                            <div class="thumb-box">
+                                                <div class="keep-centered" ng-show="imgPreview">
+                                                    <img ngf-src="picFile" class="thumbnail-modal">
+                                                </div>
+                                            </div>
+                                            <button class="gap-5 btn-sm btn-danger keep-right" ng-click="picFile = null && info.ThumbnailURL == null && showRemove == false" ng-show="(picFile.size < 3145728 && picfile != null) || (showRemove)" ng-disabled="isUserInstructor">Remove</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ve type -->
+                    <div id="tabPage3" ng-hide="index != 1">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <h3 class="header-space">Lab Templates <span class="header-span">(2/4)</span></h3>
+                            </div>
+
+                            <div class="row modal-inner-box">
+                                <div>
+                                    <div class="col-sm-6">
+
+                                        <label class="panel-sub-name" style="margin-bottom:20px; margin-top:5px;" for="ProfileName"><span class="">SELECT LAB TYPE: <span style="color:white;">&nbsp;&nbsp;&nbsp;CHOOSE AN OPERATING SYSTEM</span> </span></label>
+                                        <div class="panel shorten panel-info active-library">
+                                            <div class="panel-body">
+                                                <ul class="no-style-list">
+                                                    <li ng-class="isUserInstructor ? {disabledOS: isActiveOS(x)}: {activeOS: isActiveOS(x)}" ng-repeat="x in VETypes" ng-show="x.Enabled" class="OSSelection" ng-click="selectOS(x); chooseOS(x)" ng-style="isUserInstructor ? {'pointer-events':'none'} :''">
+
+                                                        <div class="no-decoration">
+                                                            <div class="div-img-OS">
+                                                                <img class="image-box style-image-OS" ng-src="{{x.ThumbnailUrl}}">
+                                                            </div>
+                                                            <div class="div-img-OS OSName">
+                                                                <span style="font-size:13px;" ng-bind="x.Name" class="no-decoration"></span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label class="panel-sub-name" style="margin-bottom:20px; margin-top:5px;" for="ProfileName"><span class="">SELECT LAB TEMPLATE</span> <span style="color:white;">&nbsp;&nbsp;&nbsp;{{OSName | uppercase}} </span> </label>
+                                        <div class="panel shorten panel-info active-library">
+                                            <div class="panel-body">
+                                                <input class="form-control search" type="text" placeholder="Search Lab Template" ng-model="searchTemplate" ng-disabled="isUserInstructor" />
+                                                <span ng-show="(OSTemplates.length == 0) && selectIsSecond" class="no-template-style">
+                                                    There are no templates available for this type
+                                                </span>
+                                                <ul class="no-style-list" ng-show="veTypeId != 11">
+                                                    <li ng-repeat="x in OSTemplates | orderBy:'Title' | filter: {Title: searchTemplate}" ng-click="chooseTemplate(x); selectTemplate(x)" ng-class="isUserInstructor ? {disabledTemplate: isActiveTemplate(x)} : {activeTemplate: isActiveTemplate(x)}" class="TemplateSelection" ng-style="isUserInstructor ? {'pointer-events':'none'} :''">
+                                                        <div class="labelTemplate">
+                                                            <div><span ng-bind="x.Title" class="template-title"></span></div>
+                                                            <div><span ng-bind="x.Description" class="template-description"></span></div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <ul class="no-style-list" ng-show="veTypeId == 11">
+                                                    <li ng-repeat="c in OSTemplates | orderBy:'Title' | filter: {Title: searchTemplate}" ng-click="chooseTemplate(c); selectTemplate(c)" ng-class="isUserInstructor ? {disabledTemplate: isActiveTemplate(c)} : {activeTemplate: isActiveTemplate(c)}" class="TemplateSelection" ng-style="isUserInstructor ? {'pointer-events':'none'} :''">
+                                                        <div class="labelTemplate">
+                                                            <div><span ng-bind="c.Title" class="template-title"></span></div>
+                                                            <div><span ng-bind="c.Description" class="template-description"></span></div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- lab activities -->
+                    <div id="tabPage4" ng-hide="index != 2">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <h3 class="header-space">Lab Activities <span class="header-span">(3/4)</span></h3>
+                            </div>
+
+                            <div class="row modal-inner-box">
+                                <div ng-show="actLoading" class="loading-block">
+                                    <!--<img class="" src="../../../Content/Image/loading-icon.svg" />-->
+                                    <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+
+                                </div>
+                                <div ng-show="!actLoading">
+                                    <p class="instruction no-margin">*Drag activities here.</p>
+                                    <div ng-repeat="list in model " class="col-sm-6">
+                                        <label ng-show="$index == 0" class="panel-sub-name" for="ProfileName"><span class="">Current Activities</span></label>
+                                        <label ng-show="$index == 1" class="panel-sub-name" for="ProfileName"><span class="">Active Library</span></label>
+                                        <div class="panel shorten panel-info active-library">
+                                            <div class="panel-body">
+
+
+                                                <ul dnd-list dnd-drop="callback({targetList: list, targetIndex: index})">
+                                                    <input ng-show="$index ==1 && !model[1].length == 0" class="form-control search" ng-model="searchActivity" type="text" placeholder="Search Activity" />
+                                                    <span ng-show="model[1].length == 0 && model[0].length == 0" class="no-content-act">No Lab Activities Available</span>
+                                                    <div class="active-library-item col-md-12" ng-repeat="item in list | orderBy:Name | filter: {Name: searchActivity}" dnd-draggable="null" dnd-callback="onDrop(list, $index, targetList, targetIndex-2, searchActivity)">
+                                                        <div class="col-md-8 truncate no-padding">
+                                                            <span data-toggle="tooltip" data-placement="top" title="{{item.Name}}" ng-bind="item.Name"></span>
+                                                        </div>
+
+                                                        <div class="col-md-offset-2 no-padding">
+                                                            <a ng-click="openViewActivityModal(item)" class="btn btn-info btn-sm right-panel">View</a>
+                                                        </div>
+                                                    </div>
+                    
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p ng-show="Act" class="error-block push-right text-danger">Please assign lab activity.</p>
+                                <p ng-hide="!Act" class="help-block"></p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- summary -->
+                    <div id="tabPage5" ng-hide="index != 3">
+                        <div class="col-md-12">
+                            <div class="row"><h3 ng-show="type != 'view'" class="header-space">Summary <span class="header-span">(4/4)</span></h3></div>
+                            <div ng-show="type == 'view'" class="row help-block"></div>
+                            <div ng-show="type == 'view'" class="row help-block"></div>
+                            <div class="row modal-inner-box might-overflow">
+                                <div ng-show="loading2" class="loading-block">
+                                    <!--<img class="" src="../../../Content/Image/loading-icon.svg" />-->
+                                    <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+
+                                </div>
+                                <div ng-show="!loading2" class="might-overflow">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="final-details">
+                                                <div>
+                                                    <p class="" style="margin-bottom: 0px;">Title:</p>
+                                                    <p class="display-details lh-lg">
+                                                        {{profileName}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="final-details">
+                                                <div>
+                                                    <p class=""  style="margin-bottom: 0px;">Description:</p>
+                                                    <p class="display-details lh-lg">
+                                                        {{profileDescription}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="final-details">
+                                                <div>
+                                                    <p class="" style="margin-bottom: 0px;">Lab Activities:</p>
+                                                    <div ng-repeat="x in model[0]">
+                                                        <p class="display-details summary-entry-md">&bull; {{x.Name}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="final-details">
+                                                <div>
+                                                    <p class="" style="margin-bottom: 0px;">Operating System:</p>
+                                                    <p class="display-details lh-lg">
+                                                        {{chosenOS.Name}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="final-details">
+                                                <div>
+                                                    <p class="" style="margin-bottom: 0px;">Template:</p>
+                                                    <p class="display-details lh-lg">
+                                                        {{chosenTemplate.Title}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<div class="push-right text-block">
+                                        <span class="itprofile-title-lab">Title: </span>
+                                        <span class="summary-entry-lg">{{profileName}}</span>
+                                    </div>
+                                    <div class="push-right text-block">
+                                        <span class="itprofile-title-lab">Lab Activities:</span>
+                                        <div ng-repeat="x in model[0]" class="ve-lab-info" id="summary" activity-16="">
+                                            <span class="summary-entry-md">&bull; {{x.Name}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="push-right text-block">
+                                        <span class="itprofile-title-lab">Operating System:</span>
+                                        <span class="summary-entry-md">{{chosenOS.Name}}</span>
+                                    </div>
+                                    <div class="push-right text-block">
+                                        <span class="itprofile-title-lab">Template:</span>
+                                        <span class="summary-entry-md">{{chosenTemplate.Title}}</span>
+                                    </div>
+                                    <div class="push-right text-block">
+                                        <span class="itprofile-title-lab">Description: </span>{{profileName}}
+                                        <span class="summary-entry-md">{{profileDescription}}</span>
+                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer col-md-12" style="margin-top: 60px !important;">
+        <div class="col-xs-6 text-left" ng-show="hidePrevious">
+            <a class="btn btn-primary btn-lg" id="createPrevious" ng-click="previousStep()">
+                <span class="glyphicon glyphicon-menu-left"> </span>
+                Previous
+            </a>
+        </div>
+        <div class="col-xs-6 text-right" style="float:right; transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0s" ng-show="hideNext">
+            <a class="btn btn-primary btn-lg" id="createNext" ng-click="nextStep(thumbnailUpload.picFile.$invalid, picFile.size)"
+               ng-disabled="((index == 0 && ((!profileName) || (!profileDescription) || (imgLarge))) || (index == 1 && ((!chosenOS) || (!chosenTemplate))) || (index == 2 && (model[0].length == 0)))">
+                Next
+                <span class="glyphicon glyphicon-menu-right"> </span>
+            </a>
+        </div>
+        <div class="col-xs-6 text-right" style="float:right;" ng-show="hideSave">
+            <a class="btn btn-primary btn-lg" id="createNext" ng-click="openConfirmationModal(profileName, profileDescription)">
+                Save
+                <span class="glyphicon glyphicon-save"> </span>
+            </a>
+        </div>
+        <div ng-show="type == 'view'" class=" no-padding keep-centered">
+            <a class="btn btn-primary btn-lg" id="createNext" ng-click="close()">
+                Close
+            </a>
+        </div>
+    </div>
+</div>

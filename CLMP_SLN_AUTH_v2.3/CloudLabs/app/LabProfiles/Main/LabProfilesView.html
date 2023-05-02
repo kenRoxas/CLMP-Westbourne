@@ -1,0 +1,178 @@
+﻿
+
+
+
+
+<div ng-model="base" infinite-scroll="loadMore()" infinite-scroll-distance="0">
+
+    <div class="search-block" style="padding-top:1%;">
+        <div>
+            <div ng-show="!loading" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                <div style="display: flex; align-items: center; margin: 5px; margin-left: 12px;">
+                    <input class="form-control search-labs" ng-keypress="loadingContent" ng-model="searchEntry" type="text" placeholder="Search Lab Profiles" aria-label="search lab profiles">
+                    <i class="glyphicon glyphicon-search right-addon glyph-color"></i>
+                </div>
+
+                <div style="display: flex; flex-wrap: wrap; margin-right: 9px;">
+                    <div ng-show="isDisabled" style="margin: 5px;">
+                        <button href="" ng-show="isUserSuperAdmin || isUserAdmin" ng-click="openLabHours()" class="btn btn-primary btn-lg" id="btn-create-profile" data-toggle="tooltip" data-target="#createModal" ng-disabled="isDisabled" tooltip="ASDADA">Course Lab Hours</button>
+                    </div>
+                    <div ng-show="!isDisabled" style="margin: 5px;">
+                        <button href="" ng-show="isUserSuperAdmin || isUserAdmin" ng-click="openLabHours()" class="btn btn-primary btn-lg" id="btn-create-profile" data-toggle="tooltip" data-target="#createModal" ng-disabled="isDisabled || loadingContent">Course Lab Hours</button>
+                    </div>
+                    <div style="margin: 5px;">
+                        <button href="" ng-show="isUserSuperAdmin || isUserAdmin" class="btn btn-primary btn-lg" id="btn-create-profile" ng-disabled="loadingContent" data-toggle="modal" data-target="#createModal" ng-click="openCreateModal('create','')">Create Lab Profile</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="loadingContent" class="loading-block">
+        <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+    </div>
+
+    <div ng-show="!loadingContent" class="" style="display: flex; flex-wrap: wrap; margin-top: 10px;">
+        <div ng-show="!searchEntry" ng-repeat="x in profiles | orderBy: Name" id="profile-{{x.VEProfileID}}" class="lab-container">
+
+            <div class="veprofile-block view-first" style="width: 350px;">
+                <div>
+                    <img ng-show="x.ThumbnailURL == ''" class="img-responsive profile-image" ng-src="../../../Content/Image/course-default.png" style="height: 130px; width: 350px" alt="image">
+                    <img ng-show="x.ThumbnailURL != ''" class="img-responsive profile-image" ng-src="{{x.ThumbnailURL}}" style="height: 130px; width: 350px" alt="image">
+                </div>
+                <div class="veprofile-mask">
+                    <div>
+                        <h3 data-toggle="tooltip" data-placement="top" title="{{x.Name}}" ng-bind="cname(x.Name)" style="width: 350px" class="col assessment-title-shadow"></h3>
+                    </div>
+                    <div ng-show="isUserSuperAdmin" class="ve-btns" ng-class="{'ve-btns': x.CloudLabsSchedule.length == 0, 've-btns-sm': x.CloudLabsSchedule.length != 0}">
+                        <a href="" class="no-outline" ng-class="{'col-sm-4': x.CloudLabsSchedule.length != 0, 'col-sm-3': x.CloudLabsSchedule.length == 0}" data-toggle="tooltip" title="View" ng-click="openCreateModal('view', $index)">
+                            <img ng-init="itemsrc='../../../Content/Image/view.png'" ng-mouseleave="itemsrc='../../../Content/Image/view.png'" ng-mouseover="itemsrc='../../../Content/Image/view-hover.png'" class="btn-profile" ng-src="{{itemsrc}}">
+                        </a>
+                        <a href="" class="no-outline col-sm-3" ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" data-toggle="tooltip" ng-disabled="isProvisioning" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Edit'}}" ng-click="openCreateModal('edit', $index)">
+                            <img ng-init="itemsrc2='../../../Content/Image/edit.png'" class="btn-profile" ng-src="{{itemsrc2}}" alt="image">
+                        </a>
+                        <a href="" class="no-outline" ng-show="x.CloudLabsSchedule.length == 0" ng-class="{'col-sm-4': x.CloudLabsSchedule.length != 0, 'col-sm-3': x.CloudLabsSchedule.length == 0}" data-toggle="tooltip" title="Delete" ng-click="openConfirmationModal('delete', x.VEProfileID, x.Name)">
+                            <img ng-init="itemsrc3='../../../Content/Image/delete.png'" ng-mouseleave="itemsrc3='../../../Content/Image/delete.png'" ng-mouseover="itemsrc3='../../../Content/Image/delete-hover.png'" class="btn-profile" ng-src="{{itemsrc3}}">
+                        </a>
+                        <!--<button ng-if="x.VirtualEnvironment.VETypeID != 6" ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" onclick="this.blur();" href="" ng-class="{'col-sm-4': x.CloudLabsSchedule.length != 0, 'col-sm-3': x.CloudLabsSchedule.length == 0}" data-toggle="tooltip" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Grant Lab Access'}}" ng-disabled="isProvisioning" ng-click="openGrantLabModal(x.VEProfileID, x.VirtualEnvironment.VETypeID, x.Name)">
+                            <img ng-init="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseleave="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseover="searchitemsrc4='../../../Content/Image/attach-hover.png'" class="btn-profile" ng-src="{{searchitemsrc4}}">
+                        </button>
+                        <button ng-if="x.VirtualEnvironment.VETypeID == 6" ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" onclick="this.blur();" href="" ng-class="{'col-sm-4': x.CloudLabsSchedule.length != 0, 'col-sm-3': x.CloudLabsSchedule.length == 0}" data-toggle="tooltip" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Schedule Format'}}" ng-disabled="isProvisioning" ng-click="openGrantLabModal(x.VEProfileID, x.VirtualEnvironment.VETypeID, x.Name)">
+                            <img ng-init="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseleave="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseover="searchitemsrc4='../../../Content/Image/attach-hover.png'" class="btn-profile" ng-src="{{searchitemsrc4}}">
+                        </button>-->
+                        <button ng-if="x.VirtualEnvironment.VETypeID != 6" ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" onclick="this.blur();" href="" ng-class="{'col-sm-4': x.CloudLabsSchedule.length != 0, 'col-sm-3': x.CloudLabsSchedule.length == 0}" data-toggle="tooltip" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Grant Lab Access'}}" ng-disabled="isProvisioning" ng-click="openGrantLabModal(x.VEProfileID, x.VirtualEnvironment.VETypeID, x.Name)">
+                            <img ng-init="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseleave="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseover="searchitemsrc4='../../../Content/Image/attach-hover.png'" class="btn-profile" ng-src="{{searchitemsrc4}}">
+                        </button>
+                        <!--<div class="no-outline col-sm-3 text-center" ng-style="isUserStaff ? {'width': '100%'} : {}" style="padding:0;">
+                            <button onclick="this.blur();" href="" style="background:transparent; border:0px;" data-toggle="tooltip" title="Lab Hours Extension" ng-click="openLabHourExtension(x.VEProfileID, x.Name)">
+                                <img ng-init="searchitemsrc5='../../../Content/Image/hourglass-icon.png'" class="btn-profile" ng-src="{{searchitemsrc5}}" alt="image">
+                            </button>
+                        </div>-->
+                    </div>
+                    <div ng-show="!isUserSuperAdmin" class="ve-btns">
+                        <div class="no-outline col-sm-3 text-center" ng-style="isUserStaff ? {'width': '100%'} : {}" style="padding:0;">
+                            <button onclick="this.blur();" href="" style="background:transparent; border:0px;" data-toggle="tooltip" title="View" ng-click="openCreateModal('view', $index)">
+                                <img ng-init="searchitemsrc='../../../Content/Image/view.png'" class="btn-profile" ng-src="{{searchitemsrc}}" alt="image">
+                            </button>
+                        </div>
+                        <div class="no-outline col-sm-3 text-center" ng-show="!isUserStaff" style="padding:0;">
+                            <button ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" onclick="this.blur();" href="" style="background:transparent; border:0px;" data-toggle="tooltip" ng-click="openCreateModal('edit', $index)" ng-disabled="isProvisioning" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Edit'}}">
+                                <img ng-init="itemsrc2='../../../Content/Image/edit.png'" class="btn-profile" ng-src="{{itemsrc2}}" alt="image">
+                            </button>
+                        </div>
+                        <div class="no-outline col-sm-3 text-center" ng-style="isUserStaff ? {'width': '100%'} : {}" style="padding:0;">
+                            <button ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" onclick="this.blur();" href="" data-toggle="tooltip" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Grant Lab Access'}}" ng-disabled="isProvisioning" ng-click="openGrantLabModal(x.VEProfileID, x.VirtualEnvironment.VETypeID, x.Name)">
+                                <img ng-init="searchitemsrc4='../../../Content/Image/attach.png'" class="btn-profile" ng-src="{{searchitemsrc4}}" alt="image">
+                            </button>
+                        </div>
+                        <div class="no-outline col-sm-3 text-center" ng-style="isUserStaff ? {'width': '100%'} : {}" style="padding:0;">
+                            <button onclick="this.blur();" href="" style="background:transparent; border:0px;" data-toggle="tooltip" title="Lab Grade" ng-click="courseGradeModal(x.VEProfileID, x.VirtualEnvironment.VETypeID, x.Name, x.VEDescription)">
+                                <img ng-init="itemsrc4='../../../Content/Image/coursegrade.png'" class="btn-profile" ng-src="{{itemsrc4}}" alt="image">
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="block-info-edit info-ve" style="width: 350px; white-space: nowrap;">
+                    <div class="assessment-title" ng-bind="x.Name" style="text-overflow: ellipsis;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="searchEntry" ng-repeat="y in data = (profiles | filter: search | orderBy: Name)" class="lab-container">
+            <div class="veprofile-block view-first" style="width: 350px;">
+                <div>
+                    <img ng-show="y.ThumbnailURL == ''" class="img-responsive profile-image" ng-src="../../../Content/Image/course-default.png" style="height: 130px; width: 350px" alt="image">
+                    <img ng-show="y.ThumbnailURL != ''" class="img-responsive profile-image" ng-src="{{y.ThumbnailURL}}" style="height: 130px; width: 350px" alt="image">
+                </div>
+                <div class="veprofile-mask">
+                    <div>
+                        <h3 class="assessment-title-shadow" ng-bind="cname(y.Name)" style="width: 350px;"></h3>
+                    </div>
+                    <div ng-show="isUserSuperAdmin" class="" ng-class="{'ve-btns': y.CloudLabsSchedule.length == 0, 've-btns-sm': y.CloudLabsSchedule.length != 0}">
+                        <a href="" class="no-outline" ng-class="{'col-sm-4': y.CloudLabsSchedule.length != 0, 'col-sm-3': y.CloudLabsSchedule.length == 0}" data-toggle="tooltip" title="View" ng-click="openCreateModal('view', y)">
+                            <img ng-init="searchitemsrc='../../../Content/Image/view.png'" ng-mouseleave="searchitemsrc='../../../Content/Image/view.png'" ng-mouseover="searchitemsrc='../../../Content/Image/view-hover.png'" class="btn-profile" ng-src="{{searchitemsrc}}" alt="image">
+                        </a>
+                        <a href="" class="no-outline" ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" ng-class="{'col-sm-4': y.CloudLabsSchedule.length != 0, 'col-sm-3': y.CloudLabsSchedule.length == 0}"
+                           data-toggle="tooltip" ng-disabled="isProvisioning" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Edit'}}" ng-click="openCreateModal('edit', y)">
+                            <img ng-init="searchitemsrc2='../../../Content/Image/edit.png'" ng-mouseleave="searchitemsrc2='../../../Content/Image/edit.png'" ng-mouseover="searchitemsrc2='../../../Content/Image/edit-hover.png'" class="btn-profile" ng-src="{{searchitemsrc2}}" alt="image">
+                        </a>
+                        <a href="" class="no-outline" ng-show="y.CloudLabsSchedule.length == 0" ng-class="{'col-sm-4': y.CloudLabsSchedule.length != 0, 'col-sm-3': y.CloudLabsSchedule.length == 0}" data-toggle="tooltip" title="Delete" ng-click="openConfirmationModal('delete', y.VEProfileID, y.Name)">
+                            <img ng-init="searchitemsrc3='../../../Content/Image/delete.png'" ng-mouseleave="searchitemsrc3='../../../Content/Image/delete.png'" ng-mouseover="searchitemsrc3='../../../Content/Image/delete-hover.png'" class="btn-profile" ng-src="{{searchitemsrc3}}" alt="image">
+                        </a>
+                        <!--<button ng-if="x.VirtualEnvironment.VETypeID != 6" onclick="this.blur();" href="" ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" ng-class="{'col-sm-4': y.CloudLabsSchedule.length != 0, 'col-sm-3': y.CloudLabsSchedule.length == 0}" data-toggle="tooltip" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Grant Lab Access'}}" ng-disabled="isProvisioning" ng-click="openGrantLabModal(y.VEProfileID, y.VirtualEnvironment.VETypeID, y.Name)">
+                            <img ng-mouseleave="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseover="searchitemsrc4='../../../Content/Image/attach-hover.png'" class="btn-profile" ng-src="{{searchitemsrc4}}" alt="image">
+                        </button>
+                        <button ng-if="x.VirtualEnvironment.VETypeID == 6" onclick="this.blur();" href="" ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" ng-class="{'col-sm-4': y.CloudLabsSchedule.length != 0, 'col-sm-3': y.CloudLabsSchedule.length == 0}" data-toggle="tooltip" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Schedule Format'}}" ng-disabled="isProvisioning" ng-click="openGrantLabModal(y.VEProfileID, y.VirtualEnvironment.VETypeID, y.Name)">
+                            <img ng-mouseleave="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseover="searchitemsrc4='../../../Content/Image/attach-hover.png'" class="btn-profile" ng-src="{{searchitemsrc4}}" alt="image">
+                        </button>-->
+                        <button onclick="this.blur();" href="" ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" ng-class="{'col-sm-4': y.CloudLabsSchedule.length != 0, 'col-sm-3': y.CloudLabsSchedule.length == 0}" data-toggle="tooltip" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Grant Lab Access'}}" ng-disabled="isProvisioning" ng-click="openGrantLabModal(y.VEProfileID, y.VirtualEnvironment.VETypeID, y.Name)">
+                            <img ng-mouseleave="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseover="searchitemsrc4='../../../Content/Image/attach-hover.png'" class="btn-profile" ng-src="{{searchitemsrc4}}" alt="image">
+                        </button>
+                        <!--<div ng-show="isUserSuperAdmin" class="no-outline col-sm-3 text-center" ng-style="isUserStaff ? {'width': '100%'} : {}" style="padding:0;">
+                            <button onclick="this.blur();" href="" style="background:transparent; border:0px;" data-toggle="tooltip" title="Lab Hours Extension" ng-click="openLabHourExtension(y.VEProfileID, y.Name)">
+                                <img ng-init="searchitemsrc5='../../../Content/Image/hourglass-icon.png'" class="btn-profile" ng-src="{{searchitemsrc5}}" alt="image">
+                            </button>
+                        </div>-->
+                    </div>
+                    <div ng-show="!isUserSuperAdmin" class="ve-btns" ng-class="{'ve-btns': y.CloudLabsSchedule.length == 0, 've-btns-sm': y.CloudLabsSchedule.length != 0}">
+                        <div class="no-outline col-sm-3 text-center" ng-style="isUserStaff ? {'width': '100%'} : {}" style="padding:0;">
+                            <button onclick="this.blur();" href="" style="background:transparent; border:0px;" data-toggle="tooltip" title="View" ng-click="openCreateModal('view', y)">
+                                <img ng-init="searchitemsrc='../../../Content/Image/view.png'" ng-mouseleave="searchitemsrc='../../../Content/Image/view.png'" ng-mouseover="searchitemsrc='../../../Content/Image/view-hover.png'" class="btn-profile" ng-src="{{searchitemsrc}}" alt="image">
+                            </button>
+                        </div>
+                        <div class="no-outline col-sm-3 text-center" ng-show="!isUserStaff" style="padding:0;">
+                            <button onclick="this.blur();" href="" style="background:transparent; border:0px;" data-toggle="tooltip" ng-click="openCreateModal('edit', y)" ng-disabled="isProvisioning" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Edit'}}">
+                                <img ng-init="itemsrc2='../../../Content/Image/edit.png'" ng-mouseleave="itemsrc2='../../../Content/Image/edit.png'" ng-mouseover="itemsrc2='../../../Content/Image/edit-hover.png'" class="btn-profile" ng-src="{{itemsrc2}}" alt="image">
+                            </button>
+                        </div>
+                        <div class="no-outline col-sm-3 text-center" ng-style="isUserStaff ? {'width': '100%'} : {}" style="padding:0;">
+                            <button onclick="this.blur();" ng-style="isProvisioning ? {'filter':'grayscale(80%)','background':'transparent', 'border':'0px', 'cursor':'not-allowed'} : {'background':'transparent', 'border':'0px'}" href="" data-toggle="tooltip" title="{{isProvisioning ? 'Machine Provision is Ongoing.' : 'Grant Lab Access'}}" ng-disabled="isProvisioning" ng-click="openGrantLabModal(y.VEProfileID, y.VirtualEnvironment.VETypeID, y.Name)">
+                                <img ng-init="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseleave="searchitemsrc4='../../../Content/Image/attach.png'" ng-mouseover="searchitemsrc4='../../../Content/Image/attach-hover.png'" class="btn-profile" ng-src="{{searchitemsrc4}}" alt="image">
+                            </button>
+                        </div>
+                        <div class="no-outline col-sm-3 text-center" ng-style="isUserStaff ? {'width': '100%'} : {}" style="padding:0;">
+                            <button onclick="this.blur();" href="" style="background:transparent; border:0px;" data-toggle="tooltip" title="Lab Grade" ng-click="courseGradeModal(y.VEProfileID, y.VirtualEnvironment.VETypeID, y.Name,y.VEDescription)">
+                                <img ng-init="itemsrc4='../../../Content/Image/coursegrade.png'" ng-mouseleave="itemsrc4='../../../Content/Image/coursegrade.png'" ng-mouseover="itemsrc4='../../../Content/Image/coursegrade.png'" class="btn-profile" ng-src="{{itemsrc4}}" alt="image">
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="block-info-edit info-ve" style="width: 350px; white-space: nowrap;">
+                    <div class="assessment-title" style="text-overflow: ellipsis;">{{y.Name}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-show="loading" class="loading-block">
+    <!--<img src="../../../Content/Image/loading-icon.svg" />-->
+    <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+    <span class="loadText" aria-busy="true" aria-live="polite" aria-label="Loading Lab Profiles Page">Loading Lab Profiles Page...</span>
+</div>
+
+<div ng-show="empty && !loading" class="loading-block no-content">
+    <h1>No Lab Profiles Available</h1>
+</div>

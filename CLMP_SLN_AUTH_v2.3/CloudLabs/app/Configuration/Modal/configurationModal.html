@@ -1,0 +1,644 @@
+﻿
+
+<div class="panel-modal-content panel-outline-content">
+    <div class="modal-header">
+        <button type="button" ng-show="oppositeLoader" class="close" aria-label="Close" ng-click="close()">
+            <i class="glyphicon glyphicon-remove close" aria-hidden="true" data-dismiss="modal"></i>
+        </button>
+
+
+        <span class="panel-modal-title">{{header}}</span>
+    </div>
+
+    <div class="modal-body">
+        <div class="loading-block no-padding text-center" ng-show="loader">
+            <img src="../../../Content/Image/loading2.gif" />
+        </div>
+
+        <div ng-show="oppositeLoader" class="panel-sub-name">
+            <form ng-show="isTypeOfBusinessesVisible" name="BusinessTypeForm">
+                <div class="configuration-form">
+
+                    <span class="my-modal-style">User Group</span>
+                    <!--<select ng-model="businessGroupSelected" ng-change="changeBusinessGroup()" required class="form-control config-form-control-box" ">
+    <option ng-repeat="x in businessGroup track by $index" value="{{x}}">{{x.UserGroupName}}</option>
+                    </select>-->
+                    <select ng-model="businessGroupSelected" class="form-control config-form-control-box" ng-options="x.UserGroupName for x in businessGroup" required>
+                        <option value="" selected="selected">- Please Select -</option>
+                    </select>
+                    <span class="my-modal-style">Business Type<span class="text-danger"> *</span></span>
+                    <select ng-model="businessName" class="form-control config-form-control-box" ng-change="changeBusiness()" ng-disabled="isDisabled" ng-options="x.BusinessType for x in businessType" required>
+                        <option value="" selected="selected">- Please Select -</option>
+                    </select>
+                    <!--<select ng-model="businessName" required class="form-control config-form-control-box" ng-disabled="businessGroupSelected.length == 0">
+        <option ng-repeat="x in businessType track by $index" value="{{x}}">{{x}}</option>
+    </select>-->
+                    <span class="my-modal-style">Validity (OPTIONAL)</span>
+                    <input ng-model="validity" type="number" class="form-control config-form-control-box day-control-form" ng-pattern="/^[0-9]*$/" ng-disabled="isValidityDisabled" placeholder="Days of Validity" />
+
+                </div>
+            </form>
+
+            <!--<form ng-show="isAutoDeletionVisible" name="AutoDeletionForm">
+                <div class="configuration-form">
+                    <div>
+                        <span class="my-modal-style">User Group Name <span class="text-danger">*</span></span>
+                        <select ng-model="SelectUserGroupNameForAutoDeletion" ng-change="checkIfUserGroupHasSchedule()" class="form-control config-form-control-box" ng-options="x.GroupName for x in userGroupForAutoDeletion" required>
+                            <option value="" selected="selected">- Please Select -</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span class="my-modal-style">Days <span class="text-danger">*</span></span>
+                        <input ng-model="NumberOfDays" type="number" class="form-control config-form-control-box day-control-form" placeholder="Days" required />
+                    </div>
+                </div>
+
+            </form>-->
+
+            <form ng-show="isCreateVirtualEnvironmentVisible" class="configuration-form" name="CreateVEForm">
+                <div class="my-modal-style"><span>Title <span class="text-danger">*</span></span> </div><input type="text" class="form-control config-form-control-box" ng-model="Title" required>
+                <div class="my-modal-style"><span>Description <span class="text-danger">*</span></span></div> <input type="text" class="form-control config-form-control-box" ng-model="Description" required>
+                <div class="my-modal-style"><span>Type ID <span class="text-danger">*</span></span></div>
+                <select ng-model="VETypeID" class="form-control config-form-control-box" ng-options="x.Name for x in VEType" required>
+                    <option value="" selected="selected">- Please Select -</option>
+                </select>
+                <!--<div class="my-modal-style"><span>Cloud Provider ID <span class="text-danger">*</span></span></div>
+                <select ng-model="CloudProviderID" class="form-control config-form-control-box" ng-options="x.Name for x in CloudProvider" required>
+                    <option value="" selected="selected">- Please Select -</option>
+                </select>-->
+
+            </form>
+
+            <form ng-show="isEditVirtualEnvironmentVisible" class="configuration-form" name="EditVEForm">
+                <span class="my-modal-style">Title <span class="text-danger">*</span></span>
+                <div style="display: flex; align-items: center;">
+                    <select ng-model="title" class="form-control config-form-control-box" ng-options="x.Title for x in VEDescription" required>
+                        <option value="" selected="selected">- Please Select -</option>
+                    </select>
+                    <div class="my-glyph-bin">
+                        <button type="button" ng-show="!DisabledDelete" class="close" aria-label="Close" ng-click="deleteVE()">
+                            <i class="glyphicon glyphicon-trash my-glyphicon-style" aria-hidden="true" data-dismiss="modal"></i>
+                        </button>
+                    </div>
+                </div>
+                <span class="my-modal-style">Description <span class="text-danger">*</span></span> <input type="text" ng-disabled="DisabledTitle" class="form-control config-form-control-box" ng-model="description" required>
+                <span class="my-modal-style">Type ID <span class="text-danger">*</span></span>
+                <select ng-disabled="DisabledVETypeID" ng-model="VETypeSelectedEdit" class="form-control config-form-control-box" ng-options="x.Name for x in VEType">
+                </select>
+                <!--<span class="my-modal-style">Cloud Provider ID <span class="text-danger">*</span></span>
+                <select ng-disabled="DisabledCloudProviderID" ng-model="CloudProviderSelectedEdit" class="form-control config-form-control-box" ng-options="x.Name for x in CloudProvider">
+                </select>-->
+            </form>
+
+            <form ng-show="isEditRoleNameVisible" class="configuration-form" name="EditRoleForm">
+                <span class="my-modal-style">Current Role Name <span class="text-danger">*</span></span>
+                <select ng-model="currentRoleName" class="form-control config-form-control-box" ng-options="x.Name for x in roleConfig" required>
+                    <option value="" selected="selected">- Please Select -</option>
+                </select>
+                <span class="my-modal-style">New Role Name <span class="text-danger">*</span></span> <input type="text" ng-disabled="DisabledNewRoleName" class="form-control config-form-control-box" ng-model="newRoleName" required>
+            </form>
+
+            <form ng-show="isEditTimeVisible" class="configuration-form" name="EditTimeForm">
+                <span class="my-modal-style">Max Job Idle Time (sec) <span class="text-danger">*</span></span> <input type="number" class="form-control config-form-control-box" ng-model="MaxJobIdleTime" required>
+                <span class="my-modal-style">Hearbeat Interval (sec) <span class="text-danger">*</span></span> <input type="number" class="form-control config-form-control-box" ng-model="HeartbeatInterval" required>
+                <span class="my-modal-style">Max Idle Time (sec) <span class="text-danger">*</span></span> <input type="number" class="form-control config-form-control-box" ng-model="MaxIdleTime" required>
+            </form>
+
+            <form ng-show="isEditVirtualEnvironmentImagesVisible" ng-model="VirtualEnvironmentImages" class="configuration-form" name="VirtualEnvironmentImagesForm">
+                <button class="btn btn-primary btn-lg" style="width:auto;margin-left: 3%; margin-bottom: 3%;" ng-click="btn = 'NonGCP'; clickVE();" ng-disabled="noGCPDisabled">Non-Google Cloud Provider</button>
+                <button class="btn btn-primary btn-lg" style="width:auto;margin-bottom: 3%;" ng-click="btn = 'GCP'; clickVE();" ng-disabled="GCPDisabled">Google Cloud Provider</button>
+                <div ng-show="btn == 'NonGCP';">
+                    <span class="my-modal-style">Storage Template Name <span class="text-danger">*</span></span>
+                    <div style="display: flex; align-items: center;">
+                        <select ng-model="StorageTemplateName" class="form-control config-form-control-box" ng-options="x.storageAccountName for x in StorageAccountName" name="StorageTemplateName" required>
+                            <option value="" selected="selected" ng-disabled="true">- Please Select -</option>
+                        </select>
+                    </div>
+                    <span class="my-modal-style">Title <span class="text-danger">*</span></span>
+                    <div style="display: flex; align-items: center;">
+                        <select ng-model="TitleImages" class="form-control config-form-control-box" ng-options="x.Title for x in VEDescription" required ng-disabled="DisableTitle" name="TitleImages">
+                            <option value="" selected="selected">- Please Select -</option>
+                        </select>
+                        <div class="my-glyph-bin">
+                            <button type="button" ng-show="DisabledDeleteImage" class="close" aria-label="Close" ng-click="deleteVEImage()">
+                                <i disabled="Disabled" class="glyphicon glyphicon-trash my-glyphicon-style" aria-hidden="true" data-dismiss="modal"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <span class="my-modal-style">URL <span class="text-danger">*</span></span>
+                    <select ng-disabled="DisableImageURL" ng-model="URLImages" class="form-control config-form-control-box" ng-options="x for x in Images" required name="URLImages">
+                        <option value="" selected="selected" ng-disabled="true">- Please Select -</option>
+                    </select>
+                </div>
+                <div ng-show="btn == 'GCP';">
+                    <span class="my-modal-style">Title <span class="text-danger">*</span></span>
+                    <div style="display: flex; align-items: center;">
+                        <select ng-model="TitleImagesGCP" class="form-control config-form-control-box" ng-options="x.Title for x in VEDescriptionGCP" required name="TitleImagesGCP">
+                            <option value="" selected="selected">- Please Select -</option>
+                        </select>
+                        <div class="my-glyph-bin">
+                            <button type="button" ng-show="DisabledDeleteImage" class="close" aria-label="Close" ng-click="deleteVEImage()">
+                                <i disabled="Disabled" class="glyphicon glyphicon-trash my-glyphicon-style" aria-hidden="true" data-dismiss="modal"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <span class="my-modal-style">Project Family <span class="text-danger">*</span></span>
+                    <div style="display: flex; align-items: center;">
+                        <select ng-model="ProjFamily" class="form-control config-form-control-box" ng-options="x.name for x in StorageTemplateNameGCP" name="ProjFamily" ng-disabled="!TitleImagesGCP" required>
+                            <option value="" selected="selected" ng-disabled="true">- Please Select -</option>
+                        </select>
+                    </div>
+                    <span class="my-modal-style">Image Name <span class="text-danger">*</span></span>
+                    <div style="display: flex; align-items: center;">
+                        <select ng-model="AMI" class="form-control config-form-control-box" ng-options="x.name for x in ProjAMIFamily" name="AMI"  ng-disabled="!TitleImagesGCP" required>
+                            <option value="" selected="selected">- Please Select -</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!--<div style="position: relative;">
+        <select ng-model="URLImages" ng-disabled="DisableImageURL" class="form-control config-form-control-box" required>
+            <option ng-repeat="x in Images" value="{{x}}">{{x}}</option>
+        </select>
+        <span class="my-modal-style" ng-show="URLImages == undefined || URLImages == undefined" style="position: absolute; top: 102%;">No VHD Avilable.<span class="text-danger">*</span></span>
+    </div>-->
+            </form>
+
+            <form ng-show="isAddTenantVisible" class="configuration-form" name="AddTenantForm">
+                <div class="tenant-form-wrapper">
+                    <div class="layer">
+                        <div class="tenant-name">
+                            <span class="my-modal-style-tenant">Tenant Name <span class="text-danger">*</span></span>
+                            <select class="form-control config-form-control-box" ng-model="SelectTenantName" ng-options="item as item.name for item in names" required></select>
+                            <input type="text" class="input-sm input-tenant-medium-modal" ng-model="TenantName" required>
+                        </div>
+                        <div class="tenant-code" style="padding: 0px 15px">
+                            <span class="my-modal-style-tenant">Code <span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box" name="code" ng-model="SelectTenantName.code" ng-change="monitorLength(3)" ng-disabled="true" required>
+                        </div>
+                        <div class="tenant-code">
+                            <span class="my-modal-style-tenant">Azure Port <span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box" ng-model="TenantAzurePort" disabled="disabled" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">Edx URL <span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box" ng-model="EdxUrl" required>
+                        </div>
+                        <div class="tenant-name">
+                            <span class="my-modal-style-tenant">Database Host <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-medium-modal" ng-model="TenantDatabaseHost" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">Auth Connection <span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box" ng-model="AuthConnectionString" required>
+                        </div>
+                        <div class="tenant-name">
+                            <span class="my-modal-style-tenant">Database Password <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-medium-modal" ng-model="TenantDatabasePassword" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">API URL <span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box" ng-model="apiurl" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">Guacamole Connection <span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box" ng-model="GuacConnection" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">Guacamole URL <span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box" ng-model="GuacamoleURL" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">Subscription ID <span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box" ng-model="SubscriptionId" required>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form ng-show="isEditTenantVisible" class="configuration-form" name="EditTenantForm">
+                <div class="tenant-form-wrapper">
+                    <div class="layer">
+                        <div class="tenant-name">
+                            <span class="my-modal-style-tenant">Tenant Name <span class="text-danger">*</span></span>
+                            <select class="input-sm input-tenant-medium-modal" ng-model="TenantName" ng-options="item for item in names"></select>
+                            <input type="text" class="input-sm input-tenant-medium-modal" ng-model="TenantName" required>
+                        </div>
+                        <div class="tenant-code" style="padding: 0px 15px">
+                            <span class="my-modal-style-tenant">Code <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-small-modal" ng-model="TenantCode" ng-change="monitorLength(3)" required>
+                        </div>
+                        <div class="tenant-code">
+                            <span class="my-modal-style-tenant">Azure Port <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-small-modal" ng-model="TenantAzurePort" disabled="disabled" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">Edx URL <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-large-modal" ng-model="EdxUrl" required>
+                        </div>
+                        <div class="tenant-name">
+                            <span class="my-modal-style-tenant">Database Host <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-medium-modal" ng-model="TenantDatabaseHost" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">Auth Connection <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-large-modal" ng-model="AuthConnectionString" required>
+                        </div>
+                        <div class="tenant-name">
+                            <span class="my-modal-style-tenant">Database Password <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-medium-modal" ng-model="TenantDatabasePassword" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">API URL <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-large-modal" ng-model="apiurl" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">Guacamole Connection <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-large-modal" ng-model="GuacConnection" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">Guacamole URL <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-large-modal" ng-model="GuacamoleURL" required>
+                        </div>
+                    </div>
+                    <div class="layer">
+                        <div class="tenant-URL">
+                            <span class="my-modal-style-tenant">Subscription ID <span class="text-danger">*</span></span>
+                            <input type="text" class="input-sm input-tenant-large-modal" ng-model="SubscriptionId" required>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form ng-show="isAddUserGroupVisible" class="configuration-form" name="AddUserGroupForm">
+                <span class="my-modal-style">User Group Name <span class="text-danger">*</span></span>
+                <input class="form-control config-form-control-box" maxlength="40" ng-change="EnableSaveButton()" ng-model="UserGroupName" required>
+
+                <!--<span class="my-modal-style">Type of Business <span class="text-danger">*</span></span>-->
+                <!--<select ng-model="SelectedTypeOfBusiness" class="form-control config-form-control-box" required>
+        <option value="" selected="selected">- Please Select -</option>
+        <option ng-show="TypeOfBusiness.length > 0" ng-repeat="item in TypeOfBusiness" value="{{item.Id}}">{{item.TypeOfBusinessName}}</option>
+    </select>-->
+
+                <span class="my-modal-style">EDX URL <span class="text-danger">*</span> </span>
+                <input style="margin-bottom:0 !important;" class="form-control config-form-control-box" ng-model="EdxUrl" required>
+                <div style="margin-bottom:20px !important;">Don't include https://</div>
+
+                <span class="my-modal-style">Cloud Labs URL <span class="text-danger">*</span> </span>
+                <input style="margin-bottom:0 !important;" class="form-control config-form-control-box" ng-model="CLUrl" required>
+                <div style="margin-bottom:20px !important;">Full Url including https://</div>
+
+                <span ng-if="DuplicateChecker" class="duplicate-User-Group duplicate-Add-Group">*Duplicate User Group Name*</span>
+
+                <span class="my-modal-style">Environment <span class="text-danger">*</span> </span>
+                <select ng-model="Environment" ng-change="getPrefix(Environment)" class="form-control config-form-control-box" required>
+                    <option ng-repeat="x in environment" value="{{x.EnvCode}}">{{x.EnvName}}</option>
+                </select>
+
+                <span class="my-modal-style">Cloud Labs Prefix <span class="text-danger">*</span> </span>
+                <select ng-model="CLPrefix" ng-disabled="!(Environment.length >= 0)" class="form-control config-form-control-box" required>
+                    <option ng-repeat="x in clPrefix track by $index" value="{{x}}">{{x}}</option>
+                </select>
+                <!--<input style="margin-bottom:0 !important;" ng-change="Duplicate()" class="form-control config-form-control-box" maxlength="3" ng-model="CLPrefix" required>
+    <span ng-if="DuplicatePrefix" class="duplicate-User-Group" style="top: 330px">*Duplicate Prefix*</span>-->
+                <!--<span class="my-modal-style">Cloud Labs Prefix <span class="text-danger">*</span> </span>
+    <input class="form-control config-form-control-box" maxlength="5" ng-model="CLPrefix" required>
+    <span ng-if="DuplicatePrefix" class="duplicate-User-Group" style="top: 330px">*Duplicate Prefix*</span>-->
+
+                <span class="my-modal-style">API Prefix <span class="text-danger">*</span> </span>
+                <input class="form-control config-form-control-box" maxlength="3" ng-model="ApiPrefix" placeholder="Ask the DEVOPS what is the api prefix of the tenant" required>
+            </form>
+
+            <form ng-show="isEditUserGroupVisible" class="configuration-form" name="EditUserGroupForm">
+                <span class="my-modal-style">User Group Name <span class="text-danger">*</span></span>
+                <div style="display: flex; align-items: center;">
+
+                    <select ng-model="SelectUserGroupEditName" class="form-control config-form-control-box" ng-options="x.GroupName for x in UserGroups" required>
+                        <option value="" selected="selected">- Please Select -</option>
+                    </select>
+                    <div class="my-glyph-bin">
+                        <button type="button" ng-show="isUserGroupCurrentActive" class="close" aria-label="Close" ng-click="deleteUserGroup()">
+                            <i class="glyphicon glyphicon-trash my-glyphicon-style" aria-hidden="true" data-dismiss="modal"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+                <span class="my-modal-style">New User Group Name <span class="text-danger">*</span> </span> <input class="form-control config-form-control-box" ng-change="EnableSaveButton()" ng-disabled="!(SelectUserGroupEditName.GroupName.length >= 0)" ng-model="UserGroupName" required>
+
+                <span class="my-modal-style">EDX URL <span class="text-danger">*</span></span> <input ng-disabled="!(SelectUserGroupEditName.GroupName.length >= 0)" style="margin-bottom:0 !important;" class="form-control config-form-control-box" ng-model="EdxUrl" required>
+                <div style="margin-bottom: 20px;">Don't include https://</div>
+
+                <span class="my-modal-style">Cloud Labs URL <span class="text-danger">*</span></span> <input ng-disabled="!(SelectUserGroupEditName.GroupName.length >= 0)" style="margin-bottom:0 !important;" class="form-control config-form-control-box" ng-model="CLUrl" required>
+                <div style="margin-bottom: 20px;">Full Url including https://</div>
+                <span ng-if="DuplicateChecker" class="duplicate-User-Group duplicate-Edit-Group">*Duplicate User Group Name*</span>
+
+                <span class="my-modal-style">Environment <span class="text-danger">*</span> </span>
+                <select ng-model="Environment" ng-change="getPrefix(Environment)" ng-disabled="{{alwaysTrue}}" class="form-control config-form-control-box">
+                    <option ng-repeat="x in environment">{{Environment}}</option>
+                </select>
+
+                <span class="my-modal-style">Cloud Labs Prefix <span class="text-danger">*</span> </span>
+                <select ng-model="CLPrefix" ng-init="CLPrefix" class="form-control config-form-control-box" ng-disabled="!(SelectUserGroupEditName.GroupName.length >= 0)">
+                    <option ng-repeat="x in clPrefix  track by $index" value="{{x}}">{{x}}</option>
+                </select>
+                <span class="my-modal-style">API Prefix <span class="text-danger">*</span> </span>
+                <input ng-disabled="!(SelectUserGroupEditName.GroupName.length >= 0)" class="form-control config-form-control-box" maxlength="3" ng-model="ApiPrefix" placeholder="Ask the DEVOPS what is the api prefix of the tenant" required>
+
+            </form>
+
+            <form ng-show="isLabHoursCreditVisible" class="configuration-form" name="LabHoursCreditForm">
+                <span class="my-modal-style">User Group Name <span class="text-danger">*</span></span>
+                <select ng-model="SelectSubscriptionCredit" class="form-control config-form-control-box" ng-options="x.GroupName for x in UserGroups" required>
+                    <option value="" selected="selected">- Please Select -</option>
+                </select>
+
+                <div>
+                    <span class="my-modal-style">Total Lab Hours Credit <span class="text-danger">*</span></span>
+                    <div style="display: flex; align-items: center;">
+                        <input ng-keydown="styleLabCredit = {'color': 'black'}" ng-style="styleLabCredit" type="number" class="form-control config-form-control-box" ng-model="SubscriptionHourCredits" required><span style="display:inline; margin: 0px 0px 5px 5px;" class="my-modal-style">hrs.</span>
+                    </div>
+                </div>
+            </form>
+            <form ng-show="isAddTenantNewVisible" name="AddTenantNewForm" class="configuration-form" style="overflow-y: auto; height: 60em;">
+                <span class="my-modal-style-tenant">Cloud Provider<span class="text-danger">*</span></span>
+                <select ng-model="CloudProviderID" class="form-control config-form-control-box" ng-options="x.Name for x in CloudProvider" ng-change="changeCloud()" required>
+                    <option value="" selected="selected">- Please Select -</option>
+                </select>
+                <!--#region TenantNew  -->
+
+                <span class="my-modal-style-tenant">Environment<span class="text-danger">*</span></span>
+                <select ng-model="Environment" required class="form-control config-form-control-box" ng-disabled="!CloudProviderID" ng-change="changeEnvi()">
+                    <option ng-repeat="x in environment" value="{{x.EnvCode}}">{{x.EnvName}}</option>
+                </select>
+                <div ng-show="CloudProviderID">
+                    <div ng-show="isAzure">
+                        <span class="my-modal-style-tenant">Client Code<span class="text-danger">*</span></span>
+                        <input type="text" class="form-control config-form-control-box uppercase" ng-model="ClientCode" name="ClientCode"  ng-pattern-restrict="^[A-Za-z0-9]{0,5}$" ng-disabled="!(Environment.length >= 0)" placeholder="5 Uppercase Letters Required" required style="margin-bottom: 0;">
+                        <span class="text-danger" ng-show="show">Client Code Exists</span>
+
+                        <span class="my-modal-style-tenant" style="margin-top:20px">Application Tenant Id<span class="text-danger">*</span></span>
+                        <input type="text" class="form-control form-control config-form-control-box" placeholder="ApplicationTenantId" ng-model="ApplicationTenantId" name="ApplicationTenantId" ng-disabled="!(Environment.length >= 0)" required>
+
+                        <span class="my-modal-style-tenant">Subscription Id<span class="text-danger">*</span></span>
+                        <input type="text" class="form-control form-control config-form-control-box" placeholder="SubscriptionId" ng-model="SubscriptionId" name="SubscriptionId" ng-disabled="!(Environment.length >= 0)" required>
+
+                        <span class="my-modal-style-tenant">Application Client Id<span class="text-danger">*</span></span>
+                        <input type="text" class="form-control form-control config-form-control-box" placeholder="Client Id" ng-model="ApplicationId" name="ApplicationId" ng-disabled="!(Environment.length >= 0)" required>
+
+                        <span class="my-modal-style-tenant">Application Secret Key Id<span class="text-danger">*</span></span>
+                        <input type="text" class="form-control form-control config-form-control-box" placeholder="Secret Key" ng-model="ApplicationSecretKey" name="ApplicationSecretKey" ng-disabled="!(Environment.length >= 0)" required>
+
+                        <span class="my-modal-style-tenant">Regions<span class="text-danger">*</span></span>
+                        <select ng-model="RegionName" required class="form-control config-form-control-box" ng-options="x for x in Regions" name="RegionName" ng-disabled="!(Environment.length >= 0)">
+                            <option value="" selected="selected">- Please Select -</option>
+                        </select>
+
+                        <span class="my-modal-style-tenant">Type of Business<span class="text-danger">*</span></span>
+                        <select ng-model="businessName" class="form-control config-form-control-box" ng-options="x.BusinessType for x in businessType" name="businessName" ng-disabled="!(Environment.length >= 0)" required>
+                            <option value="" selected="selected">- Please Select -</option>
+                        </select>
+
+                        <span class="my-modal-style-tenant">Contact Email<span class="text-danger">*</span></span>
+                        <input type="email" class="form-control config-form-control-box" ng-model="ContactEmail" name="ContactEmail" ng-disabled="!(Environment.length >= 0)" required>
+
+
+                        <span class="my-modal-style-tenant">Guacamole Connection<span class="text-danger">*</span></span>
+                        <input type="text" class="form-control config-form-control-box" ng-model="GuacConnection" name="GuacConnection" ng-disabled="!(Environment.length >= 0)" required>
+
+                        <span class="my-modal-style-tenant">Guacamole URL<span class="text-danger">*</span></span>
+                        <input type="text" class="form-control config-form-control-box" ng-model="GuacamoleURL" name="GuacamoleURL" ng-disabled="!(Environment.length >= 0)" required>
+                    </div>
+
+                    <div ng-show="isGCP">
+                        <button class="btn btn-primary btn-lg" style="margin-left: 6%;" ng-click="btn = 'Add'; btnClicked();" ng-disabled="addDisabled">Add Existing</button>
+                        <button class="btn btn-primary btn-lg" ng-click="btn = 'Create'; btnClicked();" ng-disabled="createDisabled">Create</button>
+
+                        <div ng-show="btn">
+                            <span class="my-modal-style-tenant">Client Code<span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box uppercase" ng-model="ClientCode" name="ClientCode" ng-pattern-restrict="^[A-Za-z0-9]{0,5}$" ng-disabled="!(Environment.length >= 0)" placeholder="5 Uppercase Letters Required" required style="margin-bottom: 0;">
+                            <span class="text-danger" ng-show="show">Client Code Exists</span>
+
+                            <div ng-show="btn == 'Create'">
+                                <span class="my-modal-style-tenant" style="margin-top:20px">Project Name<span class="text-danger">*</span></span>
+                                <input type="text" class="form-control config-form-control-box uppercase" ng-model="PrjName" name="PrjName" ng-pattern-restrict="^[A-Za-z0-9-]{0,15}$" ng-disabled="!(Environment.length >= 0)" placeholder="15 Alphanumeric including '-'" required style="margin-bottom: 0;">
+                                <span class="text-danger" ng-show="show">Project Name Exists</span>
+
+                                <span class="my-modal-style-tenant" style="margin-top:20px">VPC Network<span class="text-danger">*</span></span>
+                                <input type="text" class="form-control config-form-control-box uppercase" ng-model="VPCName" name="VPCName" ng-pattern-restrict="^[A-Za-z0-9-]{0,15}$" ng-disabled="!(Environment.length >= 0)" placeholder="15 Alphanumeric only" required style="margin-bottom: 0;">
+
+                                <span class="my-modal-style-tenant" style="margin-top:20px">VPC SubNetwork<span class="text-danger">*</span></span>
+                                <input type="text" class="form-control config-form-control-box uppercase" ng-model="VPCSubName" name="VPCSubName" ng-pattern-restrict="^[A-Za-z0-9-]{0,15}$" ng-disabled="!(Environment.length >= 0)" placeholder="15 Alphanumeric only" required style="margin-bottom: 0;">
+                            </div>
+                            <div ng-show="btn == 'Add'">
+                                <span class="my-modal-style-tenant" style="margin-top:20px">Project Name<span class="text-danger">*</span></span>
+                                <select ng-model="ProjectName" required class="form-control config-form-control-box" ng-options="x.project_id for x in ProjectGCP" name="ProjectName" ng-disabled="!(Environment.length >= 0)">
+                                    <option value="" selected="selected">- Please Select -</option>
+                                </select>
+                                <span class="my-modal-style-tenant" style="margin-top:20px">VPC Network<span class="text-danger">*</span></span>
+                                <select ng-model="VPCNetworkName" required class="form-control config-form-control-box" ng-options="x.name for x in VPCGCP" name="VPCNetworkName" ng-disabled="!(Environment.length >= 0)">
+                                    <option value="" selected="selected">- Please Select -</option>
+                                </select>
+
+                                <span class="my-modal-style-tenant" style="margin-top:20px">VPC SubNetwork<span class="text-danger">*</span></span>
+                                <select ng-model="SubNetwork" required class="form-control config-form-control-box" ng-options="x.name for x in SubGCP" name="SubNetwork" ng-disabled="!(Environment.length >= 0)">
+                                    <option value="" selected="selected">- Please Select -</option>
+                                </select>
+
+                                <span class="my-modal-style-tenant">Regions<span class="text-danger">*</span></span>
+                                <select ng-model="RegionsGCP" required class="form-control config-form-control-box" ng-options="x for x in RegionGCP" name="RegionsGCP" ng-disabled="!(Environment.length >= 0)">
+                                    <option value="" selected="selected">- Please Select -</option>
+                                </select>
+                            </div>
+
+                            <span class="my-modal-style-tenant" style="margin-top:20px">Type of Business<span class="text-danger">*</span></span>
+                            <select ng-model="businessName" class="form-control config-form-control-box" ng-options="x.BusinessType for x in businessType" name="businessName" ng-disabled="!(Environment.length >= 0)" required>
+                                <option value="" selected="selected">- Please Select -</option>
+                            </select>
+
+                            <span class="my-modal-style-tenant">Contact Email<span class="text-danger">*</span></span>
+                            <input type="email" class="form-control config-form-control-box" ng-model="ContactEmail" name="ContactEmail" ng-disabled="!(Environment.length >= 0)" required>
+
+
+                            <span class="my-modal-style-tenant">Guacamole Connection<span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box" ng-model="GuacConnection" name="GuacConnection" ng-disabled="!(Environment.length >= 0)" required>
+
+                            <span class="my-modal-style-tenant">Guacamole URL<span class="text-danger">*</span></span>
+                            <input type="text" class="form-control config-form-control-box" ng-model="GuacamoleURL" name="GuacamoleURL" ng-disabled="!(Environment.length >= 0)" required>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <!--#endregion  TenantNew  -->
+
+            </form>
+            <form ng-show="isEditTenantNewVisible" class="configuration-form" name="EditTenantNewForm">
+                <span class="my-modal-style-tenant">Cloud Provider<span class="text-danger">*</span></span>
+                <select ng-model="CloudProviderID" class="form-control config-form-control-box" ng-options="x.Name for x in CloudProvider" ng-change="changeCloud()" required>
+                    <option value="" selected="selected">- Please Select -</option>
+                </select>
+
+                <span class="my-modal-style-tenant">Client Code<span class="text-danger">*</span></span>
+                <select ng-model="ClientCode" required ng-change="isTrue= 'true';getTenantValues(ClientCode)" class="form-control config-form-control-box">
+                    <option ng-repeat="x in tCodes track by $index" value="{{x}}">{{x}}</option>
+                </select>
+                <div ng-show="isGCP">
+                    <span class="my-modal-style-tenant" style="margin-top:20px">Project Name<span class="text-danger">*</span></span>
+                    <select ng-model="ProjectNameEdit" required class="form-control config-form-control-box" name="ProjectName" ng-disabled="!(ClientCode.length >= 0)">
+                        <option ng-repeat="x in ProjectGCP" value="{{x.project_id}}">{{x.project_id}}</option>
+                    </select>
+                    <span class="my-modal-style-tenant" style="margin-top:20px">VPC Network<span class="text-danger">*</span></span>
+                    <select ng-model="VPCNetworkNameEdit" required class="form-control config-form-control-box" name="VPCNetworkName" ng-disabled="!(ClientCode.length >= 0)">
+                        <option ng-repeat="x in VPCGCP" value="{{x.name}}">{{x.name}}</option>
+                    </select>
+
+                    <span class="my-modal-style-tenant" style="margin-top:20px">VPC SubNetwork<span class="text-danger">*</span></span>
+                    <select ng-model="SubNetworkEdit" required class="form-control config-form-control-box" name="SubNetwork" ng-disabled="!(ClientCode.length >= 0)">
+                        <option ng-repeat="x in SubGCP" value="{{x.name}}">{{x.name}}</option>
+                    </select>
+
+                    <span class="my-modal-style-tenant">Regions<span class="text-danger">*</span></span>
+                    <select ng-model="RegionsGCPEdit" required class="form-control config-form-control-box" name="RegionsGCP" ng-disabled="!(ClientCode.length >= 0)">
+                        <option ng-repeat="x in RegionGCP track by $index" value="{{x}}">{{x}}</option>
+                    </select>
+                </div>
+
+                <div ng-show="isAzure">
+                    <span class="my-modal-style-tenant" style="margin-top:20px">Application Tenant Id<span class="text-danger">*</span></span>
+                    <input type="text" class="form-control form-control config-form-control-box" placeholder="ApplicationTenantId" ng-model="ApplicationTenantId" ng-disabled="!isTrue" required>
+
+                    <span class="my-modal-style-tenant">Subscription Id<span class="text-danger">*</span></span>
+                    <input type="text" class="form-control form-control config-form-control-box" placeholder="SubscriptionId" ng-model="SubscriptionId" ng-disabled="!isTrue" required>
+
+                    <span class="my-modal-style-tenant">Application Client Id<span class="text-danger">*</span></span>
+                    <input type="text" class="form-control form-control config-form-control-box" placeholder="Client Id" ng-model="ApplicationId" ng-disabled="!isTrue" required>
+
+                    <span class="my-modal-style-tenant">Application Secret Key Id<span class="text-danger">*</span></span>
+                    <input type="text" class="form-control form-control config-form-control-box" placeholder="Secret Key" ng-model="ApplicationSecretKey" ng-disabled="!isTrue" required>
+
+                    <span class="my-modal-style-tenant">Regions<span class="text-danger">*</span></span>
+                    <select ng-model="RegionName" required class="form-control config-form-control-box" ng-disabled="!isTrue">
+                        <option ng-repeat="x in Regions track by $index" value="{{x}}">{{x}}</option>
+                    </select>
+                </div>
+
+                    <span class="my-modal-style-tenant">Type of Business<span class="text-danger">*</span></span>
+                    <select ng-model="BusinessEditName" required ng-options="x.BusinessType for x in businessType" class="form-control config-form-control-box" ng-disabled="!isTrue || isDisabledTypeOfBusiness">
+                        <option value=""></option>
+                    </select>
+
+                    <span class="my-modal-style-tenant">Guacamole Connection<span class="text-danger">*</span></span>
+                    <input type="text" class="form-control form-control config-form-control-box" ng-model="GuacConnectionTenantEdit" ng-disabled="!isTrue" required>
+
+                    <span class="my-modal-style-tenant">Guacamole Url<span class="text-danger">*</span></span>
+                    <input type="text" class="form-control form-control config-form-control-box" ng-model="GuacamoleURLTenantEdit" ng-disabled="!isTrue" required>
+            </form>
+
+        </div>
+    </div>
+    <div class="modal-footer my-text-center" ng-show="oppositeLoader" style="margin-top:0px !important;">
+        <!--<div ng-show="isAutoDeletionVisible">
+        <button class="btn btn-primary btn-lg" ng-disabled="AutoDeletionForm.$invalid" ng-click="save()">Save</button>
+        <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+    </div>-->
+        <div ng-show="isCreateVirtualEnvironmentVisible">
+            <button class="btn btn-primary btn-lg" ng-disabled="CreateVEForm.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isEditVirtualEnvironmentVisible">
+            <button class="btn btn-primary btn-lg" ng-disabled="EditVEForm.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isEditRoleNameVisible">
+            <button class="btn btn-primary btn-lg" ng-disabled="EditRoleForm.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isEditTimeVisible">
+            <button class="btn btn-primary btn-lg" ng-disabled="EditTimeForm.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isEditVirtualEnvironmentImagesVisible">
+            <button class="btn btn-primary btn-lg" ng-show="btn == 'NonGCP'" ng-disabled="VirtualEnvironmentImagesForm.StorageTemplateName.$invalid || VirtualEnvironmentImagesForm.TitleImages.$invalid || VirtualEnvironmentImagesForm.URLImages.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-primary btn-lg" ng-show="btn == 'GCP'" ng-disabled="VirtualEnvironmentImagesForm.ProjFamily.$invalid || VirtualEnvironmentImagesForm.TitleImagesGCP.$invalid || VirtualEnvironmentImagesForm.AMI.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isAddTenantVisible">
+            <button class="btn btn-primary btn-lg" ng-disabled="AddTenantForm.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isEditTenantVisible">
+            <button class="btn btn-primary btn-lg" ng-disabled="EditTenantForm.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isAddUserGroupVisible" style="text-align: center;">
+            <!-- <button class="btn btn-info" style="width:25%;" ng-disabled="AddUserGroupForm.$invalid || DuplicateChecker || DuplicatePrefix || CLPrefix.length == 0" ng-click="AddAnotherUser = true; save();">Add Another</button>-->
+            <button class="btn btn-primary" style="width:25%;" ng-disabled="AddUserGroupForm.$invalid || DuplicateChecker || DuplicatePrefix || CLPrefix.length == 0" ng-click="AddAnotherUser = false; save();">Create</button>
+            <button class="btn btn-danger" style="width:25%;" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isEditUserGroupVisible">
+            <button class="btn btn-primary btn-lg" ng-disabled="EditUserGroupForm.$invalid || DuplicateChecker || DuplicatePrefix" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isLabHoursCreditVisible">
+            <button class="btn btn-primary btn-lg" ng-disabled="LabHoursCreditForm.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isAddTenantNewVisible">
+            <button class="btn btn-primary btn-lg" ng-show="isAzure" ng-disabled="ClientCode.length != 5 || show || AddTenantNewForm.ClientCode.$invalid ||
+AddTenantNewForm.ApplicationTenantId.$invalid || AddTenantNewForm.SubscriptionId.$invalid || AddTenantNewForm.ApplicationId.$invalid || AddTenantNewForm.ApplicationSecretKey.$invalid || AddTenantNewForm.RegionName.$invalid || AddTenantNewForm.businessName.$invalid ||
+AddTenantNewForm.ContactEmail.$invalid || AddTenantNewForm.GuacConnection.$invalid || AddTenantNewForm.GuacamoleURL.$invalid" ng-click="save()">
+                Save
+            </button>
+            <button class="btn btn-primary btn-lg" ng-show="isGCP" ng-disabled="ClientCode.length != 5 || show || (AddTenantNewForm.PrjName.$invalid && AddTenantNewForm.ProjectName.$invalid) ||
+(AddTenantNewForm.VPCName.$invalid && AddTenantNewForm.VPCNetworkName.$invalid) || (AddTenantNewForm.VPCSubName.$invalid && AddTenantNewForm.SubNetwork.$invalid) || AddTenantNewForm.RegionsGCP.$invalid || AddTenantNewForm.businessName.$invalid || AddTenantNewForm.ContactEmail.$invalid || AddTenantNewForm.GuacConnection.$invalid || AddTenantNewForm.GuacamoleURL.$invalid" ng-click="save()">
+                Save
+            </button>
+            <button class="btn btn-danger btn-lg" ng-show="isAzure" ng-click="close()">Close</button>
+        </div>
+        <div ng-show="isEditTenantNewVisible">
+            <button class="btn btn-primary btn-lg" ng-disabled="EditTenantNewForm.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div> 
+        <div ng-show="isTypeOfBusinessesVisible">
+            <button class="btn btn-primary btn-lg" ng-disabled="BusinessTypeForm.$invalid" ng-click="save()">Save</button>
+            <button class="btn btn-danger btn-lg" ng-click="close()">Close</button>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/ng-template" id="myModalContent.html" class="modal">
+    <div class="myModal">
+        This is the first modal!!
+        <br />
+        <button class="btn btn-default btnPadding" ng-click="openSecond()">Second modal</button>
+    </div>
+</script>
+
+
+
+

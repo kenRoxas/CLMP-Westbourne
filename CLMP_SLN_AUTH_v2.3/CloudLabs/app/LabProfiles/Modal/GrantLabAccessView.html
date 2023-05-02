@@ -1,0 +1,411 @@
+﻿
+<div class="panel-modal-content panel-outline-content" ng-if="isUserSuperAdmin && ( VEType == 1 || VEType == 2 || VEType == 3 || VEType == 4 || VEType == 8 || VEType == 9 || VEType == 10)">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()"><i class="glyphicon glyphicon-remove close" aria-hidden="true"></i></button>
+        <!-- <div class="modal-header-font">-->
+        <div ng-if="VEType==1 || VEType==2 || VEType==3 || VEType==4 || VEType==5 || VEType == 8 || VEType == 9 || VEType == 10">
+            <span class="panel-modal-title">Grant Lab Access</span>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div class="panel-modal-title">{{(VEName)}}</div>
+        <div style="margin-top: 5px;">
+        <div style="margin-top: 5px;">
+            <div class="modal-inner-box-grant">
+                <div style="display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items:center;">
+                        <div style="display: flex; flex-direction: column">
+                            <div style="display: flex;">
+                                <div style="margin: 5px; margin-left: 0px; display: flex; align-items:center;">
+                                    <input class="form-control search-labs" ng-model="search" ng-keyup="filterStatus(myOpt.name,search)" type="text" placeholder="Search Name or Email" style="width: 95%; top:11px; width:220px !important;">
+                                    <i class="glyphicon glyphicon-search" style="color:dimgray; margin-left: -20px;"></i>
+                                </div>
+                                <div style="margin: 5px; margin-left: 10px; display: flex; align-items:center;">
+
+                                    <select ng-model="myOpt" ng-options="opts.name for opts in opt" class="form-control option-labs" style="top:11px;" ng-change="filterStatus(myOpt.name,search)"></select>
+                                    <!--<select class="form-control option-labs" style="top:11px;" ng-model="status" ng-change="filterStatus(status,null);search= ''">-->
+                                    <!--<select class="form-control option-labs" style="top:11px;" ng-model="lablab.hasHours">-->
+                                    <!--<option value="">All User</option>
+        <option value="Available">Available</option>
+        <option value="Granted">Granted</option>
+        <option value="Provisioned">Provisioned</option>
+        <option value="Provisioning">Provisioning</option>
+        <option value="Failed">Failed</option>
+    </select>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex;">
+                            <div style="display: flex; align-items:center;" ng-if="VEType == 5">
+                                <select class="form-control option-labs" style="top:11px;" ng-model="regions.region" ng-options="region as region.RegionName for region in regions track by region.RegionName">
+                                    <option value="" ng-if="newRegion == undefined">Select Region</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                            <div style="margin: 5px;">
+                                <span class="grant-lab-header">Total Lab Hours: </span>
+                                <!--<span class="lab-hours">{{totalCourseHours / 60}}</span>-->
+                                <span class="lab-hours">{{totalCourseHours}}</span>
+                            </div>
+                            <div style="margin: 5px;">
+                                <span class="grant-lab-header">Total Remaining Lab Hours: </span>
+                                <!--<span class="lab-hours" ng-style="totalRemainingCourseHours / 60 == 0 ? {'color': 'red'} : {'color': ''}">{{totalRemainingCourseHours / 60 }}</span>-->
+                                <span class="lab-hours" ng-style="totalRemainingCourseHours == 0 ? {'color': 'red'} : {'color': ''}">{{totalRemainingCourseHours}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="width-100 keep-left text-block">
+                            <span class="grant-lab-header-small">*Select names to create Cloud Lab Machines</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="table-animation" class="outer-box">
+                    <table id="table-animation" class="table table-condensed table-hover">
+                        <thead class="levelOne">
+                            <tr ng-model="users">
+                                <th class="" ng-click="sortData(''); caretClick = !caretClick">
+                                    <input ng-click="toggleAll(filterData)" ng-model="isAllSelected" type="checkbox" />
+                                </th>
+                                <th ng-click="sortData('LastName'); caretClick = !caretClick">
+                                    Name
+                                    <span ng-if="defaultCaretChange.FirstName">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.FirstName" />
+                                    </span>
+                                    <span ng-if="!defaultCaretChange.FirstName">
+                                        <span ng-show="caretChange.FirstName" class="fa fa-caret-down" style="color:black"></span>
+                                        <span ng-show="!caretChange.FirstName" class="fa fa-caret-up" style="color:black"></span>
+                                    </span>
+                                </th>
+                                <th ng-click="sortData('Email')">
+                                    Email
+                                    <span ng-if="defaultCaretChange.Email">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.Email" />
+                                    </span>
+                                    <span ng-if="!defaultCaretChange.Email">
+                                        <span ng-show="caretChange.Email" class="fa fa-caret-down" style="color:black"></span>
+                                        <span ng-show="!caretChange.Email" class="fa fa-caret-up" style="color:black"></span>
+                                    </span>
+                                </th>
+                                <th ng-click="sortData('hasHours'); caretClick = !caretClick" style="min-width: 9rem;">
+                                    Credit
+                                    <span ng-if="defaultCaretChange.LabHoursTotal">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.LabHoursTotal" />
+                                    </span>
+                                    <span ng-if="!defaultCaretChange.LabHoursTotal">
+                                        <span ng-show="caretChange.LabHoursTotal" class="fa fa-caret-down" style="color:black"></span>
+                                        <span ng-show="!caretChange.LabHoursTotal" class="fa fa-caret-up" style="color:black"></span>
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody ng-show="allUsers.length == 0 || filterData.length == 0">
+                            <tr>
+                                <td colspan="8" class="text-center noHover" style="color:white;">No User found.</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr ng-show="!loading" style="text-align:center;" ng-repeat="user in filterData = (allUsers | filter : lablab) | orderBy: sortType:sortReverse"
+                                class="trow" ng-click="SelectUser(user,true)" ng-class="{disableRow: toggled(user)}">
+                                <td style="text-transform: lowercase;">
+                                    <div class="user-name">
+                                        <span data-toggle="tooltip">
+                                            <input type="checkbox" ng-click="user.selected = !user.selected" ng-model="user.selected" ng-disabled="toggled(user)" />
+                                        </span>
+                                    </div>
+                                </td>
+                                <td style="text-align:left; padding-left:3em;">
+                                    <div class="user-name truncate-lab letterCase">
+                                        <div class="push-right changeColor" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;  color: white; width: 200px;" data-toggle="tooltip" title="{{user.FirstName}} {{user.LastName}}">
+                                            {{user.LastName}}, {{user.FirstName}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="text-transform: lowercase; text-align:left; padding-left:3em;">
+                                    <div class="user-name">
+                                        <div data-toggle="tooltip" class="changeColor" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; color: white; width: 257px;" title="{{user.Email}}">
+                                            {{user.Email}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="user-name">
+                                        <div data-toggle="tooltip" ng-style="user.selected && user.hasHours != 'Failed' ? {'color': '#25a9c0'} : user.hasHours == 'Failed' ? {'color': 'red'} : {'color': ''}" ng-disabled="user.hasHours == 'Provisioning'">
+                                            <span title="{{user.hasHours}}" ng-if="user.hasHours == 'Available' || user.hasHours == 'Granted'" style="color: #DC3545" class="changeColor">{{user.hasHours}}</span>
+                                            <span title="{{user.hasHours}}" ng-if="user.hasHours == 'Provisioned'" style="color: #28A745">{{user.LabHoursTotal}}</span>
+                                            <span title="{{user.hasHours}}" ng-if="user.hasHours == 'Provisioning'" style="color: #28A745" class="changeColor">{{user.hasHours}}</span>
+                                            <span title="{{user.hasHours}}" ng-if="user.hasHours == 'Failed'" style="color: red" class="changeColor">{{user.hasHours}}</span>
+                                            <span title="{{user.hasHours}}" ng-if="user.hasHours == 'Deleted'" style="color: red" class="changeColor">{{user.hasHours}}</span>
+                                        </div>
+                                        <!--<span class="changeColor" ng-style="user.selected && user.MachineStatus != 3 ? {'color': '#25a9c0'} : user.MachineStatus == 3 ? {'color': 'red'} : {'color': ''}"
+                  data-toggle="tooltip" title="{{user.MachineStatus == 0 || user.MachineStatus == 1 || user.MachineStatus == 2 ? user.LabHoursTotal / 60 : user.MachineStatus == 3 ? 'Failed' : 'Provisioning'}}" ng-disabled="user.MachineStatus == 4">
+                {{user.MachineStatus == 0 || user.MachineStatus == 1 || user.MachineStatus == 2 ? user.LabHoursTotal / 60 : user.MachineStatus == 3 ? 'Failed' : 'Provisioning'}}
+            </span>-->
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div ng-show="loading" class="loading-block-grant">
+                        <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+                    </div>
+
+                    <h1 class="loading-block white-text" ng-show="allUsers.length == 0 && loading == false">No Students Available.</h1>
+                </div>
+                <div class="page">
+                    <!--<pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+        <a class="btn btn-primary">Page: {{pageIndex}} / {{numPages}}</a>-->
+                    <!--<pagination ng-model="pageIndex"></pagination>-->
+                    <ul uib-pagination ng-model="pagination.currentPage"
+                        class="pagination-sm"
+                        max-size="pagination.maxSize"
+                        boundary-links="true"
+                        items-per-page="pagination.pageSizeSelected"
+                        num-pages="numPages"
+                        ng-change="pageChanged()"
+                        total-items="totalCount" style="margin: 10px 0;"></ul>
+                </div>
+                <!--<div ng-show="!loading" class="page">
+        <pagination ng-model="currentPage"></pagination>
+        <ul uib-pagination ng-model="currentPage"
+            class="pagination-sm"
+            max-size="maxSize"
+            boundary-links="true"
+            items-per-page="itemsPerPage"
+            num-pages="numPages"
+            ng-change="pageChanged()"
+            total-items="filterData.length" style="margin: 10px 0;"></ul>
+    </div>-->
+                <div style="margin-top: 10px;">
+                    <span style="color:white;">
+                        <u>{{Userlength}}</u> Total users <u>{{selectedUsers.length}}</u> Selected users
+                    </span>
+                    <button ng-disabled="selectedUsers.length != 0" type="button" style="position: absolute;right: 30px;bottom: 17%;" class="btn btn-primary btn-lg" id="btn-create-profile" ng-click="Save(selectedUsers)" ng-show="bulkShow">Bulk Create</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer no-left col-md-12">
+        <div>
+            <span class="grant-lab-header-small keep-left no-padding">Note: Creating Cloud Lab machines can take up to 1 hour. </span>
+        </div>
+        <div class="no-padding">
+            <div class="keep-right">
+                <a class="btn btn-danger btn-sm" ng-click="close()">
+                    Cancel
+                </a>
+            </div>
+            <div class="keep-right" ng-if="VEType == 5">
+                <button class="btn btn-primary btn-sm" ng-disabled="selectedUsers.length == 0 || newRegion === null || newRegion === undefined" ng-click="Save(selectedUsers)">
+                    Grant Access
+                </button>
+            </div>
+            <div class="keep-right" ng-if="VEType == 1 || VEType == 2 || VEType == 3 || VEType == 4  || VEType == 8 || VEType == 9 || VEType == 10">
+                <button class="btn btn-primary btn-sm" ng-disabled="selectedUsers.length == 0" ng-click="Save(selectedUsers)">
+                    Grant Access
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<div class="panel-modal-content panel-outline-content" ng-if="!isUserSuperAdmin || ( VEType == 6 || VEType == 7 && (isUserSuperAdmin))">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()"><i class="glyphicon glyphicon-remove close" aria-hidden="true"></i></button>
+        <div ng-show="VEType != 3 && VEType !=4">
+            <span class="panel-modal-title">Grant Lab Access</span>
+        </div>
+        <div ng-show="VEType == 3 || VEType ==4">
+            <span class="panel-modal-title">Custom VM</span>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div class="panel-modal-title">{{(VEName)}}</div>
+        <div style="margin-top: 5px;">
+            <div class="modal-inner-box-grant">
+                <div style="display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items:center;">
+                        <div style="display: flex; flex-direction: column">
+                            <div style="display: flex;">
+                                <div style="margin: 5px; margin-left: 0px; display: flex; align-items:center;">
+                                    <input class="form-control search-labs" ng-model="search;" ng-keyup="filterStatus(status,search); status=status" type="text" placeholder="Search Name or Email" style="width: 95%; top:11px; width:220px !important;">
+                                    <i class="glyphicon glyphicon-search" style="color:dimgray; margin-left: -20px;"></i>
+                                </div>
+                                <div style="margin: 5px; margin-left: 10px; display: flex; align-items:center;">
+                                    <select class="form-control option-labs" style="top:11px;" ng-model="status" ng-change="filterStatus(status,search); search= search">
+                                        <option value="">All User</option>
+                                        <option value="Available">Available</option>
+                                        <option value="Granted">Granted</option>
+                                        <option value="Provisioned">Provisioned</option>
+                                        <option value="Provisioning">Provisioning</option>
+                                        <option value="Failed">Failed</option>
+                                        <option value="Deleted">Deleted</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end;" ng-if="VEType == 1 || VEType == 2 || VEType == 3 || VEType == 4 || VEType == 8 || VEType == 9 || VEType == 10">
+                            <div style="margin: 5px;">
+                                <span class="grant-lab-header">Total Lab Hours: </span>
+                                <span class="lab-hours">{{totalCourseHours}}</span>
+                                <!--<span class="lab-hours">{{totalCourseHours / 60}}</span>-->
+                            </div>
+                            <div style="margin: 5px;">
+                                <span class="grant-lab-header">Total Remaining Lab Hours: </span>
+                                <!--<span class="lab-hours" ng-style="totalRemainingCourseHours / 60 == 0 ? {'color': 'red'} : {'color': ''}">{{totalRemainingCourseHours / 60 }}</span>-->
+                                <span class="lab-hours" ng-style="totalRemainingCourseHours == 0 ? {'color': 'red'} : {'color': ''}">{{totalRemainingCourseHours}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="width-100 keep-left text-block">
+                            <span class="grant-lab-header-small">*Select names to schedule the course for students</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="table-animation" class="outer-box">
+                    <table id="table-animation" class="table table-condensed table-hover">
+                        <thead class="levelOne">
+                            <tr ng-model="users">
+                                <th ng-click="sortData(''); caretClick = !caretClick">
+                                    <input ng-click="toggleAll(filterData)" ng-model="isAllSelected" type="checkbox" />
+                                </th>
+                                <th ng-click="sortData('LastName'); caretClick = !caretClick">
+                                    Name
+                                    <span ng-if="defaultCaretChange.FirstName">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.FirstName" />
+                                    </span>
+                                    <span ng-if="!defaultCaretChange.FirstName">
+                                        <span ng-show="caretChange.FirstName" class="fa fa-caret-down" style="color:black"></span>
+                                        <span ng-show="!caretChange.FirstName" class="fa fa-caret-up" style="color:black"></span>
+                                    </span>
+                                </th>
+                                <th ng-click="sortData('Email')">
+                                    Email
+                                    <span ng-if="defaultCaretChange.Email">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.Email" />
+                                    </span>
+                                    <span ng-if="!defaultCaretChange.Email">
+                                        <span ng-show="caretChange.Email" class="fa fa-caret-down" style="color:black"></span>
+                                        <span ng-show="!caretChange.Email" class="fa fa-caret-up" style="color:black"></span>
+                                    </span>
+                                </th>
+                                <th ng-click="sortData('IsCourseGranted'); caretClick = !caretClick" ng-show="VEType != 3 && VEType !=4">
+                                    Status
+                                    <span ng-if="defaultCaretChange.IsCourseGranted">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="defaultCaretChange.IsCourseGranted" />
+                                    </span>
+                                    <span ng-if="!defaultCaretChange.IsCourseGranted">
+                                        <span ng-show="caretChange.IsCourseGranted" class="fa fa-caret-down" style="color:black"></span>
+                                        <span ng-show="!caretChange.IsCourseGranted" class="fa fa-caret-up" style="color:black"></span>
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody ng-show="allUsers.length == 0 || filterData.length == 0">
+                            <tr>
+                                <td colspan="8" class="text-center noHover" style="color:white;">No User found.</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr ng-show="!loading" style="text-align:center;" ng-repeat="user in filterData = (allUsers | filter : lablab : strict) | orderBy: sortType:sortReverse"
+                                class="trow" ng-click="SelectUser(user,true)" ng-class=" (VEType == 6 || VEType == 7 ? {disableRow: user.IsProvisioned != 0} : {disableRow: toggled(user)})">
+
+                                <td style="text-transform: lowercase;">
+                                    <div class="user-name">
+                                        <span data-toggle="tooltip">
+                                            <input type="checkbox" ng-click="user.selected = !user.selected" ng-model="user.selected" ng-disabled=" (VEType == 6 || VEType == 7 ? user.IsProvisioned != 0 : user.IsProvisioned == 0)" />
+                                        </span>
+                                    </div>
+                                </td>
+                                <td style="text-align:left; padding-left:3em;">
+                                    <div class="user-name truncate-lab letterCase">
+                                        <div class="push-right changeColor" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;  color: white; width: 200px;" data-toggle="tooltip" title="{{user.FirstName}} {{user.LastName}}">
+                                            {{user.LastName}}, {{user.FirstName}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="text-transform: lowercase; text-align:left; padding-left:3em;">
+                                    <div class="user-name">
+                                        <div data-toggle="tooltip" class="changeColor" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; color: white; width: 257px;" title="{{user.Email}}">
+                                            {{user.Email}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-show="VEType != 3 && VEType !=4">
+                                    <div class="user-name">
+                                        <div data-toggle="tooltip" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; color: white;" title="{{isStatusTitle(user)}}">
+
+                                            <span ng-if="user.hasHours == 'Granted'" style="color: #28A745" class="changeColor">{{user.hasHours}}</span>
+                                            <span ng-if="user.hasHours == 'Available'" style="color: #DC3545" class="changeColor">{{user.hasHours}}</span>
+                                            <span ng-if="user.hasHours == 'Provisioned'" style="color: #28A745" class="changeColor">{{user.hasHours}}</span>
+                                            <span ng-if="user.hasHours == 'Provisioning'" style="color: #28A745" class="changeColor">{{user.hasHours}}</span>
+                                            <span ng-if="user.hasHours == 'Failed'" style="color: red" class="changeColor">{{user.hasHours}}</span>
+                                            <span ng-if="user.hasHours == 'Deleted'" style="color: red" class="changeColor">{{user.hasHours}}</span>
+                                            <!--<span ng-if="user.IsCourseGranted == 1 && (user.IsStarted == null)" style="color: #28A745" class="changeColor">{{user.hasHours}}</span>
+                                <span ng-if="user.IsCourseGranted == 0 && (user.IsStarted == null)" style="color: #DC3545" class="changeColor">{{user.hasHours}}</span>
+                                <span ng-if="user.IsCourseGranted == 1 && (user.IsStarted == 1 || user.IsStarted == 0 ||  user.IsStarted == 2) " style="color: #28A745" class="changeColor">{{user.hasHours}}</span>
+                                <span ng-if="user.IsCourseGranted == 1 && user.IsStarted == 4" style="color: #28A745" class="changeColor">{{user.hasHours}}</span>
+                                <span ng-if="user.IsCourseGranted == 1 && user.IsStarted == 3" style="color: red" class="changeColor">{{user.hasHours}}</span>-->
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div ng-show="loading" class="loading-block-grant">
+                        <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+                    </div>
+                    <h1 class="loading-block white-text" ng-show="allUsers.length == 0 && loading == false">No Students Available.</h1>
+                </div>
+                <div class="page">
+                    <!--<pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+        <a class="btn btn-primary">Page: {{pageIndex}} / {{numPages}}</a>-->
+                    <!--<pagination ng-model="pageIndex"></pagination>-->
+                    <ul uib-pagination ng-model="pagination.currentPage"
+                        class="pagination-sm"
+                        max-size="pagination.maxSize"
+                        boundary-links="true "
+                        items-per-page="pagination.pageSizeSelected"
+                        num-pages="numPages"
+                        ng-change="pageChanged()"
+                        total-items="totalCount" style="margin: 10px 0;"></ul>
+                </div>
+                <div style="margin-top: 10px;">
+                    <span style="color:white;">
+                        <u>{{Userlength}}</u> Total users <u>{{selectedUsers.length}}</u> Selected users
+                    </span>
+                </div>              
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer no-left col-md-12">
+        <!--<div ng-if="VEType == 1 || VEType == 2 || VEType == 3 || VEType == 4 || VEType == 5">
+            <span class="grant-lab-header-small keep-left no-padding">Note: Creating Labs can take up to 1 hour. </span>
+        </div>-->
+        <div class="no-padding">
+            <div class="keep-right">
+                <a class="btn btn-danger btn-sm" ng-click="close()">
+                    Cancel
+                </a>
+            </div>
+            <div class="keep-right">
+                <!--<button class="btn btn-primary btn-sm" ng-disabled="selectedUsers.length == 0 || ((totalRemainingCourseHours / 60) < 0)" ng-click="Save(selectedUsers)">-->
+                <button class="btn btn-primary btn-sm" ng-disabled="selectedUsers.length == 0 || ((totalRemainingCourseHours) < 0)" ng-click="Save(selectedUsers)">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

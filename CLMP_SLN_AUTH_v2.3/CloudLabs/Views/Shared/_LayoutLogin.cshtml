@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8" />
+    <meta name="description" content="" />
+    <title>@ViewBag.Title</title>
+
+    @Styles.Render("~/Content/scriptscss")
+    @Styles.Render("~/Content/global")
+
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles", required: false)
+</head>
+
+<body>
+    <main>
+        <script type="text/javascript">
+      var apiUrl = "@System.Configuration.ConfigurationManager.AppSettings["Cloudswyft.Api"]";
+      var authUrl = '@System.Configuration.ConfigurationManager.AppSettings["CloudSwyftAuthServerUrl"]';
+        </script>
+
+        <div class="col-sm-4 upper-dot-line-container">
+            <img class="upper-dot-line" src="~/Content/Image/Login-Lines-Image.png" />
+        </div>
+        <div id="wrapper">
+            <div class="col-sm-12 loginPage">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-5 left-cont">
+                    <img class="logo-cs" src="~/Content/Image/CloudSwyft-Logo-Login.png" alt="Cloudlabs logo" />
+                    @*<div class="tagline-cs">
+                        <p class="blue-text"> Learn technology, </p>
+                        <p class="white-text"> by doing.</p>
+                    </div>*@
+                </div>
+                <div class="col-sm-5">
+                    @RenderBody()
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+
+
+            <div class="login-privacy-tos-box">
+                <span>@Html.ActionLink("Privacy", "Privacy", "Account", null, new { @class = "privacy-details" })</span>
+                <span>@Html.ActionLink("Terms of Service", "TermsOfService", "Account", null, new { @class = "tos-details" })</span>
+            </div>
+        </div>
+
+        <div class="col-sm-4 lower-dot-line-container">
+            <img class="lower-dot-line" src="~/Content/Image/Login-Lines-Image.png" />
+        </div>
+
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/angular")
+        @Scripts.Render("~/bundles/cookies")
+        @RenderSection("scripts", required: false)
+        @RenderSection("PageScripts", false)
+    </main>
+</body>
+</html>

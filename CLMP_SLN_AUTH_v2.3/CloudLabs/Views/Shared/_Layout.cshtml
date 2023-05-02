@@ -1,0 +1,531 @@
+﻿@using CloudSwyft.CloudLabs.Models
+@using CloudSwyft.CloudLabs.Controllers
+@model ChangePasswordModel
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8" />
+
+    <meta name="description" content="" />
+    <title>@ViewBag.Title</title>
+
+
+    @Styles.Render("~/Content/global")
+    @Styles.Render("~/Content/scriptscss")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    @*<script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/app/layoutjs")"></script>*@
+    @*<link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
+        <link href="~/Content/jquery-ui.theme.min.css" rel="stylesheet" />
+        <link href="~/Content/jquery-ui.structure.min.css" rel="stylesheet" />*@
+    @* <link href="~/Content/notification.css" rel="stylesheet" />*@
+
+    @RenderSection("styles", required: false)
+
+</head>
+
+<body style="position: fixed; height: 100%; width: 100%; margin: 0; padding: 0;">
+    <script type="text/javascript">
+        var apiUrl = "@System.Configuration.ConfigurationManager.AppSettings["Cloudswyft.Api"]";
+        var authUrl = '@System.Configuration.ConfigurationManager.AppSettings["CloudSwyftAuthServerUrl"]';
+        var blobStorage = '@System.Configuration.ConfigurationManager.AppSettings["StorageURL"]';
+        var currentUserGroup = '@CloudSwyft.CloudLabs.Models.CustomUserIdentity.UserDetails().UserGroup';
+        var currentId = '@CloudSwyft.CloudLabs.Models.CustomUserIdentity.UserDetails().Id';
+        var currentUserId = '@CloudSwyft.CloudLabs.Models.CustomUserIdentity.UserDetails().UserId';
+        var groupName = '@CloudSwyft.CloudLabs.Models.CustomUserIdentity.GroupName()';
+        var groupCode = '@CloudSwyft.CloudLabs.Models.CustomUserIdentity.GroupCode()';
+        var name = '@CloudSwyft.CloudLabs.Models.CustomUserIdentity.UserDetails().Fullname';
+        var userTenantId = '@CloudSwyft.CloudLabs.Models.CustomUserIdentity.UserDetails().TenantId';
+        var userRoleName = '@CloudSwyft.CloudLabs.Models.CustomUserIdentity.UserDetails().Role';
+        var currentEmail = '@CloudSwyft.CloudLabs.Models.CustomUserIdentity.UserDetails().Email';
+        var currentUserIdLTI = '@CloudSwyft.CloudLabs.Models.CustomUserIdentity.UserDetails().UserIdLTI';
+
+        $(document).ready(function () {
+
+            $(window).bind("resize",function(){
+                if($(this).width() > 767){
+                $('#navbar').removeClass('in').addClass('collapse')
+                }
+            })
+
+            if(window.location.href.indexOf("Dashboard") > -1)
+            {
+                $("a[href='/Dashboard']").removeClass("Dashboard");
+                $("a[href='/Dashboard']").addClass("Dashboard-active");
+            }
+
+                if(window.location.href.indexOf("LabProfiles") > -1)
+                {
+                    $("a[href='/LabProfiles']").removeClass("Labprofile");
+                    $("a[href='/LabProfiles']").addClass("Labprofile-active");
+                }
+
+                if(window.location.href.indexOf("LabSession") > -1)
+                {
+                    $("a[href='/LabSession']").removeClass("LabSession");
+                    $("a[href='/LabSession']").addClass("LabSession-active");
+                }
+
+                if(window.location.href.indexOf("LabActivity") > -1)
+                {
+                    $("a[href='/LabActivity']").removeClass("Labactivity");
+                    $("a[href='/LabActivity']").addClass("Labactivity-active");
+                }
+
+                if(window.location.href.indexOf("Usermanagement") > -1)
+                {
+                    $("a[href='/Usermanagement']").removeClass("Usermanagement");
+                    $("a[href='/Usermanagement']").addClass("Usermanagement-active");
+                }
+
+                if(window.location.href.indexOf("Configuration") > -1)
+                {
+                    $("a[href='/Configuration']").removeClass("Configuration");
+                    $("a[href='/Configuration']").addClass("Configuration-active");
+                }
+            });
+    </script>
+    @if (User.IsInRole("Admin"))
+    {
+        <script type="text/javascript">
+            var userIsSuperAdmin = false;
+            var userIsAdmin = true;
+            var userIsInstructor = false;
+            var userIsStaff = false;
+        </script>
+        <div id="sidebar">
+            <ul>
+                <li><a href="@Url.Action("Index", "Dashboard")" class="Dashboard" aria-label="Dashboard"></a></li>
+                <li><a href="@Url.Action("Index", "LabProfiles")" class="Labprofile" aria-label="Lab Profile"></a></li>
+                <li><a href="@Url.Action("Index", "LabSession")" class="LabSession" aria-label="Lab Session"></a></li>
+                <li><a href="@Url.Action("Index", "LabActivity")" class="Labactivity" aria-label="Lab Activity"></a></li>
+                <li><a href="@Url.Action("Index", "Usermanagement")" class="Usermanagement" aria-label="User Management"></a></li>
+                <li><a href="@Url.Action("Index", "Configuration")" class="Configuration" aria-label="Configuration"></a></li>
+            </ul>
+        </div>
+    }
+    @if (User.IsInRole("SuperAdmin"))
+    {
+        <script type="text/javascript">
+            var userIsSuperAdmin = true;
+            var userIsAdmin = false;
+            var userIsInstructor = false;
+            var userIsStaff = false;
+        </script>
+        <div id="sidebar">
+            <ul>
+                <li><a href="@Url.Action("Index", "Dashboard")" class="Dashboard" aria-label="Dashboard"></a></li>
+                <li><a href="@Url.Action("Index", "LabProfiles")" class="Labprofile" aria-label="Lab Profile"></a></li>
+                <li><a href="@Url.Action("Index", "LabActivity")" class="Labactivity" aria-label="Lab Activity"></a></li>
+                <li><a href="@Url.Action("Index", "Usermanagement")" class="Usermanagement" aria-label="User Management"></a></li>
+                <li><a href="@Url.Action("Index", "Configuration")" class="Configuration" aria-label="Configuration"></a></li>
+            </ul>
+        </div>
+    }
+
+    @if (User.IsInRole("Instructor"))
+    {
+        <script type="text/javascript">
+            var userIsSuperAdmin = false;
+            var userIsAdmin = false;
+            var userIsInstructor = true;
+            var userIsStaff = false;
+
+        </script>
+        <div id="sidebar">
+            <ul>
+                <li><a href="@Url.Action("Index", "Dashboard")" class="Dashboard" aria-label="Dashboard"></a></li>
+                <li><a href="@Url.Action("Index", "LabProfiles")" class="Labprofile" aria-label="Lab Profile"></a></li>
+                <li><a href="@Url.Action("Index", "LabActivity")" class="Labactivity" aria-label="Lab Activity"></a></li>
+                <li><a href="@Url.Action("Index", "LabSession")" class="LabSession" aria-label="Lab Session"></a></li>
+            </ul>
+        </div>
+    }
+    @if (User.IsInRole("Staff"))
+    {
+        <script type="text/javascript">
+            var userIsSuperAdmin = false;
+            var userIsAdmin = false;
+            var userIsInstructor = false;
+            var userIsStaff = true;
+
+            /**/</script>
+
+        <div id="sidebar">
+            <ul>
+                <li><a href="@Url.Action("Index", "Dashboard")" class="Dashboard" aria-label="Dashboard"></a></li>
+                <li><a href="@Url.Action("Index", "LabProfiles")" class="Labprofile" aria-label="Lab Profile"></a></li>
+                <li><a href="@Url.Action("Index", "LabActivity")" class="Labactivity" aria-label="Lab Activity"></a></li>
+                <li><a href="@Url.Action("Index", "LabSession")" class="LabSession" aria-label="Lab Session"></a></li>
+            </ul>
+        </div>
+    }
+
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/cookies")
+
+    @RenderSection("scripts", required: false)
+    @RenderSection("PageScripts", false)
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-header h-rem nav-head-style">
+            <button type="button" class="navbar-toggle e-button" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="cs-image" aria-label="CloudSwyft Icon"></div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse in" aria-expanded="true" style="overflow-x: hidden; background-color: #171A1F">
+            <ul class="nav navbar-nav h-rem title-container">
+                <li class="learning-title" title="Hands On Learning Labs">
+                    Hands On Learning Labs
+                </li>
+                <li style=" color: #FFF; font-size: 18px;" class="learning-title" title="@CloudSwyft.CloudLabs.Models.CustomUserIdentity.GroupName()">
+                    @CloudSwyft.CloudLabs.Models.CustomUserIdentity.GroupName()
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right h-drop-rem" style="margin-right: 0px;">
+                <!--#region notif  -->
+                @*<li id="notification-container" class="dropdown h-rem">
+
+            @if (User.IsInRole("SuperAdmin"))
+            {
+
+                <a href="#" class="dropdown user-dropdown" id="notification-icon" data-toggle="collapse" role="button" aria-haspopup="true" aria-expanded="false" style="">
+                    <i class="fa fa-bell fa-2x" aria-hidden="true" style="color: #125282; left:-2px; top: -1px;"></i>
+                </a>
+                <div class="dropdown-menu gray-dropdown-bg dropdownMainContainer" style="  ">
+                    <div class="notification-header" style="">
+                        <div class="notification-title-container" style="">
+                            <h1 id="header-title-notification" style="">Notifications</h1>
+                        </div>
+                        <div>
+                            <button class="create-button" data-toggle="modal" data-target="#createMessage" style="">Create</button>
+                            <button class="back-button" style=""><< Back</button>
+                        </div>
+                    </div>
+
+                    <div id="empty-notification-notice-superadmin" style="">
+                        <i class="fa fa-bell-slash-o fa-3x empty-notification-icon" aria-hidden="true" style=""></i>
+                        <h1 class="empty-notification-title" style="">No Notifications</h1>
+                        <div class="empty-notification-message-container" style="">
+                            <p class="empty-notification-message" style="">Click the create button to provide notification</p>
+                        </div>
+                    </div>
+
+                    <div class="full-message-container" style="">
+                        <span class="overflow-message" style=""></span>
+                    </div>
+
+                    <div class="main-message-content output-data-bind">
+
+                    </div>
+                </div>
+            }
+            @if (User.IsInRole("Instructor") || User.IsInRole("Admin") || User.IsInRole("Student"))
+            {
+                <a href="#" class="dropdown user-dropdown" id="admin-notification-icon" data-toggle="collapse" role="button" aria-haspopup="true" aria-expanded="false" style="">
+                    <i id="admin-bell-icon" class="fa fa-bell fa-2x" aria-hidden="true" style=""></i>
+                    <div class="admin-notification-count-container">
+                        <span class="admin-notification-count" style=""></span>
+                    </div>
+                </a>
+                <div class="dropdown-menu gray-dropdown-bg dropdownMainContainer" style="">
+
+                    <div class="notification-header" style="">
+                        <div class="notification-title-container" style="">
+                            <h1 class="admin-notification-title" style="">Notifications</h1>
+                        </div>
+                        <div>
+                            <button class="back-button" style=""><< Back</button>
+                        </div>
+                    </div>
+
+                    <div id="empty-notification-notice" style="">
+                        <i class="fa fa-bell-slash-o fa-3x empty-notification-icon" aria-hidden="true" style=""></i>
+                        <h1 class="empty-notification-title">No Notifications</h1>
+                        <div class="empty-notification-message-container">
+                            <p class="empty-notification-message">When you have notification, you will see them here</p>
+                        </div>
+                    </div>
+
+                    <div class="full-message-container">
+                        <span class="overflow-message"></span>
+                    </div>
+
+
+                    <div class="admin-data-container">
+
+                    </div>
+
+
+                </div>
+
+
+            }
+
+        </li>*@
+
+                <!--#endregion -->
+
+                <li class="dropdown h-rem">
+                    <a href="" class="dropdown-toggle user-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="display: flex; margin-left: 1.3rem; height: 100%;">
+                        <i class="glyphicon glyphicon-user" style="left:-2px; top: -1px"></i>
+                        <span>@CloudSwyft.CloudLabs.Models.CustomUserIdentity.UserDetails().Fullname</span>
+                    </a>
+                    <ul class="dropdown-menu gray-dropdown-bg">
+                        <li>
+                            <button aria-label="Change Password" data-toggle="modal" data-target="#commonModal" id="modalPassword" role="button">
+                                Change Password
+                            </button>
+                        </li>
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-toggle" href="#" id="changeGroup">Change Group</a>
+                                <ul class="dropdown-menu dropdown-menu-group">
+                                    <li class="dropdown-submenu">
+                                        <select id="addGroups" style="width: 100%; max-width: 100%;" role="listbox" aria-label="Add Group" aria-expanded="true"></select>
+                                    </li>
+                                    @*<select id="addGroups" class="dropdown-toggle" style="width: 100%; max-width: 100%;" role="listbox" aria-label="Add Group" aria-expanded="true"></select>*@
+                                </ul>
+
+                            </li>
+
+
+                            @*<li class="dropdown-submenu">
+                        <a class="dropdown-toggle" href="#" id="changeGroup">
+                            Change Group
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-group">
+                            <li class="dropdown-submenu">
+                                <select id="addGroups" style="width: 100%; max-width: 100%;" role="listbox" aria-label="Add Group" aria-expanded="true"></select>
+                            </li>
+                        </ul>
+                    </li>*@
+                            <li class="test">
+                                <a href="~/Content/Image/CloudLabsAdminUserGuide.pdf" download="User's Guide" target="_blank">
+                                    User Guide
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Instructor") || User.IsInRole("Admin") || User.IsInRole("Staff"))
+                        {
+                            <li class="test">
+                                <a href="~/Content/Image/CloudLabsAdminUserGuide.pdf" download="User's Guide" target="_blank" style="text-decoration:none;color:white;">
+                                    User Guide
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li class="test">
+                                <a href="~/Content/Image/CloudLabsStudentUserGuide.pdf" download="User's Guide" target="_blank" style="text-decoration:none;color:white;">
+                                    User Guide
+                                </a>
+                            </li>
+                        }
+                        @*<li><a class="logout" href="@Url.Action("Logout","Account")" title="Logout here">Logout</a></li>*@
+                        <li><a href="@Url.Action("Logout","Account")" onclick="window.open('https://sso-dbb138d3.sso.duosecurity.com/saml2/sp/DIZHI4B26A2HSEX739T2/slo');">Logout</a>
+                        </li>
+                </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    @if (User.IsInRole("Student"))
+    {
+        <div id="wrapper">
+            <div id="studentMain">
+                <div id="submain" style="display: flex; flex-direction: column;">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div id="wrapper">
+            <div id="main">
+                <div id="submain" style="display: flex; flex-direction: column;">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="modal fade" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="commonModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document" style="width:380px;">
+            <div class="modal-content panel-outline-content">
+                <div class="modal-header">
+                    <span class="panel-modal-title">Change Password</span>
+                    <button class="glyphicon glyphicon-remove col-md-1 close" aria-label="Close Button" data-dismiss="modal" tabindex="6"></button>
+                </div>
+                <div class="modal-body" id="changePassLoading" style="text-align:center; height: auto;">
+                    <img class="sizeImg" src="~/Content/Image/loading2.gif" />
+                </div>
+                <div class="modal-body" style="padding: 35px 0px 10px 40px;height:auto;" id="changePassBody">
+                    <div class="modalFirst panel-sub-name">
+                        <span>Current Password <span class="text-danger">*</span><br></span>
+                        <input class="form-control modalTextBox" type="password" id="CurrentPassword" autocomplete="off" aria-label="Current Password" tabindex="7" />
+                    </div>
+                    <div class="modalLast panel-sub-name">
+                        <span>New Password <span class="text-danger">*</span><br></span>
+                        <input class="form-control modalTextBox" type="password" id="NewPassword" autocomplete="off" aria-label="New Password" tabindex="8" />
+                    </div>
+                    <div class="modalLast panel-sub-name">
+                        <span>Re-Type Password <span class="text-danger">*</span><br></span>
+                        <input class="form-control modalTextBox" type="password" id="ConfirmPassword" autocomplete="off" aria-label="Retype Password" tabindex="9" />
+                    </div>
+                    <label id="ErrorMessage" name="ErrorMessage" class="color-red .validationFont-size-login"></label>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" onclick="saveChangePass(currentId)" id="btnSave" tabindex="10">Save</button>
+                    <button class="btn btn-cancel" type="button" data-dismiss="modal" id="btnCancel" tabindex="11">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="ConfirmationModal" role="dialog" aria-labelledby="confirmationModal" tabindex="-1" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" style="width:380px;" role="document">
+                <div class="modal-content panel-outline-content">
+                    <div class="modal-header">
+                        <span class="panel-modal-title" id="confirmationModal">Information</span>
+                    </div>
+                    <div class="modal-body" style="color:white;font-size:20px; text-align:center;" tabindex="0">
+                        Your Account has been updated!<br /> Please Log in again.
+                    </div>
+                    <div class="modal-footer" style="border-top:none !important; padding-top:0px !important;">
+                        <button class="btn btn-primary send-message-button" type="button" onclick="closeModal()">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--#region notif  -->
+    @*<div class="modal fade" id="createMessage" tabindex="-1" role="dialog" aria-labelledby="createMessage" aria-hidden="true" style="height: 374px; top: 50px;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content-notification" style="">
+                    <div class="modal-header" style="border: none; color: #25a9c0; ">
+                        <h5 class="modal-title" style="text-align: center; font-size: 24px;">Create Notification</h5>
+                        <button type="button" data-dismiss="modal" class="close message-cancel-button" aria-label="Close" style="font-size: 18px !important; position: absolute; top: 20px; right: 18px;">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body-notification" style="">
+                        <div class="create-message-container" style="align-content: center;">
+                            <div style="display: flex; justify-content: space-between; margin: auto; ">
+                                <div class="create-startdate-container" style="margin-left: 22px; font-size: 10px;">
+                                    <label style="color: #fff;">From</label>
+                                    <input class="form-control" style="" type="text" id="create-startdate" placeholder="Start Date" onkeydown="return false" onchange="createDateValidation()">
+                                    <i class="fa fa-calendar fa-2x" id="calendar-icon" aria-hidden="true" style="display: none; color: #009DFF; position: absolute; top: 30px; left: 202px; "></i>
+                                </div>
+                                <div class="create-enddate-container" style="margin-right: 22px; font-size: 10px;">
+                                    <label style="color: #fff;">To</label>
+                                    <input class="form-control" style="" type="text" id="create-enddate" placeholder="End Date" onkeydown="return false" onchange="allowSubmitButton()">
+                                    <i class="fa fa-calendar fa-2x" aria-hidden="true" style="display: none; color: #009DFF; position: absolute; top: 30px; right: 50px; "></i>
+                                </div>
+                            </div>
+                            <div style="margin-top: 5px;">
+                                <label style="color: #fff; margin-left: 22px;">Message</label>
+                                <textarea class="form-control input-model" onkeyup="allowSubmitButton()" style="border-radius: 7px; padding: 5px; margin: auto; width: 414px; max-width: 414px !important; height: 120px;" placeholder="Message" required></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer-notification" style="">
+                        <button type="button" disabled data-dismiss="modal" class="btn btn-primary send-message-button" style="margin-right: 22px !important; background-color: #009DFF">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    @*<div class="modal fade" id="editMessage" tabindex="-1" role="dialog" aria-labelledby="editMessage" aria-hidden="true" style="height: 374px; top: 50px;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content-notification">
+                    <div class="modal-header" style="border: none; color: #25a9c0; ">
+                        <h5 class="modal-title" style="text-align: center; font-size: 24px;">Edit Notification</h5>
+                        <button type="button" data-dismiss="modal" class="close" aria-label="Close" style="font-size: 18px !important; position: absolute; top: 20px; right: 18px;">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body-notification">
+                        <div class="edit-message-container" style="align-content: center;">
+                            <div style="display: flex; justify-content: space-between; margin: auto; ">
+                                <div class="edit-startdate-container" style="margin-left: 22px; font-size: 10px;">
+                                    <label style="color: #fff; margin-right: 10px;">From</label>
+                                    <input class="form-control" type="text" id="edit-startdate" placeholder="Start Date" onkeydown="return false" onchange="editDateValidation()">
+
+                                </div>
+                                <div class="edit-enddate-container" style="margin-right: 22px; font-size: 10px;">
+                                    <label style="color: #fff; margin-right: 10px;">To</label>
+                                    <input class="form-control" type="text" id="edit-enddate" placeholder="End Date" onkeydown="return false">
+
+                                </div>
+                            </div>
+                            <div style="margin-top: 5px;">
+                                <label style="color: #fff; margin-left: 22px;">Message</label>
+                                <textarea class="form-control input-model" onkeyup="allowSubmitButton()" style="border-radius: 7px; padding: 5px; margin: auto; width: 414px; max-width: 414px !important; height: 120px;" placeholder="Message" required></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer-notification" style="border: none; padding: 20px !important; margin: 0 !important;">
+                        <button type="button" data-dismiss="modal" class="btn btn-primary send-message-button" style="margin-right: 22px !important; background-color: #009DFF ">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    @*<div class="modal fade" id="deleteMessage" tabindex="-1" role="dialog">
+            <div class="modal-dialog-notification" role="document">
+                <div class="modal-content-notification" style="text-align-last: center; width: 350px; left: 30%; margin-top: 20%; background-color: #171A1F;">
+                    <div class="modal-header" style="color: #25a9c0; border: none; padding-bottom: 0; ">
+                        <i class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
+                        <h5 class="modal-title" style="text-align: center; font-size: 24px; margin-top: 5px;">Delete Notification</h5>
+                    </div>
+                    <div class="modal-body-notification" style="padding: 0 !important; margin-top: 10px; color: #fff;">
+                        <p style="font-size:14px !important;">Are you sure you want to delete?</p>
+                    </div>
+                    <div class="modal-footer" style="border: none; padding: 0 !important; margin-bottom: 30px;">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="button" id="confirmDeletionButton" class="btn btn-primary" data-dismiss="modal" style="">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+    <!--#endregion -->
+    <style>
+
+        .loading-block {
+            text-align: center;
+            width: 100%;
+        }
+        .loadText {
+            color: #25a9c0;
+            display: block;
+        }
+    </style>
+    <script src="~/Scripts/jquery/jquery-ui.min.js"></script>
+    @*<script src="~/app_minified/Common/Notification.min.js"></script>*@
+    <script src="~/app/Common/PasswordChange.js"></script>
+    <script src="~/app/Common/ChangeGroup.js"></script>
+</body>
+</html>

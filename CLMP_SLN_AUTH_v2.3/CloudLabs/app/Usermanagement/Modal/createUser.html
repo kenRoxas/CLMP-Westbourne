@@ -1,0 +1,151 @@
+﻿<script src="../../Scripts/bootstrap-filestyle.js"></script>
+
+<div class="modal-content panel-outline-content">
+    <div class="modal-header">
+        <span class="panel-modal-title">{{createEditModalHeader}}</span>
+        <!--<span class="panel-modal-title">Upload bulk User</span>-->
+        <i class="glyphicon glyphicon-remove col-md-1 close" ng-click="close()"></i>
+    </div>
+    <div class="modal-body">
+        <div class="loading-block no-padding text-center" ng-show="loader">
+            <img src="../../../Content/Image/loading2.gif" />
+        </div>
+        <div ng-show="oppositeLoader">
+            <form name="myForm" novalidate class="createUserForm" ng-show="isCreatedUser">
+                <div class="col-md-6">
+                    <div class="modalFirst panel-sub-name">
+                        <span>First Name <span class="text-danger">*</span><br></span>
+                        <input class="form-control modalTextBox" type="text" name="firstname" value="{{ firstname }}" ng-minlength="1" ng-model="firstname" ng-required="required_control" autocomplete="off">
+                        <span class="errorMessageFirst" ng-show="myForm.firstname.$dirty  && myForm.firstname.$invalid">
+                            <span ng-show="myForm.firstname.$error.required">Firstname is required</span>
+                        </span>
+                    </div>
+                    <div class="modalLast panel-sub-name">
+                        <span>Last Name <span class="text-danger">*</span><br></span>
+                        <input class="form-control modalTextBox" type="text" name="lastname" value="{{ lastname }}" ng-minlength="1" ng-model="lastname" ng-required="required_control" autocomplete="off">
+                        <span class="errorMessageLast" ng-show="myForm.lastname.$dirty  && myForm.lastname.$invalid">
+                            <span ng-show="myForm.lastname.$error.required">Last Name is required</span>
+                        </span>
+                    </div>
+                    <div ng-show="isShowCreate" class="modalEmail panel-sub-name">
+                        <span>Email Address <span class="text-danger">*</span><br></span>
+                        <!--<input  ng-keypress="disableHyphen($event)" class="form-control modalTextBox" type="text" name="email" ng-minlength="1" ng-model="email" ng-required="required_control" ng-pattern="emailPattern" unique autocomplete="off">-->
+                        <input class="form-control modalTextBox" type="text" name="email" ng-minlength="1" ng-model="email" ng-required="required_control" ng-pattern="emailPattern" unique autocomplete="off">
+                        <span class="errorMessageEmail" ng-show="myForm.email.$dirty  && myForm.email.$invalid">
+                            <span ng-show="myForm.email.$error.required">Email is required</span>
+                            <span ng-show="myForm.email.$error.unique">Email address already exists</span>
+                            <span ng-show="myForm.email.$error.pattern">Invalid Email Address</span>
+                        </span>
+                    </div>
+                    <div ng-show="!isShowCreate" class="modalEmail panel-sub-name">
+                        <span>Email Address <span class="text-danger"></span><br></span>
+                        <input class="form-control  modalTextBox" ng-disabled="!isSuperAdmin" type="text" name="email1" value="{{ email1 }}" ng-model="email1" ng-pattern="emailPattern" ng-required="required_control" autocomplete="off">
+                        <span class="errorMessageEmail" ng-show="myForm.email1.$dirty  && myForm.email1.$invalid">
+                            <span ng-show="myForm.email.$error.required">Email is required</span>
+                            <span ng-show="myForm.email.$error.pattern">Email Address Invalid</span>
+                        </span>
+                    </div>
+                    <div class="modalRole panel-sub-name">
+                        <!--ng-options="v for v in groups"-->
+                        <span>Role <span class="text-danger">*</span><br></span>
+                        <select ng-show="!isShowEdit" ng-model="role" name="role" ng-options="x for x in roles" ng-required="required_control"></select>
+                        <select ng-show="isShowEdit" ng-model="roleSelected" name="roleSelected" ng-options="x as x for x in roles" ng-required="required_control"></select>
+                        <span class="errorMessageRole" ng-show="myForm.role.$dirty  && myForm.role.$invalid">
+                            <span ng-show="myForm.role.$error.required">Role is required</span>
+                        </span>
+                    </div>
+                    <div class="modalPassword1 panel-sub-name">
+                        <!--ng-options="v for v in groups"-->
+                        <span>User Group <span class="text-danger">*</span><br></span>
+                        <select ng-show="!isShowEdit" class="form-control  modalTextBox" ng-model="userGroup" name="userGroup" ng-options="v.GroupName for v in groups" ng-required="required_control"></select>
+                        <select ng-show="isShowEdit" class="form-control  modalTextBox" ng-model="userGroupSelected" name="userGroupSelected" ng-options="x.GroupName for x in groups" ng-required="required_control"></select>
+                        <!--<span class="errorMessageRole" ng-show="myForm.role.$dirty  && myForm.role.$invalid">
+                    <span ng-show="myForm.role.$error.required">Role is required</span>
+                </span>-->
+                    </div>
+                    <div class="modalPassword panel-sub-name" ng-show="showEdit">
+                        <span>Password <span class="text-danger">*</span><br></span>
+                        <input class="form-control  modalTextBox" type={{showOrHidePass}} id="pw1" name="password" value="{{ password }}" ng-model="password" ng-pattern="passPattern" ng-minlength="6" ng-required="required_control" autocomplete="off">
+                        <i class="glyphicon glyphicon-eye-open password-glyph col-md-1" ng-show="!glyphPass" ng-click="showPass()" style="color:black;"></i>
+                        <i class="glyphicon glyphicon-eye-close password-glyph col-md-1" ng-show="glyphPass" ng-click="showPass()" style="color:black;"></i>
+                        <span class="errorMessagePass" ng-show="myForm.password.$dirty  && myForm.password.$invalid">
+                            <span ng-show="myForm.password.$error.required">This is required</span>
+                            <span ng-show="myForm.password.$error.minlength">Password must be at least 6 characters</span>
+                        </span>
+                    </div>
+                    <div class="modalConfirmPassword panel-sub-name" ng-show="showEdit">
+                        <span>Re-type Password <span class="text-danger">*</span><br></span>
+                        <input class="form-control modalTextBox" type={{showOrHideConfirmPass}} name="confirmPassword" pw-check="pw1" pwCheck value="{{ confirmPassword }}" ng-model="confirmPassword" ng-pattern="password" autocomplete="off">
+                        <i class="glyphicon glyphicon-eye-open password-glyph col-md-1" ng-show="!glyph" ng-click="showConfirmPass()" style="color:black;"></i>
+                        <i class="glyphicon glyphicon-eye-close password-glyph col-md-1" ng-show="glyph" ng-click="showConfirmPass()" style="color:black;"></i>
+                        <span class="errorMessageConfirm" ng-show="myForm.confirmPassword.$dirty  && myForm.confirmPassword.$invalid">
+                            <span ng-show="myForm.confirmPassword.$error.pwmatch">Passwords did not match.</span>
+                        </span>
+                    </div>
+                </div>
+            </form>
+            <form name="myForm1" novalidate class="bulkCreateUserForm" ng-show="isBulk">
+                <!--<label for="file-upload" class="custom-file-upload">
+        <i class="fa fa-cloud-upload"></i> Custom Upload
+    </label>
+    <input id="file-upload" type="file" />-->
+                <label style="color:white; font-weight: normal;">Note: Only .csv or .xlsx file type to upload</label>
+
+                <label style="color:white; font-weight: normal;">Download example excel sheet</label>
+
+                <button ng-csv="testDelim" csv-header="['Email', 'Password', 'Firstname', 'Lastname']" csv-column-order="order" filename="BulkCreate Sample Sheet.csv" style="background: url(../../../Content/Image/msexcel.png) no-repeat; width: 9%; border: none; height: 30%; position: absolute; "></button>
+               
+
+                <label for="file-upload" class="custom-file-upload">
+                    <i class="fa fa-cloud-upload"></i> Upload Bulk User
+                </label>
+
+                <input style="visibility:hidden;" type="file" name="file-upload" id="file-upload" ngf-select="uploadFiles($file, $invalidFiles)" accept=".csv, .xlsx" ng-model="picFile" class="custom-input">
+                <span class="errorBulk" ng-show="showError">
+                    <span>{{errorMsg}}</span>
+                </span>
+
+
+            </form>
+            <form name="exportForm" novalidate class="exportUserForm" ng-show="isExport">
+                <span style="color:white; font-weight: normal;">User Group <br></span>
+                <select style=" max-width: 375px; width: 375px; margin:auto;" ng-model="SelectExportUser" class="form-control config-form-control-box" ng-options="x.GroupName for x in UserGroups" required>
+                    <option value="" selected="selected">- Please Select -</option>
+                </select>
+            </form>
+
+            <div class="modal-footer" style="padding-bottom: 7%;">
+                <button class="btn btn-info" ng-show="{{isShowCreate}}" type="button" ng-disabled="!(myForm.userGroup.$valid && myForm.firstname.$valid && myForm.lastname.$valid && myForm.email.$valid && myForm.role.$valid && myForm.password.$valid && !(myForm.confirmPassword.$error.pwmatch == true))" ng-click="submit(userGroup.CloudLabsGroupID, email, role, firstname,  lastname, password, confirmPassword,userGroup.TenantId,'Add another', '')" style="position: absolute; width: 25%; left: 19.5%;">Add Another</button>
+                <div ng-if="isShowEdit">
+                    <button class="btn btn-primary" type="button" ng-disabled="!myForm.userGroupSelected.$valid || !myForm.firstname.$valid || !myForm.lastname.$valid || !myForm.email1.$valid || !myForm.roleSelected.$valid" ng-click="submit(userGroupSelected.CloudLabsGroupID, email1, roleSelected, firstname, lastname, password, confirmPassword, userGroupSelected.TenantId,'Edit', id)" style="position: absolute; width: 25%; right: 36%;">{{saveOrCreate}}</button>
+                </div>
+                <div ng-if="isShowCreate">
+                    <button class="btn btn-primary" type="button" ng-click="submit(userGroup.CloudLabsGroupID, email, role, firstname,  lastname, password, confirmPassword,userGroup.TenantId,'Create', '')" style="position: absolute; width: 25%; right: 30%;"
+                            ng-disabled="!(myForm.userGroup.$valid && myForm.firstname.$valid && myForm.lastname.$valid && myForm.email.$valid && myForm.role.$valid && myForm.password.$valid && !(myForm.confirmPassword.$error.pwmatch == true))">
+                        {{saveOrCreate}}
+                    </button>
+                </div>
+                <div ng-if="isBulk">
+                    <button class="btn btn-primary" type="button" ng-click="upload()" style="position: absolute; width: 25%; right: 30%;" ng-disabled="showError">
+                        Upload
+                    </button>
+                </div>
+                <div ng-if="isExport">
+
+                    <button type="button" ng-disabled="!exportForm.$valid" ng-csv="userList()" filename="UserLists.csv"
+                            class="btn btn-success" charset="utf-8" style="position: absolute; width: 25%; right: 30%;">
+                        Export
+                    </button>
+
+                    <!--<button class="btn btn-success" type="button" ng-csv="MyCSV()" filename="UserLists.csv"
+            csv-header="['Employee Id', 'Employee Name', 'Department', 'Designation', 'City', 'Contact Number']"
+            style="position: absolute; width: 25%; right: 30%;" ng-disabled="exportForm.$valid">-->
+                    <!--Export
+    </button>-->
+                </div>
+                <button class="btn btn-danger" type="button" ng-click="close()" style="position: absolute; width: 25%; right: 4.5%;">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</div>

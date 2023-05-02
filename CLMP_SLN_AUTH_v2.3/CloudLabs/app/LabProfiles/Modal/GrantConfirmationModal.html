@@ -1,0 +1,56 @@
+﻿<div class="modal-content panel-outline-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$confmodal.cancel()"><i class="glyphicon glyphicon-remove close-icon"></i></button>
+        <h3 class="panel-modal-title" id="modal-title" ng-model="$confmodal.title">{{$confmodal.title}}</h3>
+    </div>
+    <div>
+        <div ng-if="!$confmodal.centered" class="modal-inner-box-confirmation">
+            <div ng-show="!isBulkCreate">
+                <span class="prod-right conf-message text-block">
+                    {{$confmodal.message}} <span class="text-danger"><strong>{{$confmodal.name}}</strong></span>
+                </span>
+                <div ng-if="($confmodal.VEType == 1 || $confmodal.VEType == 2 || $confmodal.VEType == 3 || $confmodal.VEType == 4 || $confmodal.VEType == 5 || $confmodal.VEType == 8 || $confmodal.VEType == 9|| $confmodal.VEType == 10) && userIsSuperAdmin">
+                    <div class="user-list" ng-show="$confmodal.isGrant">
+                        <!--<span class="prod-right conf-message">Total Hours Given: {{($confmodal.contents.length * labhourspercourse) / 60 }}</span>-->
+                        <span class="prod-right conf-message">Total Hours Given: {{($confmodal.contents.length * labhourspercourse) }}</span>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="isBulkCreate" class="bulkProvisionForm">
+                <span class="prod-right conf-message text-block">
+                    {{$confmodal.message}} <span class="text-danger"><strong>{{$confmodal.name}}</strong></span>
+                </span>
+                <label for="file-upload" class="custom-file-upload">
+                    <i class="fa fa-cloud-upload"></i> Bulk Provision
+                </label>
+                <input type="file" name="file-upload" id="file-upload" ngf-select="uploadFiles($file, $invalidFiles)" accept=".csv, .xlsx" ng-model="picFile" class="custom-input">
+                <span class="errorBulk" ng-show="showError">
+                    <span>{{errorMsg}}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div ng-show="!isBulkCreate">
+        <div class="modal-footer-conf" style="text-align:center" ng-if="($confmodal.VEType == 1 || $confmodal.VEType == 2 || $confmodal.VEType == 3 || $confmodal.VEType == 4 || $confmodal.VEType == 5  || $confmodal.VEType == 8 || $confmodal.VEType == 9 || $confmodal.VEType == 10) && userIsSuperAdmin ">
+            <button ng-show="!$confmodal.info" class="btn btn-yes" type="button" ng-click="$confmodal.confirm()">Yes</button>
+            <button ng-show="!$confmodal.info" class="btn btn-danger" type="button" ng-click="$confmodal.cancel()">No</button>
+            <button ng-show="$confmodal.info" class="btn btn-close" type="button" ng-click="$confmodal.cancel()">Close</button>
+        </div>
+        <div class="modal-footer-conf" style="text-align:center" ng-if="(($confmodal.VEType == 6 || $confmodal.VEType == 7) || !userIsSuperAdmin) && ($confmodal.contents != 'LAB HOURS')">
+            <button ng-show="!$confmodal.info" class="btn btn-yes" type="button" ng-click="$confmodal.confirmConsole()">Yes</button>
+            <button ng-show="!$confmodal.info" class="btn btn-danger" type="button" ng-click="$confmodal.cancel()">No</button>
+            <button ng-show="$confmodal.info" class="btn btn-close" type="button" ng-click="$confmodal.cancel()">Close</button>
+        </div>
+        <div class="modal-footer-conf" style="text-align:center" ng-if="$confmodal.contents == 'LAB HOURS'">
+            <button ng-show="!$confmodal.info" class="btn btn-yes" type="button" ng-click="$confmodal.confirm()">Yes</button>
+            <button ng-show="!$confmodal.info" class="btn btn-danger" type="button" ng-click="$confmodal.cancel()">No</button>
+            <button ng-show="$confmodal.info" class="btn btn-close" type="button" ng-click="$confmodal.cancel()">Close</button>
+        </div>
+    </div>
+    <div ng-show="isBulkCreate">
+        <div class="modal-footer-conf" style="text-align:center">
+            <button class="btn btn-yes" type="button" ng-click="$confmodal.upload()" ng-disabled="showError">Upload</button>
+            <button class="btn btn-danger" type="button" ng-click="$confmodal.cancel()">Close</button>
+        </div>
+    </div>
+</div>

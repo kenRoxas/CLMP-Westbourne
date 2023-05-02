@@ -1,0 +1,10 @@
+/CloudLabs/bin/
+/CloudLabs/obj/
+/.vs/CloudLabs/
+/CloudSwyft.Auth/bin/
+/CloudSwyft.Auth/obj/
+/.vs/CloudLabs/
+/CloudSwyft.Web.Api/bin/
+/CloudSwyft.Web.Api/obj/
+/.vs
+/packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0

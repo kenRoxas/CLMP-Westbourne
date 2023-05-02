@@ -1,0 +1,260 @@
+﻿<div ng-show="!loading && !loading2">
+    <a class="btn btn-primary btn-lg provision-btn" ng-click="requestLab()">Request Lab Provision</a>
+</div>
+<div ng-if="loading" class="loading-block" tabindex="0" aria-label="Loading Lab Session Page">
+    <img class="sizeImg" aria-label="Loading 1" src="../../../Content/Image/loading2.gif" />
+    <span class="loadText" aria-live="polite" aria-busy={{isAriaBusy}} aria-label="Loading Lab Session Page">Loading Lab Session Page...</span>
+</div>
+<!--<div ng-if="loading2" class="loading-block" tabindex="0" aria-label="Your virtual machine is about to start">
+    <img class="sizeImg" aria-label="Loading 2" src="../../../Content/Image/loading2.gif" />
+    <span class="loadText" aria-live="polite" aria-busy={{isAriaBusy}} aria-label="Your virtual machine is about to start">Your virtual machine is about to start... </span>
+    <span class="loadText" aria-live="polite" aria-busy={{isAriaBusy}} aria-label="Your virtual machine is about to start">If the loading is taking more than 3-5 minutes, kindly hit “REFRESH” on the page and restart the lab. If the problem persists, please contact our support team via chat.</span>
+</div>-->
+<div ng-show="empty && !loading" class="loading-block no-content">
+    <h1>No Courses Enrolled</h1>
+</div>
+
+<div ng-show="!loading && !loading2" ng-repeat="c in labs track by c.veprofileid" class="courseContainer">
+    <div class="card-deck">
+        <div ng-class="applyOpacity(c.TimeRemaining, c.IsStarted, c.IsProvisioned, c.Is_suspended, true)" class="card white-bg">
+            <img ng-if="c.Thumbnail == '' || c.Thumbnail == null" class="img-container" aria-label="image" src="../../../Content/Image/course-default.png">
+            <img ng-if="c.Thumbnail != '' && c.Thumbnail != null" class="img-container" aria-label="image" src="{{c.Thumbnail}}">
+
+            <!--<div ng-if="c.VEType == 6 || c.VEType == 7" ng-class="setConsoleCourseTheme(c.IsProvisioned, c.Is_suspended)" class="card-body">
+                <h4 class="card-title card-clamp-2" title="{{c.Name}}">
+                    <strong>{{c.Name}}</strong>
+                </h4>
+                <div class="button-container">
+                    <div tabindex="0" ng-if="c.IsProvisioned == 0 && c.Is_suspended == isFalse" ng-click="clickCourse(c)" ng-keypress="clickCourse(c)">
+                        <img class="cursor-pointer" aria-label="Provision Lab" src="../../../Content/Image/provision-button.png">
+                    </div>
+                    <div tabindex="0" ng-if="c.IsProvisioned == 1 && c.Is_suspended == isFalse" ng-click="openLab(c)" ng-keypress="openLab(c)">
+                        <img class="cursor-pointer" aria-label="Start Lab" src="../../../Content/Image/start-button.png">
+                    </div>
+                    <span ng-if="c.IsProvisioned == 1 && c.Is_suspended == isTrue" class="white-left-text">Your lab has been suspended. Kindly contact <span style="color:#06B6D4;">support@cloudswyft.com</span> for further instructions.</span>
+                    <span ng-if="c.IsProvisioned == 2 && c.Is_suspended == isFalse" class="white-left-text">Your lab is in progress. Kindly wait as we prepare your machine.</span>
+                    <span ng-if="c.IsProvisioned == 3 && c.Is_suspended == isFalse" class="white-left-text">Your lab provision has failed. Kindly contact <span style="color:#67E8F9;">support@cloudswyft.com</span> for further instructions.</span>
+                    <div>
+                        <button ng-if="c.IsProvisioned == 1 && c.Is_suspended == isFalse" class="btn button-box btnCredentialsStart" type="button" popover-placement="bottom" uib-popover-template="dynamicPopover.templateUrl1" popover-trigger="'outsideClick'" popover-class="popover-credentials">
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" style="fill: white;" xml:space="preserve">
+                            <g>
+                            <path d="M492.172,455.48h-15.164V31.516c0-2.164-1.768-2.652-3.928-2.652h-70.168c-2.164,0-4.184,0.488-4.184,2.652V455.48
+			h-15.652V246.928c0-2.164-1.524-2.8-3.688-2.8h-70.712c-2.164,0-3.884,0.636-3.884,2.8V455.48H289.14V164.832
+			c0-2.164-1.392-2.896-3.552-2.896h-70.852c-2.164,0-3.876,0.732-3.876,2.896V455.48h-15.656V297.72
+			c0-2.164-1.748-2.712-3.912-2.712h-70.168c-2.164,0-4.196,0.548-4.196,2.712v157.76h-15.656v-67.656
+			c0-2.164-1.744-2.792-3.908-2.792h-70.44c-2.164,0-3.928,0.628-3.928,2.792v67.656H7.828c-4.324,0-7.828,3.508-7.828,7.828
+			c0,4.324,3.504,7.828,7.828,7.828h484.344c4.324,0,7.828-3.504,7.828-7.828C500,458.988,496.496,455.48,492.172,455.48z" /></g></svg>
+                        </button>
+                        <button ng-if="c.IsProvisioned == 1 && c.Is_suspended == isTrue" class="btn button-box btnCredentialsSuspend" type="button" popover-class="{{setPopoverColor(c.IsProvisioned, c.Is_suspended)}} popover-credentials" popover-placement="bottom" uib-popover-template="dynamicPopover.templateUrl1" popover-trigger="'outsideClick'">
+                            <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" style="fill: white;" xml:space="preserve">
+                            <g>
+                            <path d="M492.172,455.48h-15.164V31.516c0-2.164-1.768-2.652-3.928-2.652h-70.168c-2.164,0-4.184,0.488-4.184,2.652V455.48
+			h-15.652V246.928c0-2.164-1.524-2.8-3.688-2.8h-70.712c-2.164,0-3.884,0.636-3.884,2.8V455.48H289.14V164.832
+			c0-2.164-1.392-2.896-3.552-2.896h-70.852c-2.164,0-3.876,0.732-3.876,2.896V455.48h-15.656V297.72
+			c0-2.164-1.748-2.712-3.912-2.712h-70.168c-2.164,0-4.196,0.548-4.196,2.712v157.76h-15.656v-67.656
+			c0-2.164-1.744-2.792-3.908-2.792h-70.44c-2.164,0-3.928,0.628-3.928,2.792v67.656H7.828c-4.324,0-7.828,3.508-7.828,7.828
+			c0,4.324,3.504,7.828,7.828,7.828h484.344c4.324,0,7.828-3.504,7.828-7.828C500,458.988,496.496,455.48,492.172,455.48z" /></g></svg>
+                        </button>
+                        <button ng-if="c.IsProvisioned == 1 && c.Is_suspended == isFalse" class="btn button-box btnCredentialsStart" type="button" popover-placement="bottom" uib-popover-template="dynamicPopover.templateUrl2" popover-trigger="'outsideClick'" popover-class="popover-credentials">
+                            <svg version="1.1" id="Layer_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 485.017 485.017" style="display: flex; fill: white;" xml:space="preserve"><g>
+                            <path d="M361.205,68.899c-14.663,0-28.447,5.71-38.816,16.078c-21.402,21.403-21.402,56.228,0,77.631
+		c10.368,10.368,24.153,16.078,38.815,16.078s28.447-5.71,38.816-16.078c21.402-21.403,21.402-56.228,0-77.631
+		C389.652,74.609,375.867,68.899,361.205,68.899z M378.807,141.394c-4.702,4.702-10.953,7.292-17.603,7.292
+		s-12.901-2.59-17.603-7.291c-9.706-9.706-9.706-25.499,0-35.205c4.702-4.702,10.953-7.291,17.603-7.291s12.9,2.589,17.603,7.291
+		C388.513,115.896,388.513,131.688,378.807,141.394z" /><path d="M441.961,43.036C414.21,15.284,377.311,0,338.064,0c-39.248,0-76.146,15.284-103.897,43.036
+		c-42.226,42.226-54.491,105.179-32.065,159.698L0.254,404.584l-0.165,80.268l144.562,0.165v-55.722h55.705l0-55.705h55.705v-64.492
+		l26.212-26.212c17.615,7.203,36.698,10.976,55.799,10.976c39.244,0,76.14-15.282,103.889-43.032
+		C499.25,193.541,499.25,100.325,441.961,43.036z M420.748,229.617c-22.083,22.083-51.445,34.245-82.676,34.245
+		c-18.133,0-36.237-4.265-52.353-12.333l-9.672-4.842l-49.986,49.985v46.918h-55.705l0,55.705h-55.705v55.688l-84.5-0.096
+		l0.078-37.85L238.311,208.95l-4.842-9.672c-22.572-45.087-13.767-99.351,21.911-135.029C277.466,42.163,306.83,30,338.064,30
+		c31.234,0,60.598,12.163,82.684,34.249C466.34,109.841,466.34,184.025,420.748,229.617z" /></g></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>-->
+            <!--<pre>{{c}}</pre>-->
+            <!--<div ng-if="c.VEType != 6 && c.VEType != 7" ng-class="setCourseTheme(c.TimeRemaining, c.IsStarted)" class="card-body">-->
+            <div ng-if="c.VEType != 6 && c.VEType != 7" ng-class="setCourseTheme(c.TimeRemaining, c.IsStarted)" class="card-body">
+                <h4 class="card-title card-clamp-2" title="{{c.Name}}" style="position: relative; padding-right: 6px;">
+                    <strong>{{c.Name}}</strong>
+                    <br ng-if="(c.TimeRemaining > 0 && (c.IsStarted == 1 || c.IsStarted == 0))" />
+                    <span ng-if="(c.TimeRemaining > 0 && (c.IsStarted == 1 || c.IsStarted == 0))" style="font-size: 14px;">Remaining Credits: {{c.remainingHours}} <span style="font-size: 12px;">Hrs</span> {{c.remainingMins}} <span style="font-size: 12px;">Mins</span></span>
+                    <i ng-show="(c.TimeRemaining > 0 && (c.IsStarted == 1))" class="glyphicon glyphicon-info-sign help-info" title="How to use RDP (Remote Desktop Protocol) locally: 
+                        1.) Start the machine first, Please click the Start button on the course tile.
+                        2.) Wait until the machine completely run.
+                        3.) Open RDP installed on local machine by pressing ⊞ windows key and insert 'rdp' or 'mstsc'.
+                        4.) Enter the credentials provided by the course tile to access the Virtual Machine."></i>
+                </h4>
+
+                <div class="button-container">
+
+                    <!--<pre>{{(c.TimeRemaining > 0 && c.IsStarted == 1) || (c.TimeRemaining > 0 && c.IsStarted == 0) || (c.IsExtend && (c.IsStarted == 0 || c.IsStarted == 1))}}</pre>-->
+                                                    
+                    <div tabindex="0" ng-if="((c.TimeRemaining > 0 && c.IsStarted == 0 && c.RunningBy == 0) || (c.TimeRemaining > 0 && c.RunningBy == 2 && c.IsStarted == 1) || (c.IsExtend && c.IsStarted == 0))">
+                        <!--<button class="btnStart" ng-click="isClicked = true; openLab(c);" ng-disabled="isClicked"></button>-->
+                        <button class="btnStart" ng-click="isClicked = true; openLab(c,$event);"></button>
+                        <!--ng-class="{'disabledBtn': isClicked === true}"-->
+                        <!--<img class="cursor-pointer" aria-label="Start Lab" src="../../../Content/Image/start-button.png">-->
+                    </div>
+                    <div tabindex="0" ng-if="(c.TimeRemaining > 0 && c.IsStarted == 1 && c.RunningBy == 1) || (c.IsExtend && (c.IsStarted == 1))">
+                        <!--<button class="btnLaunch" ng-click="isClicked = true; openLab(c);" ng-class="{'disabledBtn': isClicked === true}" ng-disabled="isClicked"></button>-->
+                        <!--<button class="btnLaunch" ng-click="isClicked = true; openLab(c,$event);" ng-disabled="isClicked"></button>-->
+                        <button class="btnLaunch" ng-click="isClicked = true; openLab(c,$event);"></button>
+
+                        <!--<img class="cursor-pointer" aria-label="Start Lab" src="../../../Content/Image/start-button.png">-->
+                    </div>
+                    <!--<div tabindex="0" ng-if="((c.TimeRemaining > 0 && c.IsStarted == 0) || (c.IsExtend && (c.IsStarted == 0 || c.IsStarted == 1)))" >--> <!--rdp button-->
+                    <!--<button class="btnRdp" ng-click="startRDP(c);"></button>-->
+                    <!--<img class="cursor-pointer" style="float:right; margin-left:115px;" aria-label="Start Lab" src="../../../Content/Image/rdp-button.png">-->
+                    <!--</div>-->
+                    <span ng-if="c.TimeRemaining <= 0 && (c.IsStarted == 0 || c.IsStarted == 1) && !c.IsExtend" class="white-left-text">Your lab hours have ended. If you wish to continue, Kindly contact <span style="color:#06B6D4;">support@cloudswyft.com</span></span>
+                    <span ng-if="c.IsStarted == 2" class="white-left-text">Your lab is shutting down...</span>
+                    <!--<span ng-if="c.IsStarted == 3" class="white-left-text">Your lab has failed. Kindly contact <span style="color:#67E8F9;">support@cloudswyft.com</span> for further instructions.</span>-->
+                    <span ng-if="c.IsStarted == 3 && (c.VEType == 1 || c.VEType == 2)" class="white-left-text">There was a problem encountered with the network connection. Please click Provision to try again.</span>
+                    <span ng-if="c.IsStarted == 3 && (c.VEType == 3 || c.VEType == 4)" class="white-left-text">There was a problem encountered. Please contact support at support@cloudswyft.com.</span>
+                    <span ng-if="c.IsStarted == 4" class="white-left-text">Provisioning...</span>
+                    <span ng-if="c.IsStarted == 5" class="white-left-text">Starting...</span>
+                    <span ng-if="c.IsStarted == 6" class="white-left-text">Deleting...</span>
+                    <span ng-if="c.IsStarted == 7" class="white-left-text">Your lab session has expired. If you wish to continue, kindly contact support@cloudswyft.com.</span>
+
+                    <div tabindex="0" ng-if="(c.IsStarted == null || c.IsStarted == 3 && (c.VEType == 1 || c.VEType == 2))" ng-class="{'cursor-not-allowed' : isClicked === true}">
+                        <!--ng-click="" ng-keypress="openLab(c)"-->
+                        <!--<button class="btnProv" ng-click="openLab(c);" ng-class="{'disabledBtn': isClicked === true}" ng-disabled="isClicked"></button>-->
+                        <button class="btnProv" ng-click="openLab(c,$event);"></button>
+                    </div>
+                    <div>
+                        <!--<button ng-if="(c.IsStarted == 1 && c.RunningBy == 1 && c.Is_suspended == isFalse)" class="btnShut" ng-click="shutdown(c,$event);" ng-class="{'disabledBtn': isClicked === true}" ng-disabled="isClicked">-->
+                        <button ng-if="(c.IsStarted == 1 && c.RunningBy == 1 && c.Is_suspended == isFalse)" class="btnShut" ng-click="shutdown(c,$event);">
+                            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                                 y="0px" width="35px" height="35px" viewBox="-34-15 402.996 402.996" style="enable-background:new 0 0 370 370;"
+                                 xml:space="preserve">
+                            <g>
+                            <path class="shutdown"
+                                  d="M288.777,93.565c-15.313-23.641-36.837-42.476-62.243-54.472c-1.616-0.763-3.109-1.134-4.564-1.134
+                                                                                                c-1.969,0-8.392,0.833-8.392,11.541v17.75c0,8.998,5.479,13.113,7.159,14.16c32.613,20.33,52.083,55.317,52.083,93.59
+                                                                                                c0,60.772-49.442,110.214-110.214,110.214S52.393,235.772,52.393,175c0-38.872,19.942-74.144,53.346-94.353
+                                                                                                c4.475-2.707,6.839-7.426,6.839-13.647V49c0-7.959-5.077-10.783-9.424-10.783c-1.714,0-3.542,0.422-5.144,1.188
+                                                                                                C72.781,51.471,51.42,70.305,36.237,93.872C20.638,118.084,12.393,146.137,12.393,175c0,82.828,67.386,150.214,150.214,150.214
+                                                                                                S312.821,257.828,312.821,175C312.821,146.008,304.507,117.848,288.777,93.565z" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <path class="shutdown"
+                                  d="M152.579,117h21c5.514,0,10-4.486,10-10V10c0-5.514-4.486-10-10-10h-21c-5.514,0-10,4.486-10,10v97
+                                                                                                C142.579,112.514,147.064,117,152.579,117z" />                    </g>
+                            </svg>
+                        </button>
+                        <button ng-if="(c.IsStarted == 1 && c.RunningBy == 1 && c.TimeRemaining > 0) && c.Is_suspended == isTrue" class="btn button-box btnCredentialsSuspend" type="button" popover-class="{{setPopoverColor(c.IsProvisioned, c.Is_suspended)}} popover-credentials" popover-placement="bottom" uib-popover-template="popover" popover-trigger="'outsideClick'">
+                            <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 500 500" style="fill: white;" xml:space="preserve">
+                            <g>
+                            <path d="M492.172,455.48h-15.164V31.516c0-2.164-1.768-2.652-3.928-2.652h-70.168c-2.164,0-4.184,0.488-4.184,2.652V455.48
+			h-15.652V246.928c0-2.164-1.524-2.8-3.688-2.8h-70.712c-2.164,0-3.884,0.636-3.884,2.8V455.48H289.14V164.832
+			c0-2.164-1.392-2.896-3.552-2.896h-70.852c-2.164,0-3.876,0.732-3.876,2.896V455.48h-15.656V297.72
+			c0-2.164-1.748-2.712-3.912-2.712h-70.168c-2.164,0-4.196,0.548-4.196,2.712v157.76h-15.656v-67.656
+			c0-2.164-1.744-2.792-3.908-2.792h-70.44c-2.164,0-3.928,0.628-3.928,2.792v67.656H7.828c-4.324,0-7.828,3.508-7.828,7.828
+			c0,4.324,3.504,7.828,7.828,7.828h484.344c4.324,0,7.828-3.504,7.828-7.828C500,458.988,496.496,455.48,492.172,455.48z" /></g></svg>
+                        </button>
+                        <button ng-if="(c.IsStarted == 1 && c.RunningBy == 1 && c.Is_suspended == isFalse)" class="btn button-box btnCredentialsStart" type="button" popover-placement="bottom" uib-popover-template="popover" popover-trigger="'outsideClick'" popover-class="popover-credentials" title="User Credentials" ng-click="checkIfIpExist(c,$event)">
+                            <svg version="1.1" id="Layer_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 485.017 485.017" style="display: flex; fill: white;" xml:space="preserve"><g>
+                            <path d="M361.205,68.899c-14.663,0-28.447,5.71-38.816,16.078c-21.402,21.403-21.402,56.228,0,77.631
+		                    c10.368,10.368,24.153,16.078,38.815,16.078s28.447-5.71,38.816-16.078c21.402-21.403,21.402-56.228,0-77.631
+		                    C389.652,74.609,375.867,68.899,361.205,68.899z M378.807,141.394c-4.702,4.702-10.953,7.292-17.603,7.292
+		                    s-12.901-2.59-17.603-7.291c-9.706-9.706-9.706-25.499,0-35.205c4.702-4.702,10.953-7.291,17.603-7.291s12.9,2.589,17.603,7.291
+		                    C388.513,115.896,388.513,131.688,378.807,141.394z" /><path d="M441.961,43.036C414.21,15.284,377.311,0,338.064,0c-39.248,0-76.146,15.284-103.897,43.036
+		                    c-42.226,42.226-54.491,105.179-32.065,159.698L0.254,404.584l-0.165,80.268l144.562,0.165v-55.722h55.705l0-55.705h55.705v-64.492
+		                    l26.212-26.212c17.615,7.203,36.698,10.976,55.799,10.976c39.244,0,76.14-15.282,103.889-43.032
+		                    C499.25,193.541,499.25,100.325,441.961,43.036z M420.748,229.617c-22.083,22.083-51.445,34.245-82.676,34.245
+		                    c-18.133,0-36.237-4.265-52.353-12.333l-9.672-4.842l-49.986,49.985v46.918h-55.705l0,55.705h-55.705v55.688l-84.5-0.096
+		                    l0.078-37.85L238.311,208.95l-4.842-9.672c-22.572-45.087-13.767-99.351,21.911-135.029C277.466,42.163,306.83,30,338.064,30
+		                    c31.234,0,60.598,12.163,82.684,34.249C466.34,109.841,466.34,184.025,420.748,229.617z" /></g></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="courseTemplate.html">
+        <div style="display: flex;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <input id="actid" ng-readonly="{{isTrue}}" ngclipboard data-clipboard-target="#actid" type="text" ng-model="c.AccountID" class="form-control templateCourse" uib-popover="Copied!" popover-trigger="'outsideClick'" popover-placement="top" popover-class="popover-copied">
+                <div style="display: flex; margin-top: 3px;">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="copy" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="copy-svg"><path fill="currentColor" d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" class=""></path></svg>
+                    <label>Account ID</label>
+                </div>
+
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <input id="email" ng-readonly="{{isTrue}}" ngclipboard data-clipboard-target="#email" type="text" ng-model="c.Email" class="form-control templateCourse" uib-popover="Copied!" popover-trigger="'outsideClick'" popover-placement="top" popover-class="popover-copied">
+                <div style="display: flex; margin-top: 3px;">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="copy" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="copy-svg"><path fill="currentColor" d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" class=""></path></svg>
+                    <label>Email</label>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <input id="pass" ng-readonly="{{isTrue}}" ngclipboard data-clipboard-target="#pass" border-radius: 0px" type="text" ng-model="c.AccountPassword" class="form-control templateCourse" uib-popover="Copied!" popover-trigger="'outsideClick'" popover-placement="top" popover-class="popover-copied">
+                <div style="display: flex; margin-top: 3px;">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="copy" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="copy-svg"><path fill="currentColor" d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" class=""></path></svg>
+                    <label>Password</label>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="courseVMTemplate.html">
+        <div style="display: flex;">
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <input id="vmname" ng-readonly="{{isTrue}}" ngclipboard data-clipboard-target="#vmname" type="text" ng-model="c.FQDN" class="form-control templateCourse" uib-popover="Copied!" popover-trigger="'outsideClick'" popover-placement="top" popover-class="popover-copied">
+                <div style="display: flex; margin-top: 3px;">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="copy" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="copy-svg"><path fill="currentColor" d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" class=""></path></svg>
+                    <label>VMname</label>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <input id="actid" ng-readonly="{{isTrue}}" ngclipboard data-clipboard-target="#actid" type="text" ng-model="c.Username" class="form-control templateCourse" uib-popover="Copied!" popover-trigger="'outsideClick'" popover-placement="top" popover-class="popover-copied">
+                <div style="display: flex; margin-top: 3px;">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="copy" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="copy-svg"><path fill="currentColor" d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" class=""></path></svg>
+                    <label>Username</label>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <input id="pass" ng-readonly="{{isTrue}}" ngclipboard data-clipboard-target="#pass" type="text" ng-model="c.Password" class="form-control templateCourse" uib-popover="Copied!" popover-trigger="'outsideClick'" popover-placement="top" popover-class="popover-copied">
+                <div style="display: flex; margin-top: 3px;">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="copy" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="copy-svg"><path fill="currentColor" d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" class=""></path></svg>
+                    <label>Password</label>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="graphTemplate.html">
+        <div style="display: flex; justify-content: space-around;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div>
+                    <span>{{c.Actual_costs_spend.ActualSpend.Amount}} {{c.Actual_costs_spend.ActualSpend.Unit}}</span> / <span>{{c.Cost_budget_limit.Amount}} {{c.Cost_budget_limit.Unit}}</span>
+                </div>
+                <label>Cost Usage</label>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div>
+                    <span>{{c.Actual_data_transfer_spend.ActualSpend.Amount}} {{c.Actual_data_transfer_spend.ActualSpend.Unit}}</span> / <span>{{c.Data_transfer_budget_limit.Amount}} {{c.Data_transfer_budget_limit.Unit}}</span>
+                </div>
+                <label>Data Usage</label>
+            </div>
+        </div>
+    </script>
+
+</div>
+

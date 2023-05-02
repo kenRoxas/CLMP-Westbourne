@@ -1,0 +1,404 @@
+﻿<style>
+    .full button span {
+        background-color: limegreen;
+        border-radius: 32px;
+        color: black;
+    }
+
+    .partially button span {
+        background-color: orange;
+        border-radius: 32px;
+        color: black;
+    }
+</style>
+
+<div ng-show="!isLoading" class="loading-block">
+    <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+    <span class="loadText" aria-busy="true" aria-live="polite" aria-label="Loading Dashboard Page">Loading Dashboard Page...</span>
+</div>
+
+<div class="dash-container" ng-hide="!isLoading">
+    <div ng-if="!isVETypeSeven">
+        <div class="title-bar row" style="position: relative">
+            <span class="bar-title col-lg-12 col-md-12 col-sm-12 col-xs-12">Lab Hours</span>
+            <span class="bar-sub-title"><span>{{CurrentUserGroup}}</span></span>
+        </div>
+        <div class="graph-container" ng-show="!showSpecificStudent">
+            <div class="graph-sub-container" ng-if="VEType == 0 || VEType == 1 || VEType == 2 || VEType == 3 || VEType == 4 || VEType == 5 || VEType == 9 || VEType == 10">
+                <div class="graph-body-container">
+                    <p>Total Lab Hours per Course</p>
+                    <svg height="270" width="270">
+                        <circle id="_cir_P_x" cx="135" cy="122" r="112" stroke="rgb(90,90,90)" stroke-width="20" fill="none"></circle>
+                        <circle id="firstcircle" cx="135" cy="122" r="112" stroke="rgb(36, 168, 223)" stroke-width="20" stroke-dasharray="{{progress_firstcircle}},704" fill="none"></circle>
+                        <circle id="whitecircle" cx="135" cy="122" r="112" stroke="rgb(255, 255, 255)" stroke-width="20" stroke-dasharray="0.9,704" fill="none"></circle>
+                        <div class="display-hours" ng-class="{'char8':(TotalLabHoursPerCourse <= 99999999), 'char11':(TotalLabHoursPerCourse > 99999999 && TotalLabHoursPerCourse <= 999999999999)}">{{TotalLabHoursPerCourse}} <span style="font-size:20px">&nbsp; Hrs</span></div>
+                    </svg>
+                </div>
+            </div>
+            <div class="graph-sub-container" ng-if="VEType == 0 || VEType == 1 || VEType == 2 || VEType == 3 || VEType == 4 || VEType == 5 || VEType == 9 || VEType == 10">
+                <div class="graph-body-container">
+                    <p>Remaining Lab Hour Credits</p>
+                    <svg height="270" width="270">
+                        <circle id="_cir_p_x" cx="135" cy="122" r="112" stroke="rgb(90,90,90)" stroke-width="20" fill="none"></circle>
+                        <circle id="secondcircle" cx="135" cy="122" r="112" stroke="rgb(36, 168, 223)" stroke-width="20" stroke-dasharray="{{progress_secondcircle}},704" fill="none"></circle>
+                        <circle id="whitecircle" cx="135" cy="122" r="112" stroke="rgb(255, 255, 255)" stroke-width="20" stroke-dasharray="0.9,704" fill="none"></circle>
+                        <div class="display-hours" ng-class="{'char8':(RemainingLabHourCredits <= 99999999), 'char11':(RemainingLabHourCredits > 99999999 && RemainingLabHourCredits <= 999999999999)}">{{RemainingLabHourCredits}}<span style="font-size:20px">&nbsp; Hrs</span></div>
+                    </svg>
+                </div>
+            </div>            <!-- O-244, 149, 66|| G-176,214,20 B-36, 168, 223-->
+            <div class="graph-sub-container" ng-if="VEType == 0 || VEType == 1 || VEType == 2 || VEType == 3 || VEType == 4 || VEType == 5 || VEType == 9 || VEType == 10">
+                <div class="graph-body-container">
+                    <p>Lab Hours per User</p>
+                    <svg height="270" width="270">
+                        <circle id="_cir_P_x" cx="135" cy="122" r="112" stroke="rgb(90,90,90)" stroke-width="20" fill="none"></circle>
+                        <circle id="thirdcircle" cx="135" cy="122" r="112" stroke="rgb(36, 168, 223)" stroke-width="20" stroke-dasharray="{{progress_thirdcircle}},704" fill="none"></circle>
+                        <circle id="whitecircle" cx="135" cy="122" r="112" stroke="rgb(255, 255, 255)" stroke-width="20" stroke-dasharray="0.9,704" fill="none"></circle>
+                    </svg>
+                    <div class="display-hours" ng-class="{'char8':(LabHoursPerUser <= 99999999), 'char11':(LabHoursPerUser > 99999999 && LabHoursPerUser <= 999999999999)}">{{LabHoursPerUser}} <span style="font-size:20px">&nbsp; Hrs</span></div>
+                </div>
+            </div>
+            <div class="graph-sub-container" ng-if="VEType == 6">
+                <div class="graph-body-container">
+                    <p>Total Number of Containers</p>
+                    <svg height="270" width="270">
+                        <circle id="_cir_P_x" cx="135" cy="122" r="112" stroke="rgb(90,90,90)" stroke-width="20" fill="none"></circle>
+                        <circle id="thirdcircle" cx="135" cy="122" r="112" stroke="rgb(36, 168, 223)" stroke-width="20" stroke-dasharray="{{progress_thirdcircle}},704" fill="none"></circle>
+                        <circle id="whitecircle" cx="135" cy="122" r="112" stroke="rgb(255, 255, 255)" stroke-width="20" stroke-dasharray="0.9,704" fill="none"></circle>
+                    </svg>
+                    <div class="display-hours" ng-class="{'char8':(LabHoursPerUser <= 99999999), 'char11':(LabHoursPerUser > 99999999 && LabHoursPerUser <= 999999999999)}">{{totalContainers}}<span style="font-size:20px"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="graph-container" ng-show="showSpecificStudent">
+            <div class="graph-sub-container" ng-if="VEType == 0 || VEType == 1 || VEType == 2 || VEType == 3 || VEType == 4 || VEType == 5 || VEType == 9 || VEType == 10">
+                <div class="graph-body-container">
+                    <p>Remaining Lab Hour Credits</p>
+                    <svg height="270" width="270">
+                        <circle id="_cir_P_x" cx="135" cy="122" r="112" stroke="rgb(90,90,90)" stroke-width="20" fill="none"></circle>
+                        <circle id="fourthcircle" cx="135" cy="122" r="112" stroke="rgb(36, 168, 223)" stroke-width="20" stroke-dasharray="{{progress_fourthcircle}},704" fill="none"></circle>
+                        <circle id="whitecircle" cx="135" cy="122" r="112" stroke="rgb(255, 255, 255)" stroke-width="20" stroke-dasharray="0.9,704" fill="none"></circle>
+                    </svg>
+                    <div class="display-hours" ng-class="{'char5':(LabHoursRemaining <= 99999), 'char9':(LabHoursRemaining > 99999)}">{{LabHoursRemaining}}<span style="font-size:20px">&nbsp; H &nbsp;</span> {{LabMinsRemaining}}<span style="font-size:20px">&nbsp; M</span></div>
+                </div>
+            </div>
+            <div class="graph-sub-container" ng-if="VEType == 6">
+                <div class="graph-body-container">
+                    <p>Containers</p>
+                    <svg height="270" width="270">
+                        <circle id="_cir_P_x" cx="135" cy="122" r="112" stroke="rgb(90,90,90)" stroke-width="20" fill="none"></circle>
+                        <circle id="fourthcircle" cx="135" cy="122" r="112" stroke="rgb(36, 168, 223)" stroke-width="20" stroke-dasharray="{{progress_fourthcircle}},704" fill="none"></circle>
+                        <circle id="whitecircle" cx="135" cy="122" r="112" stroke="rgb(255, 255, 255)" stroke-width="20" stroke-dasharray="0.9,704" fill="none"></circle>
+                    </svg>
+                    <div class="display-hours" ng-class="{'char5':(LabHoursRemaining <= 99999), 'char9':(LabHoursRemaining > 99999)}">{{LabHoursRemaining}}<span style="font-size:20px"></span></div>
+                </div>
+            </div>
+        </div>
+        <div id="hidetitle" style="color: rgb(255, 106, 0) ">
+            <p ng-hide="!hidetitle" style="margin-left: 17px;">* Select from courses </p>
+        </div>
+
+        <div class="dash-container">
+            <div class="course-bar" style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="bar-title">Courses</span>
+                <span class="bar-sub-title" style="color: rgb(255, 128, 0);">{{subtitle}}</span>
+            </div>
+            <div class="search-container" ng-show="isLoading && isCourseActivated">
+                <div class="search-sub-container">
+                    <a href="" data-toggle="tooltip" title="Download Course List">
+                        <img ng-init="itemsrc='../../../Content/Image/msexcel.png'" ng-mouseleave="itemsrc='../../../Content/Image/msexcel.png'" ng-mouseover="itemsrc='../../../Content/Image/msexcel-hover.png'" class="btn-course-excel" ng-src="{{itemsrc}}" ng-click="exportDataCourses()" alt="excel">
+                    </a>
+                    <div class="search-course-container">
+                        <input class="form-control search-course" ng-keypress="loadingContent" ng-model="searchcourse.Name" type="text" placeholder="Search Course" aria-label="search course">
+                        <i class="glyphicon glyphicon-search right-addon glyph-color glyph-style"></i>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="isLoading" style="border-top: 3px solid #3d4047; height: 253px;">
+                <div ng-show="(courses|filter:searchcourse).length==0 || empty" class="name-block no-content">
+                    <h1 style="color: white;">No Lab Profiles</h1>
+                </div>
+                <div class="course-container" ng-show="isCourseActivated" style="height: 250px; overflow-y: auto; margin-left: 15px;">
+                    <div ng-hide="empty" class="course-details" ng-repeat="x in courses | orderBy : Name | filter:searchcourse">
+                        <div class="course-view">
+                            <button type="button" class="btn-lg btn-success course-btn" ng-click="revertCourse(x.Name, x.VEProfileID, x.VirtualEnvironment.VETypeID)">View Lab Consumption</button>
+                        </div>
+                        <div class="course-block">
+                            <img ng-show="x.ThumbnailURL == ''" class="img-responsive profile-image" ng-src="../../../Content/Image/course-default.png" style="height: 150px; width: 400px;" alt="image">
+                            <img ng-show="x.ThumbnailURL != ''" class="img-responsive course-image" ng-src="{{x.ThumbnailURL}}" alt="image">
+                        </div>
+                        <div class="course-name">
+                            <h3 data-toggle="tooltip" data-placement="top" title="{{x.Name}}" ng-bind="cname(x.Name)"></h3>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="!isCourseActivated">
+                    <div class="not-loading-profile" ng-show="!loadingVEProfile">
+                        <div class="not-loading-sub-profile">
+                            <div class="back-link" ng-click="revertCourse(); setDefault(); searchUser.FullNameEmail = ''; searchcourse.Name = ''; VEType = 0;">
+                                <a class="back-style" href="">
+                                    &lt;&lt; Back
+                                </a>
+                            </div>
+                            <div ng-show="isLoading && !isCourseActivated" style="display: flex; align-items: center; justify-content: flex-end;">
+                                <div style="display: flex; align-items: center;">
+                                    <a href="" data-toggle="tooltip" title="Download Student List" ng-if="VEType == 0 || VEType == 1 || VEType == 2 || VEType == 3 || VEType == 4 || VEType == 5 || VEType == 9 || VEType == 10">
+                                        <img ng-init="itemsrc='../../../Content/Image/msexcel.png'" ng-mouseleave="itemsrc='../../../Content/Image/msexcel.png'" ng-mouseover="itemsrc='../../../Content/Image/msexcel-hover.png'" class="btn-course-excel" ng-src="{{itemsrc}}" ng-click="exportDataUsers('kenneth')" alt="image">
+                                    </a>
+                                    <div style="margin-left: 10px; display: flex; align-items: center;">
+                                        <input class="form-control search-course" ng-keypress="loadingContent" ng-model="searchUser.FullNameEmail" type="text" placeholder="Search User" style="margin-right: -20px;">
+                                        <i class="glyphicon glyphicon-search right-addon glyph-color" style="color:dimgray; margin-right: 30px;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="usersInLabProfiles" class="name-block no-content" style="color: white;">
+                            <h1>No Users enrolled to this course</h1>
+                        </div>
+                        <div class="outer-box" style="overflow:auto;">
+                            <table class="table table-condensed table-hover" ng-show="!usersInLabProfiles">
+                                <thead class="levelOne">
+                                    <tr class="col-md-12">
+                                        <th class="col-md-6">
+                                            Users
+                                        </th>
+                                        <th class="col-md-6">
+                                            Email
+                                        </th>
+                                        <th class="col-md-6" ng-if="!hasContainer">
+                                            Consumed Lab Hours
+                                        </th>
+                                        <th class="col-md-6">
+                                            Days Remaining
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-show="!loading" ng-click="openSpecificStudent(user);" style="text-align:center; cursor:pointer;" ng-repeat=" user in filterData = (userSchedulesperCourse | filter : searchUser) | orderBy: ['-Firstname','-Lastname'] : true | filtername: searchUser" class="trow" ng-mouseenter="rollClass = 'highlight'" ng-mouseleave="rollClass = ''">
+                                        <td class="trow" ng-class="{activeUser: isActiveUser(user)}" style="text-transform: capitalize; text-align: left; ">
+                                            <div style=" white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis; color: white;">
+                                                <span data-toggle="tooltip" title="{{user.Firstname}} {{user.Lastname}}">
+                                                    <a style="text-decoration:none; color:white;margin-left: 5%;" href="">
+                                                        {{user.Lastname}}, {{user.Firstname}}
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="trow" ng-class="{activeUser: isActiveUser(user)}" style="text-transform: lowercase; text-align: left; ">
+                                            <div style=" white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis; color: white;">
+                                                <span data-toggle="tooltip" title="{{user.Firstname}} {{user.Lastname}}">
+                                                    <a style="text-decoration:none; color:white;margin-left: 5%;" href="">
+                                                        {{user.Email}}
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="trow" ng-if="!hasContainer" ng-class="{activeUser: isActiveUser(user)}"><div><span ng-model="LabHoursTotal" data-toggle="tooltip">{{getLabCreditHours(user , hours)}} h &nbsp;{{getLabCreditHours(user, minutes)}} m</span></div></td>
+                                        <td class="trow" ng-class="{activeUser: isActiveUser(user)}">
+                                            <div>
+                                                <span ng-model="DaysRemaining" data-toggle="tooltip">
+                                                    {{user.DaysRemaining}} days
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+                    <div ng-hide="loadingVEProfile" style="color: rgb(255, 128, 0); position: absolute; padding-left: 17px; padding-top: 17px;">
+                        <u>{{filterData.length}}</u> Total users
+                    </div>
+                    <div ng-show="loadingVEProfile" style="text-align:center; margin-top:60px;">
+                        <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+                    </div>
+                </div>
+            </div>
+            <div ng-show="!isLoading" style="text-align:center; margin-top:5%;">
+                <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+            </div>
+        </div>
+    </div>
+    <div ng-show="isVETypeSeven">
+        <div>
+            <div class="course-bar" style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="bar-title">Courses</span>
+                <span class="bar-sub-title" style="color: rgb(255, 128, 0);">{{subtitle}}</span>
+            </div>
+            <div ng-show="!isCourseActivated">
+                <div class="not-loading-profile" ng-show="!loadingVEProfile">
+                    <div class="not-loading-console-profile">
+                        <div class="back-console-link col-xs-12 col-sm-12 col-md-12" style="display: flex; justify-content: space-between; margin-top: 2%; margin-bottom: 1%; padding-right: 2%;">
+                            <div style="display: flex; align-items: center; margin-left: 4px;">
+                                <a class="back-console-style" href="" ng-click="back()">
+                                    &lt;&lt; Back
+                                </a>
+                            </div>
+                            <div class="text-label">
+                                <div style="display: flex; justify-content: center; align-items: flex-end;">
+                                    <p class="input-group" style="margin: 0px 0px">
+                                        <span>Start Date: </span>
+                                        <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="fromOptions" ng-required="true" close-text="Close" ng-readonly="{{isTrue}}" placeholder="YYYY-MM-DD" />
+                                        <span class="input-group-btn" style="vertical-align: bottom !important;">
+                                            <button type="button" class="btn btn-default" ng-click="fromOpen()" datepicker-options="fromOptions"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                    <p class="input-group" style="margin: 0px 10px">
+                                        <span>End Date: </span>
+                                        <input type="text" ng-disabled="popup1.opened || (dt == null)" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt1" is-open="popup2.opened" datepicker-options="toOptions" ng-required="true" close-text="Close" ng-readonly="{{isTrue}}" placeholder="YYYY-MM-DD" />
+                                        <span class="input-group-btn" style="vertical-align: bottom !important;" ng-class="{'not-allowed':popup1.opened || (dt == null)}">
+                                            <button type="button" ng-disabled="popup1.opened || (dt == null)" class="btn btn-default" ng-click="toOpen()" datepicker-options="toOptions"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                    <div class="ml-2" ng-class="{'not-allowed':(dt == null) || (dt1 == null)}">
+                                        <button type="button" ng-if="!downloadingCSV" ng-disabled="(dt == null) || (dt1 == null)" ng-csv="awsData()" filename="AWS Consolidated.csv" class="btn btn-default btncol btn-csv" charset="utf-8"><span class="glyphicon glyphicon-download-alt">&nbsp;</span>Download CSV</button>
+                                        <button type="button" ng-if="downloadingCSV" class="btn btncol btn-warning btn-progress-csv">IN PROGRESS</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cols-xs-12 col-sm-12 col-md-12 search-user-container">
+                            <div ng-show="openChart" style="display: flex;">
+                                <div class="copy-container">
+                                    <input id="actid" value="{{accountID}}" ng-readonly="{{isTrue}}" type="text" class="form-control no-copy" placeholder="Recipient's accountid" aria-label="Recipient's accountid" aria-describedby="button-addon1">
+                                    <div class="input-group-append" style="margin-left: -1px;">
+                                        <button class="btn copy-btn" type="button" ngclipboard data-clipboard-target="#actid">COPY ACCOUNTID</button>
+                                    </div>
+                                </div>
+                                <div class="copy-container">
+                                    <input id="email" value="{{email}}" ng-readonly="{{isTrue}}" type="text" class="form-control no-copy" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <div class="input-group-append" style="margin-left: -1px;">
+                                        <button class="btn copy-btn" type="button" ngclipboard data-clipboard-target="#email">COPY EMAIL</button>
+                                    </div>
+                                </div>
+                                <div class="copy-container">
+                                    <input id="password" value="{{accountPassword}}" ng-readonly="{{isTrue}}" class="form-control no-copy" type="text" placeholder="Recipient's password" aria-label="Recipient's password" aria-describedby="button-addon3">
+                                    <div class="input-group-append" style="margin-left: -1px;">
+                                        <button class="btn copy-btn" type="button" ngclipboard data-clipboard-target="#password">COPY PASSWORD</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-show="isLoading && !isCourseActivated">
+                                <div style="display: flex; align-items: center;">
+                                    <div style="margin-left: 10px; display: flex; align-items: center; margin-right: 7px; padding-right: 2%;" ng-show="usersInConsoleLab">
+                                        <input class="form-control search-course" ng-keypress="loadingContent" ng-model="searchConsoleUser.AccountName" type="text" placeholder="Search User" style="margin-right: -20px;">
+                                        <i class="glyphicon glyphicon-search right-addon glyph-color" style="color:dimgray;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="loadingVEProfile" style="text-align:center; margin-top:60px; margin-bottom:60px;">
+                    <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+                    <p style="color: #25a9c0;">Loading Details...</p>
+                </div>
+            </div>
+            <div class="student-consumption" ng-show="!loadingVEProfile">
+                <div class="chart-container" ng-show="openChart">
+                    <h2>{{accountName}}</h2>
+                    <div>
+                        <canvas id="myChart1" width="255" height="255"></canvas>
+                        <div class="chart-block"></div>
+                        <canvas id="myChart2" width="255" height="255"></canvas>
+                    </div>
+                </div>
+                <div ng-show="!usersInConsoleLab" class="name-block no-content" style="color: white;">
+                    <h1>No students enrolled to this course</h1>
+                </div>
+                <div class="table-container" style="overflow:auto;" ng-show="usersInConsoleLab">
+                    <table class="table table-condensed table-hover">
+                        <thead class="levelOne">
+                            <tr class="col-md-12">
+                                <th class="col-md-6" style="font-size: 16px !important;">
+                                    Student Name
+                                </th>
+                                <th class="col-md-6" style="font-size: 16px !important;">
+                                    Account ID
+                                </th>
+                                <th class="col-md-6" style="font-size: 16px !important;">
+                                    Cost Budget Ratio
+                                </th>
+                                <th class="col-md-6" style="font-size: 16px !important;">
+                                    Data Transfer Out Ratio
+                                </th>
+                                <th class="col-md-6" style="font-size: 16px !important;">
+                                    Suspend Status
+                                </th>
+                                <th class="col-md-6" style="font-size: 16px !important;">
+                                    Update Limit
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-show="!loading" style="text-align:center; cursor:pointer;" ng-repeat=" consoleLab in filterData = (consoleLabs | filter : searchConsoleUser) | filtername: searchConsoleUser" class="trow" ng-mouseenter="rollClass = 'highlight'" ng-mouseleave="rollClass = ''">
+                                <td class="trow" ng-class="{activeUser: isActiveConsoleUser(consoleLab)}" ng-click="openStudentDetails(consoleLab)">
+                                    <div>
+                                        <span data-toggle="tooltip" title="{{consoleLab.AccountName}}" style="font-size: 13px !important;">
+                                            {{consoleLab.AccountName}}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="trow" ng-class="{activeUser: isActiveConsoleUser(consoleLab)}" ng-click="openStudentDetails(consoleLab)">
+                                    <div>
+                                        <span data-toggle="tooltip" title="{{consoleLab.AccountID}}" style="font-size: 13px !important;">
+                                            {{consoleLab.AccountID}}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="trow" ng-class="{activeUser: isActiveConsoleUser(consoleLab)}" ng-click="openStudentDetails(consoleLab)">
+                                    <div>
+                                        <span data-toggle="tooltip" style="font-size: 13px !important;">
+                                            {{consoleLab.Actual_costs_spend.ActualSpend.Amount}} {{consoleLab.Actual_costs_spend.ActualSpend.Unit}} / {{consoleLab.Cost_budget_limit.Amount}} {{consoleLab.Cost_budget_limit.Unit}}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="trow" ng-class="{activeUser: isActiveConsoleUser(consoleLab)}" ng-click="openStudentDetails(consoleLab)">
+                                    <div>
+                                        <span data-toggle="tooltip" style="font-size: 13px !important;">
+                                            {{consoleLab.Actual_data_transfer_spend.ActualSpend.Amount}} {{consoleLab.Actual_data_transfer_spend.ActualSpend.Unit}} / {{consoleLab.Data_transfer_budget_limit.Amount}} {{consoleLab.Data_transfer_budget_limit.Unit}}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="trow" ng-class="{activeUser: isActiveConsoleUser(consoleLab)}">
+                                    <div>
+                                        <span data-toggle="tooltip">
+                                            <button ng-if="consoleLab.Is_suspended == false && consoleLab.SuspendProgress == false" class="btn btn-suspend" ng-click="SuspendUser(consoleLab)">SUSPEND USER</button>
+                                            <button ng-if="(consoleLab.Is_suspended == true && consoleLab.SuspendProgress == true) || (consoleLab.Is_suspended == false && consoleLab.SuspendProgress == true)" class="btn btn-warning btn-progress">IN PROGRESS</button>
+                                            <button ng-if="consoleLab.Is_suspended == true && consoleLab.SuspendProgress == false" class="btn btn-info btn-unsuspend" ng-click="SuspendUser(consoleLab)">UNSUSPEND USER</button>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="trow" ng-class="{activeUser: isActiveConsoleUser(consoleLab)}" ng-disabled="consoleLab.Is_suspended">
+                                    <div class="limit-container" ng-class="{isUpdating: consoleLab.UpdateLimitProgress == true}">
+                                        <div>
+                                            <select class="form-control" ng-disabled="consoleLab.UpdateLimitProgress == true || consoleLab.Is_suspended" style="font-size: 10px; height: 28px;" ng-model="consoleLab.limitType" ng-options="item.name as item.name for item in limits track by item.id" ng-change="changedType(consoleLab.limitType)">
+                                                <option value="" ng-if="consoleLab.limitType == undefined">Select Limit Type</option>
+                                            </select>
+                                            <input type="text" ng-disabled="consoleLab.UpdateLimitProgress == true  || consoleLab.Is_suspended" class="form-control" style="margin-top: 5px; height: 28px;" name="limitValue" ng-model="limitValue" value="{{limitValue}}" ng-change="changedValue(limitValue)" ng-pattern-restrict="^[0-9]{0,3}$" ng-min="{{min}}" ng-max="{{max}}" minlength="{{minLength}}" maxlength="{{maxLength}}" placeholder="1 ~ 999" />
+                                        </div>
+                                        <button class="btn btn-suspend" style="margin-left: 5px;" ng-disabled="(consoleLab.limitType == null) || (limitValue == null) || (limitValue == 0) || (consoleLab.UpdateLimitProgress == true)" ng-click="UpdateLimitUser(consoleLab, limitValue); limitValue=null">UPDATE</button>
+                                        <div class="shutdown-container-console" ng-if="consoleLab.UpdateLimitProgress == true">
+                                            <span class="loading-ellipsis">
+                                                Updating
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div ng-show="(consoleLabs|filter:searchConsoleUser).length==0" class="name-block no-content" style="color: white;">
+                        <h1>The student is not available on the search list.</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="!isLoading" style="text-align:center; margin-top:5%;">
+            <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+        </div>
+    </div>
+</div>

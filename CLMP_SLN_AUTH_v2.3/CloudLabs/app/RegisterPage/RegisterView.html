@@ -1,0 +1,72 @@
+﻿<form name="pdfUpload" enctype="multipart/form-data"
+      style="margin: 30px; position: relative; overflow: hidden; display: flex; justify-content: center;">
+    <input type="file" name="file-upload" id="file-upload" ngf-select="uploadFile($file, $invalidFiles)"
+           data-ngf-pattern="'application/pdf'" data-ngf-accept="'application/pdf'"
+           ng-model="picFile">
+</form>
+
+
+
+
+<div class="right-form">
+    <img class="logo-sm-cs" src="../../Content/Image/logo-cs-small.png" />
+    <span class="text-cs" ng-show="!isLoading"> Create your profile here </span>
+    <span class="text-cs" ng-show="isLoading"> Creating your profile </span>
+
+    <section id="loginForm">
+        <div class="text-center" ng-show='isLoading' style="color:antiquewhite"><!--<img src="../../../Content/Images/loading-icon.svg" />-->
+            <img class="sizeImg" src="../../Content/Image/loading2.gif" />
+        </div>
+        <form class="form-horizontal" name="registrationForm" method="POST" ng-show="!isLoading">
+            <div class="form-group">
+                <div class="col-md-6 padding">
+                    <input name="firstname" ng-model="firstname" type="text" class="form-control" placeholder="First Name" required>
+                    <span class="text-danger validationFont-size" ng-show="registrationForm.firstname.$dirty && registrationForm.firstname.$error.required">First Name is required.</span>
+                </div>
+                <div class="col-md-6 padding">
+                    <input name="lastname" ng-model="lastname" type="text" class="form-control" placeholder="Last Name" required>
+                    <span class="text-danger validationFont-size" ng-show="registrationForm.lastname.$dirty && registrationForm.lastname.$error.required">Last Name is required.</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12 padding">
+                    <input class="form-control modalTextBox" type="email" name="email" ng-model="email" ng-pattern="emailPattern" unique placeholder="Email Address" required>
+                    <span class="text-danger validationFont-size" ng-show="registrationForm.email.$touched  && registrationForm.email.$invalid">
+                        <span ng-show="registrationForm.email.$error.unique">Email address already exist.</span>
+                        <span ng-show="registrationForm.email.$error.required">Email is required.</span>
+                        <span ng-show="registrationForm.email.$error.pattern">Invalid email address.</span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6 padding">
+                    <input name="password" type="password" id="pw1" ng-model="password" class="form-control" placeholder="Password" ng-minlength="6" required>
+                    <span class="text-danger validationFont-size" ng-show="registrationForm.password.$error.minlength"> Password must be atleast 6 characters</span>
+                    <span class="text-danger validationFont-size" ng-show="registrationForm.password.$dirty && registrationForm.password.$error.required">Password is required.</span>
+                </div>
+                <div class="col-md-6 padding">
+                    <input name="confirmpassword1" type="password" id="pw2" pw-check="pw1" ng-model="confirmpassword1" class="form-control" placeholder="Password" ng-minlength="6" required>
+
+                    <span class="text-danger validationFont-size" ng-show="registrationForm.confirmpassword1.$error.pwmatch">Password mismatched</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <button class="btn btn-warning signUp-btn" type="submit" ng-click="submitForm()"
+                            ng-disabled="!(registrationForm.firstname.$valid && registrationForm.lastname.$valid
+                             && registrationForm.email.$valid && registrationForm.password.$valid && !(registrationForm.confirmpassword1.$error.pwmatch == true))">
+                        Register
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <div class="footer" ng-show="!isLoading">
+        <span class="validationFont-size">
+            Already have an account?
+            <a href="#" ng-click="gotoLogin()"> Click here to sign in </a>
+        </span>
+    </div>
+</div>
+

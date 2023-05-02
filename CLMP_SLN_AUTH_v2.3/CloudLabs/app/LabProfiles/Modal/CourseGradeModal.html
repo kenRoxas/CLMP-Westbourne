@@ -1,0 +1,128 @@
+﻿<div class="panel-modal-content panel-outline-content no-overflow">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()"><i class="glyphicon glyphicon-remove close" aria-hidden="true"></i></button>
+        <div>
+            <span class="panel-modal-title">Lab Grade</span>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div class="panel-modal-title">{{(VEName)}}</div>
+        <div style="margin-top: 5px;">
+            <div class="modal-inner-box-grant" style="flex-direction: column;">
+                <div style="display: flex; margin: 10px 2px 10px 2px;">
+                    <div style="margin: 5px; margin-left: 0px; display: flex; align-items:center;">
+                        <input class="form-control search-labs" ng-model="user.NameEmail;" type="text" placeholder="Search Name or Email" style="width: 95%; top:11px; width:220px !important;">
+                        <i class="glyphicon glyphicon-search" style="color:dimgray; margin-left: -20px;"></i>
+                    </div>
+                </div>
+                <div class="outer-box">
+                    <table class="table table-condensed table-hover">
+                        <thead class="levelOne">
+                            <tr>
+                                <th  style="min-width:180px;">
+                                    Name
+                                </th>
+                                <th style="min-width:160px;">
+                                    Email
+                                </th>
+                                <th style="min-width:100px;">
+                                    Image
+                                </th>
+                                <th style="min-width:100px;">
+                                    Remote Lab
+                                </th>
+                                <th style="min-width:120px;">
+                                    Remarks
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-show="!loading" ng-hide="noUsersinLabProfiles" style="text-align:center;" class="trow" ng-repeat="user in filterData = (allUsers | filter : user)">
+                                <td style="width: 15rem !important; text-transform:capitalize;" class="gradeTD">
+                                    <span class="text-overflow-dynamic-container">
+                                        <span class="text-overflow-dynamic-ellipsis">
+                                            {{user.Name}}
+                                        </span>
+                                    </span>
+                                </td>
+                                <td style="width: 15rem !important;" class="gradeTD">
+                                    <span class="text-overflow-dynamic-container">
+                                        <span class="text-overflow-dynamic-ellipsis">
+                                            {{user.Email}}
+                                        </span>
+                                    </span>
+                                </td>
+                                <td title="{{'View Image'}}" style="width: 10rem !important;">
+                                    <!--<div style="text-align:center !important; color:white;">
+                                        <button class="btn btn-default" style="background-color:green; font-size:12px; color:white; cursor: pointer;" ng-disabled="user.ThumbnailUpload.length == null || user.HoursRemaining === 0" ng-click="user.ThumbnailUpload.length == null ? '' : openImage(user.ThumbnailUpload, user.Name)">
+                                            View Image
+                                        </button>
+                                    </div>-->
+                                    <div style="text-align:center !important; color:white;">
+                                        <button class="btn btn-success" style="background-color:green; font-size:12px; color:white; cursor: pointer;" ng-click="openImage(user.Id, user.ThumbnailUpload, user.Name)">
+                                            View Image
+                                        </button>
+                                    </div>
+                                </td>
+                                <td title="{{user.isExtend ? 'Start Lab Remote' : user.HoursRemaining <= 0 ? 'Your lab credits have ran out' : user.IsStarted == 2 ? 'Your Machine is shutting down, Please wait..' : 'Remote Lab Access'}}"
+                                    ng-style="user.isExtend ? {'cursor':'pointer'} : user.HoursRemaining <= 0 ? {'cursor':'not-allowed'} : {'cursor':'pointer'}" style="width: 10rem !important;">
+
+                                    <button class="btn btn-success" style="background-color:green; font-size:12px; color:white;" ng-style="user.isExtend ? {'cursor':'pointer'} : user.HoursRemaining <= 0 ? {'cursor':'not-allowed'} : {'cursor':'pointer'}"
+                                                                        ng-disabled="user.isExtend ? false : (user.HoursRemaining <= 0 || user.IsStarted == 2 || user.IsStarted == 3 || user.IsStarted == 6)"
+                                                                        ng-click="openRemote(user.GuacamoleSrc, user.VEProfileId, user.UserId, user.HoursRemaining, user.IsStarted, user.ResourceId)">
+                                        Lab Remote
+                                    </button>
+                                </td>
+                                <td style="width: 10rem !important;">
+                                    <div>
+                                        <select ng-init="user.isPassed == null ? -1 : user.isPassed || null" ng-model="user.isPassed" ng-change="changeIsComing(user)" ng-options="option.grade as option.Name for option in data.grade"></select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div ng-show="noUsersinLabProfiles || filterData.length == 0" style="text-align: center; color: white; font-size: 14px;">
+                        No Users Found Here
+                    </div>
+
+                    <div ng-show="loading" class="loading-block-grant">
+                        <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+                    </div>
+                </div>
+
+                <!--<div ng-show="!loading" class="page">
+         <pagination ng-model="currentPage"></pagination>
+        <ul ng-hide="noUsersinLabProfiles" uib-pagination ng-model="currentPage"
+            class="pagination-sm"
+            max-size="maxSize"
+            boundary-links="true"
+            items-per-page="itemsPerPage"
+            num-pages="numPages"
+            ng-change="pageChanged()"
+            total-items="filterData.length"></ul>
+    </div>-->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="col-md-12 no-padding">
+                <div class="keep-right">
+                    <a class="btn btn-danger btn-sm" ng-click="close()">
+                        <span class="glyphicon glyphicon-menu-left"> </span>
+                        Cancel
+                    </a>
+                </div>
+                <div class="keep-right" style="margin-right:10px;">
+                    <a class="btn btn-primary btn-sm" ng-disabled="noUsersinLabProfiles"
+                       ng-click="noUsersinLabProfiles ? '' : save()" ng-style="noUsersinLabProfiles ?  {'cursor': 'not-allowed'} : {'cursor': 'pointer'}">
+                        <span class="glyphicon glyphicon-menu-left"> </span>
+                        Save
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+@section scripts{
+
+    <script src="~/app_minified/RegisterPage/app-register.min.js"></script>
+    <script src="~/app_minified/RegisterPage/registerController.min.js"></script>
+}
+
+
+<div ng-app="app-register">
+    <div ng-view class="col-md-6 right-cont"></div>
+</div>

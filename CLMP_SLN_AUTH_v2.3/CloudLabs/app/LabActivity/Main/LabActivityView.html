@@ -1,0 +1,49 @@
+﻿<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    
+<div on-scroll-to-bottom="loadMore()">
+    <div class="loading-block row" id="loading-block" data-page="1" data-pages="0" ng-if="loader == true">
+        <div id="activity{{x.LabActivityID}}" class="text-center">
+            <img class="sizeImgLabAct" src="../../../Content/Image/loading2.gif" />
+            <span class="loadText" aria-busy="true" aria-live="polite" aria-label="Loading Lab Activities Page">Loading Lab Activities Page...</span>
+        </div>
+    </div>
+    <div ng-show="empty && loader == false" class="loading-block no-content">
+        <h1>No Lab Activities Available</h1>
+    </div>
+
+    <div ng-show="loader == false">
+        <div class="search-block" style="display: flex; margin: 1.3rem; justify-content: space-between; margin-right: .7rem;">
+            <div class="" style="padding-bottom:1%;padding-top:1%">
+                <div class="search-content" style="">
+                    <input class="form-control search-labs" ng-model="searchText.Name" type="text" list="veList" placeholder="Search Lab Activities" style="width: 272px;" aria-label="search lab activities">
+                    <span class="glyphicon glyphicon-search search-icon" aria-hidden="{{ariaHidden}}"></span>
+                </div>
+                <datalist id="veList"></datalist>
+            </div>
+
+            <div class="" style="padding-bottom:1%;padding-top:1%" ng-show="!userIsStaff">
+                <a class="btn btn-primary btn-lg" id="btn-create-profile" ng-click="openModal('create', x)">Create Lab Activities</a>
+            </div>
+        </div>
+
+        <div class="" style="margin: 0px 50px;">
+            <div ng-repeat="x in labacts | orderBy: 'Name' | filter: searchText" id="profile{{x.LabActivityID}}" class="col-sm-4" style="padding-left:0px !important;padding-right:0px !important; margin-top: 10px;">
+                <div class="labactivity-block view-first">
+                    <div class="block-info" style="position: absolute; margin: 20px;">
+                        <span class="activity-title lab-title">{{x.Name}}</span>
+                        <span class="assessment-profile lab-profile">Name of Lab Answer Key: {{x.LabAnswerKeyName !== null ? x.LabAnswerKeyName : 'NO Answer Key'}}</span>
+                    </div>
+                    <div class="labactivity-mask" data-id={{x.LabActivityID}} data-title="{{x.Name}}">
+                        <div class="button-middle" style="display: flex;  flex-wrap: nowrap; justify-content: space-evenly; width: 100%;">
+                            <div class="labactivity-mask-btn lab-svg-center"><a class="btn-activity-view" data-toggle="tooltip" title="View" ng-click="openModal('view', x)"></a></div>
+                            <div ng-show="!userIsStaff" class="labactivity-mask-btn lab-svg-center"><a class="btn-activity-edit" data-toggle="tooltip" title="Edit" ng-click="openModal('edit', x)"></a></div>
+                            <div class="labactivity-mask-btn lab-svg-center"><a class="btn-activity-upload" data-toggle="tooltip" title="Upload Lab Answer Key" ng-click="modalUpload(x.CourseCode, x.LabActivityID)"></a></div>
+                            <div class="labactivity-mask-btn lab-svg-center" ng-style="x.LabAnswerKey === null ? {'cursor':'not-allowed', 'opacity':'20%'} : {}"><a ng-class="{'disableDL': x.LabAnswerKey === null}" class="btn-activity-download" data-toggle="tooltip" title="Download Lab Answer Key" href="{{x.LabAnswerKey}}" download></a></div>
+                            <div class="labactivity-mask-btn lab-svg-center" ng-show="!userIsStaff" ng-if="x.UseCount==0"><a class="btn-activity-delete" data-toggle="tooltip" title="Delete" ng-click="openModal('delete', x)"></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    

@@ -1,0 +1,35 @@
+﻿<div class="modal-content panel-outline-content">
+    <div class="modal-header">
+        <i class="glyphicon glyphicon-remove close col-md-1" ng-click="close()"></i>
+        <span class="panel-modal-title" id="modal-title">{{title}}</span>
+    </div>
+    <div class="modal-body" style="position: relative;margin-top: 5%;padding: -13%;padding: 0;">
+
+        <div class="form-group" style="text-align:center;display:block;color:#fff" ng-show="change">
+            <p>
+                {{message}} <br />
+            </p>
+        </div>
+
+        <div class="form-group" style="color:#fff;" ng-show="!change">
+            <p style="position: relative; left: 5%;">
+                {{message}} <br />
+            </p>
+
+            <span style="text-align:center;display:block;"><b>{{firstname}} {{lastname}}<br /></b> </span>
+            <span style="text-align:center;display:block;"><b>{{email}}</b></span>
+
+
+            <span style="margin-top: 4%;display: block;">{{warnMessage}}</span>
+
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center; border:0 !important;" ng-show="!isBulk">
+        <button class="btn btn-primary btn-confirm" type="button" ng-show="isShow" ng-click="confirm()">Yes</button>
+        <button class="btn btn-danger btn-confirm" type="button" ng-show="toShow" ng-click="close()">{{noCloseCancel}}</button>
+        <button class="btn btn-danger btn-confirm" type="button" ng-show="!isShow" ng-click="confirm()">{{noCloseCancel}}</button>
+    </div>
+    <div class="modal-footer" style="text-align:center; border:0 !important;" ng-show="isBulk">
+        <button class="btn btn-primary btn-confirm" type="button" ng-click="confirm()">Close</button>
+    </div>
+</div>

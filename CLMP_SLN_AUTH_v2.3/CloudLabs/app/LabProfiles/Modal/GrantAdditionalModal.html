@@ -1,0 +1,68 @@
+﻿<div class="panel-modal-content panel-outline-content">
+    <div class="modal-header">
+        <span class="panel-modal-title">Custom Lab Template</span>
+    </div>
+    <div class="modal-body modal-body-style" id="createModalbody">
+        <span class="panel-header title-header"></span>
+        <p class="text-danger" style="margin-top:20px;"> *Machine name field will only accepts alphanumeric.</p>
+        <div class="outer-box">
+            <form name="myForm" id="myForm" style="overflow-y: auto; height: 30em;">
+                <table class="table table-condensed table-hover">
+                    <thead class="levelOne">
+                        <tr class="col-md-12">
+                            <th class="col-md-5">
+                                Email
+                            </th>
+                            <th class="col-md-5">
+                                Name of Machine
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody ng-show="allUsers.length == 0 || filterData.length == 0">
+                        <tr>
+                            <td colspan="8" class="text-center noHover" style="color:white;">No User found.</td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-repeat="user in users track by $index">
+                        <!-- <tr class="trow"> ng-show="!loading" style="text-align:center;" ng-repeat="user in filterData = (allUsers | filter : lablab) | orderBy: sortType:sortReverse | limitTo: itemsPerPage:itemsPerPage*(currentPage-1)"-->
+                        <tr>
+                            <td style="text-align:center; padding-left:1em;padding-right:1em;">
+                                <div class="user-name truncate-lab">
+                                    {{user.Email}}
+                                </div>
+                            </td>
+                            <td style="text-transform: lowercase; text-align:left; padding-left:1em; padding-right:1em;">
+                                <div class="user-name">
+                                    <span data-toggle="tooltip" class="changeColor" title="{{user.MachineName}}">
+
+                                        <input type="text" ng-model="user.MachineName" id="machineName{{$index}}" name="machineName" ng-keyup="type(user.MachineName)" maxlength="15" ng-minlength="5" unique style="width:100%;text-transform:uppercase;" autocomplete="off" required />
+
+                                    </span>
+                                    <!--<span class="error-block text-danger" style="text-transform:none;" ng-show="myForm.$error.machinecheck">Machine name is already in used</span>-->
+
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <!--<span class="error-block text-danger" style="text-transform:none;" ng-show="myForm.{{'machineName' + $index}}.$error.pattern">Machine cannot contain only number. '-' is only special character allowed and should not begin or end with '-'</span>-->
+                <!--<span class="error-block text-danger" style="text-transform:none;" ng-show="myForm.$error.machinecheck">Machine1 name is already in used</span>-->
+
+            </form>
+            <span class="error-block text-danger" style="text-transform:none;" ng-show="isValid">Machine name is already in used</span>
+
+            <span class="error-block text-danger" style="text-transform:none;" ng-show="myForm.machineName.$error.machinecheck1">Machine name is already in used</span>
+
+            <div ng-show="loading" class="loading-block-grant">
+                <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+            </div>
+            <h1 class="loading-block white-text" ng-show="allUsers.length == 0 && loading == false">No Students Available.</h1>
+        </div>        
+    </div>
+    <div class="modal-footer-conf" style="text-align:center">
+        <button class="btn btn-yes" type="button" ng-disabled="myForm.$error.unique || myForm.$error.machinecheck || myForm.$invalid || isValid" ng-click="confirm()">Create</button>
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</div>

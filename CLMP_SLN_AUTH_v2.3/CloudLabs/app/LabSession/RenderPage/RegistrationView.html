@@ -1,0 +1,63 @@
+﻿<div class="modal-content panel-outline-content">
+    <div class="col-xs-12 modal-header">
+        <h3 class="panel-modal-title" style="color:#25a9c0; text-align:center;">REGISTRATION</h3>
+    </div>
+
+    <form name="regLabFrom" novalidate>
+        <div ng-show="loading" class="loading-block" style="margin-top:8% !important; margin-bottom:8% !important;">
+            <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+            <div>
+                <span style="color:white;">Please Wait...</span>
+            </div>
+        </div>
+        <div style="margin-top:5px;" ng-show="!loading">
+            <div class="modal-inner-box-grant-reg" ng-show="registrationLayout">
+                <div>
+                    <span style="color:white;">Firstname:</span>
+                    <input ng-model="regFirstname" name="regFirstname" class="form-control" ng-required="true" style="min-width:100%; margin-bottom:5px;" />
+                </div>
+                <div>
+                    <span style="color:white;">Lastname:</span>
+                    <input ng-model="regLastname" name="regLastname" class="form-control" ng-required="true" style="min-width:100%;margin-bottom:5px;" />
+                </div>
+                <div>
+                    <span style="color:white;">Email:</span>
+                    <input ng-model="regEmail" name="regEmail" class="form-control" type="email" ng-required="true" ng-pattern="emailPattern" unique style="min-width:100%;margin-bottom:5px;" />
+                    <span ng-show="regLabFrom.regEmail.$error.pattern" style="color:red; margin-bottom:5px;">Email Address Invalid</span>
+                    <span ng-show="regLabFrom.regEmail.$error.unique" style="color:red; margin-bottom:5px;">Email address already exists</span>
+                </div>
+                <!--<div>
+                    <span style="color:white;">Region:</span>
+                    <select ng-model="regRegion" name="regRegion" class="form-control" ng-options="x for x in regions" required style="min-width:100%;margin-bottom:5px;">
+                        <option value="" selected="selected">- Please Select -</option>
+                    </select>
+                    <span ng-show="!regLabFrom.regRegion.$error" style="color:red; margin-bottom:5px;">Please select region</span>
+                </div>-->
+                <div>
+                    <span style="color:white;">Password:</span>
+                    <input ng-model="regPassword" id="pw1d" name="regPassword" class="form-control" type={{showOrHidePass}} ng-required="true" pw-check="pw1d" pwmatch style="min-width:100%;margin-bottom:5px;" />
+                    <i class="glyphicon glyphicon-eye-open password-glyph col-md-1" ng-show="!glyphPass" ng-click="showPass()" style="color:black;"></i>
+                    <i class="glyphicon glyphicon-eye-close password-glyph col-md-1" ng-show="glyphPass" ng-click="showPass()" style="color:black;"></i>
+                </div>
+                <div>
+                    <span style="color:white;">Confirm Password:</span>
+                    <input ng-model="regConfirmPassword" id="pw2d" name="regConfirmPassword" class="form-control" type={{showOrHideConfirmPass}} ng-required="true" pw-check="pw1d" pwmatch style="min-width:100%;margin-bottom:5px;" />
+                    <i class="glyphicon glyphicon-eye-open password-glyph col-md-1" ng-show="!glyph" ng-click="showConfirmPass()" style="color:black;"></i>
+                    <i class="glyphicon glyphicon-eye-close password-glyph col-md-1" ng-show="glyph" ng-click="showConfirmPass()" style="color:black;"></i>
+                    <span ng-show="regConfirmPassword != regPassword" style="color:red;">Password did not match.</span>
+                </div>
+            </div>
+        </div>
+       
+        <div class="modal-footer-conf cursor-notallowed" style="margin-bottom:2%; text-align:center;" ng-show="!loading && registrationLayout">
+            <a class="btn btn-primary btn-sm" ng-click="register(regFirstname, regLastname, regEmail, regPassword)" ng-disabled="!(regLabFrom.regFirstname.$valid && regLabFrom.regLastname.$valid && regLabFrom.regEmail.$valid && regLabFrom.regPassword.$valid && regLabFrom.regConfirmPassword.$valid && regConfirmPassword == regPassword)">
+                Register
+            </a>
+        </div>
+        <div class="modal-footer-conf cursor-notallowed" style="margin-bottom:2%; text-align:center;" ng-show="!loading && !registrationLayout">
+            <a class="btn btn-primary btn-sm" ng-click="register('','','',regPassword)" ng-disabled="!(regLabFrom.regPassword.$valid && regLabFrom.regConfirmPassword.$valid && regConfirmPassword == regPassword)">
+                Register
+            </a>
+        </div>
+    </form>
+</div>

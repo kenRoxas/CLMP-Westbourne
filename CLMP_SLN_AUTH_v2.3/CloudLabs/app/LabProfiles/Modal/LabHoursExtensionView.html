@@ -1,0 +1,503 @@
+﻿
+<div class="panel-modal-content panel-outline-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><i class="glyphicon glyphicon-remove close" aria-hidden="true" title="Close"></i></button>
+        <div>
+            <span class="panel-modal-title">Lab Hour Extension</span>
+        </div>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="tab">
+            <span ng-show="!vm.pageProperties.loading" class="button-selection" ng-class="{'activeView': vm.isFixedLabHourExtension === false}" ng-click="vm.toggleLabHoursExtensionView(false)">Time-Bound</span>
+            <span class="button-selection"> | </span>
+            <span ng-show="!vm.pageProperties.loading" class="button-selection" ng-class="{'activeView': vm.isFixedLabHourExtension === true}" ng-click="vm.toggleLabHoursExtensionView(true)">Fixed-Validity</span>
+        </div>
+        <hr class="hr-lab-hour-extension" />
+        <div class="header-container">
+            <div class="panel-modal-title">{{(vm.VEName)}}</div>
+            <div class="createButtons" ng-show="!vm.isCreateUpdateMode">
+                <a href="" data-toggle="tooltip" title="Download Lab Hours Extension Data">
+                    <img ng-init="itemsrc='../../../Content/Image/msexcel.png'" ng-disabled="vm.usersWithCustomLabHourExtensions == 0" ng-mouseleave="itemsrc='../../../Content/Image/msexcel.png'" ng-mouseover="itemsrc='../../../Content/Image/msexcel-hover.png'" class="btn-lab-hours-extension-excel" ng-src="{{itemsrc}}" ng-click="vm.exportDataToExcel()" alt="excel">
+                </a>
+                <button class="btn btn-primary btn-md createButtonForCourse" ng-disabled="vm.isFixedLabHourExtension ? vm.usersWithFixedLabHourExtensions == 0 : vm.usersWithCustomLabHourExtensions == 0" ng-click="vm.toggleCreateLabHourExtensionView(false)">Create extension for the course</button>
+                <button class="btn btn-primary btn-md createButtonForIndividual" ng-disabled="vm.isFixedLabHourExtension ? vm.usersWithFixedLabHourExtensions == 0 : vm.usersWithCustomLabHourExtensions == 0" ng-click="vm.toggleCreateLabHourExtensionView(true)">Create extension for a user</button>
+            </div>
+            <div class="panel-modal-title" ng-show="!vm.isEditRecord && vm.isCreateUpdateMode && !vm.isForIndividual">Create extension for the course</div>
+            <div class="panel-modal-title" ng-show="vm.isForIndividual && !vm.isEditRecord">Create extension for a user</div>
+            <div class="panel-modal-title" ng-show="vm.isEditRecord">Edit the user's lab hour extension</div>
+
+        </div>
+
+        <!--Custom/Time-bound-->
+        <div class="custom-view-container" ng-show="!vm.isFixedLabHourExtension && !vm.isCreateUpdateMode">
+            <div class="modal-inner-box-grant main-list-container">
+                <div class="user-notice-container">
+                    <p class="user-notice">
+                        Time-bound or scheduled lab hour extensions are only consumable on certain period of time frame (e.g. 08:00 AM - 12:00 PM on Sept 27, 2021).
+                    </p>
+                </div>
+
+                <div class="search-filter-buttons" ng-show="!vm.isCreateUpdateMode">
+                    <!--Search Text Field-->
+                    <div class="search-button">
+                        <input class="form-control search-labs search-user-for-extension" ng-disabled="vm.pagePropeties.loadingCustomLabHourExtensions"
+                               ng-model="vm.searchTextCustom" ng-model-options='{ debounce: 500 }' ng-change="vm.onSearch()" type="text" placeholder="Search Name or Email">
+                        <i class="glyphicon glyphicon-search search-icon"></i>
+
+                        <input type="checkbox" id="showAllCustomRecords" name="showAllCustomRecords" ng-model="vm.showAllRecordsCustom" class="show-deleted-user-checkbox-input" ng-change="vm.onSearch()">
+                        <label for="showAllCustomRecords" class="show-deleted-user-checkbox-label">Show deleted</label>
+                    </div>
+
+                    <!--Search Date Pickers-->
+                    <div class="bulk-calendar-filter">
+                        <div class="date-filter-container">
+                            <h2 class="date-extension-type-filter">Start date:</h2>
+                            <input type="text" class="form-control-bulk date-filter-input" datetime-picker="MM/dd/yyyy HH:mm" placeholder="Start date"
+                                   ng-disabled="vm.pagePropeties.loadingCustomLabHourExtensions"
+                                   ng-model="vm.startDateFilterCustom"
+                                   is-open="vm.searchStartDateOptionsForCustom.showFlag"
+                                   name="start"
+                                   onkeydown="return false"
+                                   ng-change="vm.onSearchDateChange()"
+                                   datepicker-options="vm.searchStartDateOptionsForCustom" />
+                            <span>
+                                <button type="button" class="btn btn-default" ng-click="vm.searchStartDateOptionsForCustom.showFlag = true;"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                        <div class="date-filter-container">
+                            <h2 class="date-extension-type-filter">End date:</h2>
+                            <input type="text" class="form-control-bulk date-filter-input" datetime-picker="MM/dd/yyyy HH:mm" placeholder="End date"
+                                   ng-disabled="vm.pagePropeties.loadingCustomLabHourExtensions"
+                                   ng-model="vm.endDateFilterCustom"
+                                   is-open="vm.searchEndDateOptionsForCustom.showFlag"
+                                   name="end"
+                                   onkeydown="return false"
+                                   ng-change="vm.onSearchDateChange()"
+                                   datepicker-options="vm.searchEndDateOptionsForCustom" />
+                            <span>
+                                <button type="button" class="btn btn-default" ng-click="vm.searchEndDateOptionsForCustom.showFlag = true"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!--List of Enrolled Users with/without Lab Hour Extensions-->
+                <div id="table-animation" class="outer-box lab-hour-list-view" ng-show="!vm.isCreateUpdateMode">
+                    <table id="table-animation" class="table table-condensed table-hover lab-hour-extension-table">
+                        <thead class="levelOne">
+                            <tr ng-model="vm.usersWithCustomLabHourExtensions">
+                                <th class="thead-text-alignment" ng-click="vm.sortList('Name'); caretClick = !caretClick">
+                                    Name
+                                    <span ng-if="vm.defaultCaretChangeForCustom.Name">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="vm.defaultCaretChangeForCustom.Name" />
+                                    </span>
+                                    <span ng-if="!vm.defaultCaretChangeForCustom.Name">
+                                        <span ng-show="vm.caretChangeForCustom.Name" class="fa fa-caret-down caret-buttons-color"></span>
+                                        <span ng-show="!vm.caretChangeForCustom.Name" class="fa fa-caret-up caret-buttons-color"></span>
+                                    </span>
+                                </th>
+                                <th class="thead-text-alignment" ng-click="vm.sortList('Email')">
+                                    Email
+                                    <span ng-if="vm.defaultCaretChangeForCustom.Email">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="vm.defaultCaretChangeForCustom.Email" />
+                                    </span>
+                                    <span ng-if="!vm.defaultCaretChangeForCustom.Email">
+                                        <span ng-show="vm.caretChangeForCustom.Email" class="fa fa-caret-down caret-buttons-color"></span>
+                                        <span ng-show="!vm.caretChangeForCustom.Email" class="fa fa-caret-up caret-buttons-color"></span>
+                                    </span>
+                                </th>
+                                <th class="thead-numeric-alignment" ng-click="vm.sortList('StartDate')">
+                                    Start Date
+                                    <span ng-if="vm.defaultCaretChangeForCustom.StartDate">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="vm.defaultCaretChangeForCustom.StartDate" />
+                                    </span>
+                                    <span ng-if="!vm.defaultCaretChangeForCustom.StartDate">
+                                        <span ng-show="vm.caretChangeForCustom.StartDate" class="fa fa-caret-down caret-buttons-color"></span>
+                                        <span ng-show="!vm.caretChangeForCustom.StartDate" class="fa fa-caret-up caret-buttons-color"></span>
+                                    </span>
+                                </th>
+                                <th class="thead-numeric-alignment" ng-click="vm.sortList('EndDate')">
+                                    End Date
+                                    <span ng-if="vm.defaultCaretChangeForCustom.EndDate">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="vm.defaultCaretChangeForCustom.EndDate" />
+                                    </span>
+                                    <span ng-if="!vm.defaultCaretChangeForCustom.EndDate">
+                                        <span ng-show="vm.caretChangeForCustom.EndDate" class="fa fa-caret-down caret-buttons-color"></span>
+                                        <span ng-show="!vm.caretChangeForCustom.EndDate" class="fa fa-caret-up caret-buttons-color"></span>
+                                    </span>
+                                </th>
+                                <th class="thead-numeric-alignment">
+                                    Duration (dd:hh:mm)
+                                </th>
+                                <th class="thead-text-alignment" ng-click="vm.sortList('ExtensionTypeId')">
+                                    Type of Extension
+                                    <span ng-if="vm.defaultCaretChangeForCustom.ExtensionTypeId">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="vm.defaultCaretChangeForCustom.ExtensionTypeId" />
+                                    </span>
+                                    <span ng-if="!vm.defaultCaretChangeForCustom.ExtensionTypeId">
+                                        <span ng-show="vm.caretChangeForCustom.ExtensionTypeId" class="fa fa-caret-down caret-buttons-color"></span>
+                                        <span ng-show="!vm.caretChangeForCustom.ExtensionTypeId" class="fa fa-caret-up caret-buttons-color"></span>
+                                    </span>
+                                </th>
+                                <th class="thead-text-alignment">
+                                    Created By
+                                </th>
+                                <th>
+                                    On-going
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody ng-show="vm.usersWithCustomLabHourExtensions.length == 0">
+                            <tr>
+                                <td colspan="10" class="text-center noHover no-user-text">No users found.</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr ng-class="{'is-deleted': user.IsDeleted === true}" ng-show="!vm.pagePropeties.loadingCustomLabHourExtensions" ng-repeat="user in filterData = (vm.usersWithCustomLabHourExtensions | filter : acct)"
+                                class="trow user-table-row">
+                                <td class="thead-text-alignment item-padding">
+                                    <div class="truncate-lab letterCase user-name-container">
+                                        <div class="push-right changeColor user-name-column" data-toggle="tooltip" title="{{user.Name}}">
+                                            {{user.Name}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="user-data-container item-padding">
+                                    <div class="changeColor user-email-column" data-toggle="tooltip" title="{{user.Email}}">
+                                        {{user.Email}}
+                                    </div>
+                                </td>
+                                <td class="user-data-container item-padding">
+                                    <div class="changeColor user-start-date-column" data-toggle="tooltip" ng-show="user.LabHourExtensionId !== null" title="{{user.StartDate}}">
+                                        {{user.StartDate | date:'MM/dd/yyyy h:mm a'}}
+                                    </div>
+                                </td>
+                                <td class="user-data-container item-padding">
+                                    <div class="changeColor user-end-date-column" data-toggle="tooltip" ng-show="user.LabHourExtensionId !== null" title="{{user.EndDate}}">
+                                        {{user.EndDate | date:'MM/dd/yyyy h:mm a'}}
+                                    </div>
+                                </td>
+                                <td class="user-data-container item-padding">
+                                    <div class="changeColor user-extension-duration" data-toggle="tooltip" ng-show="user.LabHourExtensionId !== null" title="{{user.Duration}}">
+                                        {{user.Duration}}
+                                    </div>
+                                </td>
+                                <td class="item-padding">
+                                    <div class="user-extension-type" data-toggle="tooltip" ng-show="user.LabHourExtensionId !== null" title="{{user.SelectedExtensionType.Label}}">
+                                        {{user.SelectedExtensionType.Label}}
+                                    </div>
+                                </td>
+                                <td class="thead-text-alignment item-padding">
+                                    <div class="truncate-lab letterCase user-createdBy-container">
+                                        <div class="push-right changeColor user-name-column" data-toggle="tooltip" title="{{user.CreatedBy}}">
+                                            {{user.CreatedBy}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="user-data-container item-padding">
+                                    <div data-toggle="tooltip" ng-show="user.LabHourExtensionId !== null" class="changeColor user-on-going-status-column">
+                                        <span ng-show="!user.ExtensionIsOnGoing"> </span>
+                                        <span ng-show="user.ExtensionIsOnGoing && (user.IsDeleted === false)" title="On-Going"> <i class="fa fa-check" aria-hidden="true"></i> </span>
+                                    </div>
+                                </td>
+                                <td class="user-data-container item-padding">
+                                    <div class="action-button-container" ng-show="user.LabHourExtensionId !== null">
+                                        <div>
+                                            <img ng-show="user.LabHourExtensionId !== null && !user.ExtensionIsInThePast && !user.ExtensionIsOnGoing && !user.IsDeleted" ng-src="../../../Content/Image/editcircle-hover.png" class="actionButton-edit" ng-click="vm.toggleEditLabHourExtensionView(user)" title="Edit" />
+                                            <img ng-src="../../../Content/Image/close-icon.png" class="actionButton-delete" ng-show="user.LabHourExtensionId !== null && !user.ExtensionIsOnGoing && !user.IsDeleted" ng-click="vm.deleteLabHourExtension(user)" title="Delete" />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="loading-block-grant" ng-show="vm.pagePropeties.loadingCustomLabHourExtensions">
+                        <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+                    </div>
+                    <h1 class="loading-block white-text" ng-show="vm.usersWithCustomLabHourExtensions.length == 0 && vm.pagePropeties.loadingCustomLabHourExtensions == false">No students enrolled yet.</h1>
+                </div>
+            </div>
+        </div>
+
+        <!--Fixed-->
+        <div class="fixed-view-container" ng-show="vm.isFixedLabHourExtension && !vm.isCreateUpdateMode">
+            <div class="modal-inner-box-grant main-list-container">
+                <div class="user-notice-container">
+                    <p class="user-notice">
+                        Fixed-validity lab hour extensions have a collective number of hours that can be consumed within a particular validity period.
+                    </p>
+                </div>
+
+                <div class="search-filter-buttons" ng-show="!vm.isCreateUpdateMode">
+
+                    <div class="search-button">
+                        <input class="form-control search-labs search-user-for-extension" ng-model="vm.searchTextFixed" ng-disabled="vm.pagePropeties.loadingFixedLabHourExtensions"
+                               ng-change="vm.onSearch()" ng-model-options='{ debounce: 500 }' type="text" placeholder="Search Name or Email">
+                        <i class="glyphicon glyphicon-search search-icon"></i>
+
+                        <input type="checkbox" id="showAllFixedRecords" name="showAllFixedRecords" ng-model="vm.showAllRecordsFixed" class="show-deleted-user-checkbox-input" ng-change="vm.onSearch()">
+                        <label for="showAllFixedRecords" class="show-deleted-user-checkbox-label">Show deleted</label>
+                    </div>
+
+                    <div class="bulk-calendar-filter">
+                        <div class="date-filter-container">
+                            <h2 class="date-extension-type-filter">Start date:</h2>
+                            <input type="text" class="form-control-bulk date-filter-input" datetime-picker="MM/dd/yyyy HH:mm" placeholder="Start date"
+                                   ng-disabled="vm.pagePropeties.loadingFixedLabHourExtensions"
+                                   ng-model="vm.startDateFilterFixed"
+                                   is-open="vm.searchStartDateOptionsForFixed.showFlag"
+                                   name="start"
+                                   onkeydown="return false"
+                                   ng-change="vm.onSearchDateChange()"
+                                   datepicker-options="vm.searchStartDateOptionsForFixed" />
+                            <span>
+                                <button type="button" class="btn btn-default" ng-click="vm.searchStartDateOptionsForFixed.showFlag = true;"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                        <div class="date-filter-container">
+                            <h2 class="date-extension-type-filter">End date:</h2>
+                            <input type="text" class="form-control-bulk date-filter-input" datetime-picker="MM/dd/yyyy HH:mm" placeholder="End date"
+                                   ng-disabled="vm.pagePropeties.loadingFixedLabHourExtensions"
+                                   ng-model="vm.endDateFilterFixed"
+                                   is-open="vm.searchEndDateOptionsForFixed.showFlag"
+                                   name="end"
+                                   onkeydown="return false"
+                                   ng-change="vm.onSearchDateChange()"
+                                   datepicker-options="vm.searchEndDateOptionsForFixed" />
+                            <span>
+                                <button type="button" class="btn btn-default" ng-click="vm.searchEndDateOptionsForFixed.showFlag = true"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!--List of Enrolled Users with/without Lab Hour Extensions-->
+                <div id="table-animation" class="outer-box lab-hour-list-view" ng-show="!vm.isCreateUpdateMode">
+                    <table id="table-animation" class="table table-condensed table-hover lab-hour-extension-table">
+                        <thead class="levelOne">
+                            <tr ng-model="vm.usersWithFixedLabHourExtensions">
+                                <th class="thead-text-alignment" ng-click="vm.sortList('Name'); caretClick = !caretClick">
+                                    Name
+                                    <span ng-if="vm.defaultCaretChangeForFixed.Name">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="vm.defaultCaretChangeForFixed.Name" />
+                                    </span>
+                                    <span ng-if="!vm.defaultCaretChangeForFixed.Name">
+                                        <span ng-show="vm.caretChangeForFixed.Name" class="fa fa-caret-down caret-buttons-color"></span>
+                                        <span ng-show="!vm.caretChangeForFixed.Name" class="fa fa-caret-up caret-buttons-color"></span>
+                                    </span>
+                                </th>
+                                <th class="thead-text-alignment" ng-click="vm.sortList('Email')">
+                                    Email
+                                    <span ng-if="vm.defaultCaretChangeForFixed.Email">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="vm.defaultCaretChangeForFixed.Email" />
+                                    </span>
+                                    <span ng-if="!vm.defaultCaretChangeForFixed.Email">
+                                        <span ng-show="vm.caretChangeForFixed.Email" class="fa fa-caret-down caret-buttons-color"></span>
+                                        <span ng-show="!vm.caretChangeForFixed.Email" class="fa fa-caret-up caret-buttons-color"></span>
+                                    </span>
+                                </th>
+                                <th class="thead-numeric-alignment">
+                                    Total Time (hh:mm)
+                                </th>
+                                <th class="thead-numeric-alignment" ng-click="vm.sortList('StartDate')">
+                                    Date Valid
+                                    <span ng-if="vm.defaultCaretChangeForFixed.StartDate">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="vm.defaultCaretChangeForFixed.StartDate" />
+                                    </span>
+                                    <span ng-if="!vm.defaultCaretChangeForFixed.StartDate">
+                                        <span ng-show="vm.caretChangeForFixed.StartDate" class="fa fa-caret-down caret-buttons-color"></span>
+                                        <span ng-show="!vm.caretChangeForFixed.StartDate" class="fa fa-caret-up caret-buttons-color"></span>
+                                    </span>
+                                </th>
+                                <th class="thead-text-alignment" ng-click="vm.sortList('ExtensionTypeId')">
+                                    Type of Extension
+                                    <span ng-if="vm.defaultCaretChangeForFixed.ExtensionTypeId">
+                                        <img ng-src="../../../Content/Image/img-sort-arrow.png" ng-show="vm.defaultCaretChangeForFixed.ExtensionTypeId" />
+                                    </span>
+                                    <span ng-if="!vm.defaultCaretChangeForFixed.ExtensionTypeId">
+                                        <span ng-show="vm.caretChangeForFixed.Role" class="fa fa-caret-down caret-buttons-color"></span>
+                                        <span ng-show="!vm.caretChangeForFixed.Role" class="fa fa-caret-up caret-buttons-color"></span>
+                                    </span>
+                                </th>
+                                <th class="thead-text-alignment">
+                                    Created By
+                                </th>
+                                <th>
+                                    On-going
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody ng-show="vm.usersWithFixedLabHourExtensions.length == 0">
+                            <tr>
+                                <td colspan="10" class="text-center noHover no-user-text">No users found.</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr ng-class="{'is-deleted': user.IsDeleted === true}" ng-show="!vm.pagePropeties.loadingFixedLabHourExtensions" ng-repeat="user in filterData = (vm.usersWithFixedLabHourExtensions | filter : acct)"
+                                class="trow user-table-row">
+                                <td class="thead-text-alignment item-padding">
+                                    <div class="truncate-lab letterCase user-name-container">
+                                        <div class="push-right changeColor user-name-column" data-toggle="tooltip" title="{{user.Name}}">
+                                            {{user.Name}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="user-data-container thead-text-alignment item-padding">
+                                    <div class="changeColor user-email-column" data-toggle="tooltip" title="{{user.Email}}">
+                                        {{user.Email}}
+                                    </div>
+                                </td>
+                                <td class="user-data-container thead-numeric-alignment item-padding">
+                                    <div class="changeColor user-extension-duration" data-toggle="tooltip" ng-show="user.LabHourExtensionId !== null" title="{{user.TotalHoursDisplay}}">
+                                        {{user.TotalHoursDisplay}}
+                                    </div>
+                                </td>
+                                <td class="user-data-container thead-numeric-alignment item-padding">
+                                    <div class="changeColor user-start-date-column" data-toggle="tooltip" ng-show="user.LabHourExtensionId !== null" title="Date Valid">
+                                        {{user.StartDate | date:'MM/dd/yyyy h:mm a'}} - {{user.EndDate | date:'MM/dd/yyyy h:mm a'}}
+                                    </div>
+                                </td>
+                                <td class="thead-text-alignment item-padding">
+                                    <div class="user-extension-type" data-toggle="tooltip" ng-show="user.LabHourExtensionId !== null" title="{{user.SelectedExtensionType.Label}}">
+                                        {{user.SelectedExtensionType.Label}}
+                                    </div>
+                                </td>
+                                <td class="thead-text-alignment item-padding">
+                                    <div class="truncate-lab letterCase user-createdBy-container">
+                                        <div class="push-right changeColor user-name-column" data-toggle="tooltip" title="{{user.CreatedBy}}">
+                                            {{user.CreatedBy}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="user-data-container item-padding">
+                                    <div data-toggle="tooltip" ng-show="user.LabHourExtensionId !== null" class="changeColor user-on-going-status-column">
+                                        <span ng-show="!user.ExtensionIsOnGoing"></span>
+                                        <span ng-show="user.ExtensionIsOnGoing"> <i class="fa fa-check fa-sm" aria-hidden="true"></i> </span>
+                                    </div>
+                                </td>
+                                <td class="user-data-container item-padding">
+                                    <div class="action-button-container" ng-show="user.LabHourExtensionId !== null">
+                                        <div>
+                                            <img ng-show="user.LabHourExtensionId !== null && !user.ExtensionIsInThePast &&  !user.IsDeleted" ng-src="../../../Content/Image/editcircle-hover.png" class="actionButton-edit" ng-click="vm.toggleEditLabHourExtensionView(user)" title="Edit" />
+                                            <img ng-src="../../../Content/Image/close-icon.png" class="actionButton-delete" ng-show="user.LabHourExtensionId !== null && !user.ExtensionIsOnGoing && !user.IsDeleted" ng-click="vm.deleteLabHourExtension(user)" title="Delete" />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="loading-block-grant" ng-show="vm.pagePropeties.loadingFixedLabHourExtensions">
+                        <img class="sizeImg" src="../../../Content/Image/loading2.gif" />
+                    </div>
+                    <h1 class="loading-block white-text" ng-show="vm.usersWithFixedLabHourExtensions.length == 0 && vm.pagePropeties.loadingFixedLabHourExtensions == false">No students enrolled yet.</h1>
+                </div>
+            </div>
+        </div>
+
+        <!--Create/Update Lab Hour Extension View-->
+        <div ng-show="vm.isCreateUpdateMode" class="modal-inner-box-grant" style="color:white;">
+            <div class="bulk-extension-container" ng-class="{'adjust-division': vm.isFixedLabHourExtension === true && vm.isForIndividual === true}">
+                <h2 ng-show="vm.isFixedLabHourExtension" class="date-extension-type">Total Time (hh:mm):</h2>
+                <div ng-show="vm.isFixedLabHourExtension">
+                    <select ng-model="vm.selectedHour" ng-change="" class="user-time-option">
+                        <option ng-repeat="h in vm.hoursOptions" value="{{h.hourValue}}">{{h.hourValue}}</option>
+                    </select>
+                    :
+                    <select ng-model="vm.selectedMinute" ng-change="" class="user-time-option">
+                        <option ng-repeat="m in vm.minutesOptions" value="{{m.minuteValue}}">{{m.minuteDisplay}}</option>
+                    </select>
+                </div>
+
+                <h2 class="date-extension-type">Start date:</h2>
+                <div class="bulk-calendar">
+                    <input type="text" class="form-control-bulk" datetime-picker="MM/dd/yyyy HH:mm" placeholder="Start date"
+                           ng-model="vm.startSubmittedDate"
+                           is-open="vm.startSubmittedDateOptions.showFlag"
+                           ng-change="vm.onDateChange()"
+                           name="start"
+                           onkeydown="return false"
+                           datepicker-options="vm.startSubmittedDateOptions" />
+                    <span>
+                        <button ng-disabled="vm.originalLabHourExtensionData.isScheduleOnGoing == true" type="button" class="btn btn-default" ng-click="vm.startSubmittedDateOptions.showFlag = true;"><i class="fa fa-calendar"></i></button>
+                    </span>
+                </div>
+
+                <h2 class="date-extension-type">End date:</h2>
+                <div class="bulk-calendar">
+                    <input type="text" class="form-control-bulk" datetime-picker="MM/dd/yyyy HH:mm" placeholder="End date"
+                           ng-model="vm.endSubmittedDate"
+                           is-open="vm.endSubmittedDateOptions.showFlag"
+                           ng-change="vm.onDateChange()"
+                           name="end"
+                           onkeydown="return false"
+                           datepicker-options="vm.endSubmittedDateOptions" />
+                    <span>
+                        <button type="button" class="btn btn-default" ng-click="vm.endSubmittedDateOptions.showFlag = true"><i class="fa fa-calendar"></i></button>
+                    </span>
+                </div>
+
+                <div class="user-extension-type-option-container" data-toggle="tooltip">
+                    <h2 class="date-extension-type">Extension Type: </h2>
+                    <div>
+                        <select ng-model="vm.selectedExtensionType" class="form-control-bulk user-selected-extension-type" ng-options="item.Label for item in vm.extensionTypes" required>
+                        </select>
+                    </div>
+                </div>
+
+                <div ng-show="!vm.isFixedLabHourExtension">
+                    <h5 class="date-extension-type">Duration (dd:hh:mm):</h5>
+                    <span class="number-of-hours">{{vm.endSubmittedDate - vm.startSubmittedDate | numberOfHours}}</span>
+                </div>
+
+                <div class="selected-user-container" data-toggle="tooltip">
+                    <h2 ng-show="vm.isForIndividual" class="date-extension-type">User:</h2>
+                    <div ng-show="vm.isForIndividual && !vm.isEditRecord">
+                        <select ng-model="vm.selectedUser" class="form-control-bulk user-selected-extension-type" ng-options="item.Name for item in vm.userOptions" required>
+                        </select>
+                    </div>
+                    <div class="user-edit-record-container">
+                        <span class="user-edit-record" ng-show="vm.isEditRecord">{{vm.selectedUser.Name}}</span>
+                    </div>
+
+                    <div ng-show="vm.isFixedLabHourExtension && vm.errorMessage.length > 0" class="user-validation-notice-container">
+                        <p class="user-validation-notice">
+                            <i class="fa fa-exclamation-circle fa-lg invalid-notice-icon" aria-hidden="true"></i>{{vm.errorMessage}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer no-left col-md-12">
+        <div class="no-padding">
+            <div class="keep-right">
+                <button class="btn btn-danger btn-sm footer-btn" ng-show="!vm.isCreateUpdateMode" data-dismiss="modal" aria-label="Close" ng-click="vm.close()">
+                    Close
+                </button>
+                <a class="btn btn-danger btn-sm footer-btn" ng-show="vm.isCreateUpdateMode" ng-click="vm.cancelCreation()">
+                    Cancel
+                </a>
+            </div>
+            <div class="keep-right">
+                <button class="btn btn-primary btn-sm footer-btn" ng-show="vm.isCreateUpdateMode && !vm.isForIndividual && !vm.isEditRecord" ng-disabled="(vm.startSubmittedDate == null || vm.endSubmittedDate == null || vm.selectedExtensionType == null || vm.startSubmittedDate == vm.endSubmittedDate)" ng-click="vm.saveLabHourExtension(vm.isFixedLabHourExtension)">
+                    Save
+                </button>
+                <button class="btn btn-primary btn-sm footer-btn" ng-show="vm.isCreateUpdateMode && vm.isForIndividual && !vm.isEditRecord" ng-disabled="(vm.startSubmittedDate == null || vm.endSubmittedDate == null || vm.selectedExtensionType == null || vm.selectedUser == null || vm.startSubmittedDate == vm.endSubmittedDate)" ng-click="vm.saveLabHourExtension(vm.isFixedLabHourExtension)">
+                    Save
+                </button>
+                <button class="btn btn-primary btn-sm footer-btn" ng-show="vm.isCreateUpdateMode && vm.isForIndividual && vm.isEditRecord" ng-disabled="(vm.startSubmittedDate == null || vm.endSubmittedDate == null || vm.selectedExtensionType == null || vm.startSubmittedDate == vm.endSubmittedDate)" ng-click="vm.updateLabHourExtension(vm.isFixedLabHourExtension)">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
